@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from '../lib/supabase';
-import { ExternalLink, PlayCircle, BookOpen, ChevronDown, Loader2 } from "lucide-react";
+import { ExternalLink, PlayCircle, BookOpen, ChevronDown, Loader2, Play } from "lucide-react";
 import "./YouTube.css";
 
 const BRANCHES = ["CS", "IT", "Mech", "Civil", "Elec", "ETC"];
@@ -40,11 +40,13 @@ function PlaylistCard({ item }) {
           />
         ) : (
           <div className="yt-card__thumb-fallback">
-            <PlayCircle size={32} strokeWidth={1.5} />
+            <PlayCircle size={40} strokeWidth={1.2} />
           </div>
         )}
         <div className="yt-card__overlay">
-          <PlayCircle size={26} color="#fff" strokeWidth={1.5} />
+          <div className="yt-card__play-btn">
+            <Play size={24} color="#fff" fill="#fff" strokeWidth={0} />
+          </div>
         </div>
       </div>
 
@@ -57,7 +59,7 @@ function PlaylistCard({ item }) {
           </span>
         )}
         <span className="yt-card__cta">
-          Watch playlist <ExternalLink size={11} strokeWidth={2} />
+          Watch <ExternalLink size={10} strokeWidth={2.5} />
         </span>
       </div>
     </a>
@@ -76,12 +78,12 @@ function SemesterBlock({ sem, playlists }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        <span className="yt-sem__label">
+        <div className="yt-sem__label">
           <span className="yt-sem__number">SEM {sem}</span>
-          <span className="yt-sem__count">{playlists.length} subjects</span>
-        </span>
+          <span className="yt-sem__count">{playlists.length} {playlists.length === 1 ? 'subject' : 'subjects'}</span>
+        </div>
         <ChevronDown
-          size={16}
+          size={18}
           strokeWidth={2}
           className={`yt-sem__chevron${open ? " yt-sem__chevron--open" : ""}`}
         />
@@ -135,34 +137,52 @@ export default function YouTube() {
   }, {});
 
   const hasSemesters = Object.keys(bySemester).length > 0;
+  const totalPlaylists = data.length;
 
   return (
     <section className="yt-page">
 
       {/* header */}
       <div className="yt-header">
-        <p className="yt-eyebrow">Free Resources</p>
-        <h1 className="yt-title">YouTube Playlists</h1>
+        <div className="yt-header__top">
+          <p className="yt-eyebrow">Free Resources</p>
+          <h1 className="yt-title">YouTube Playlists</h1>
+        </div>
         <p className="yt-subtitle">
-          Hand-picked playlists for every subject, every semester —
-          curated for MSBTE K-scheme.
+          Hand-picked playlists for every subject, every semester — 
+          curated by experienced educators for MSBTE K-scheme students.
         </p>
+        {hasSemesters && (
+          <div className="yt-header__stats">
+            <span className="yt-stat">
+              <span className="yt-stat__value">{totalPlaylists}</span>
+              <span className="yt-stat__label">Playlists</span>
+            </span>
+            <span className="yt-stat">
+              <span className="yt-stat__value">{Object.keys(bySemester).length}</span>
+              <span className="yt-stat__label">Semesters</span>
+            </span>
+          </div>
+        )}
       </div>
 
       {/* branch tabs */}
-      <div className="yt-tabs" role="tablist" aria-label="Select branch">
-        {BRANCHES.map((b) => (
-          <button
-            key={b}
-            role="tab"
-            aria-selected={activeBranch === b}
-            className={`yt-tab${activeBranch === b ? " yt-tab--active" : ""}`}
-            onClick={() => setActiveBranch(b)}
-          >
-            <span className="yt-tab__code">{b}</span>
-            <span className="yt-tab__full">{BRANCH_LABELS[b]}</span>
-          </button>
-        ))}
+      <div className="yt-branch-selector">
+        <p className="yt-branch-label">Select your branch</p>
+        <div className="yt-tabs" role="tablist" aria-label="Select branch">
+          {BRANCHES.map((b) => (
+            <button
+              key={b}
+              role="tab"
+              aria-selected={activeBranch === b}
+              className={`yt-tab${activeBranch === b ? " yt-tab--active" : ""}`}
+              onClick={() => setActiveBranch(b)}
+            >
+              <span className="yt-tab__code">{b}</span>
+              <span className="yt-tab__full">{BRANCH_LABELS[b]}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* content */}
@@ -170,23 +190,25 @@ export default function YouTube() {
 
         {loading && (
           <div className="yt-state">
-            <Loader2 size={22} className="yt-spinner" />
-            <p>Loading playlists…</p>
+            <Loader2 size={28} className="yt-spinner" />
+            <p className="yt-state__title">Loading playlists…</p>
+            <p className="yt-state__sub">Fetching the best content for {BRANCH_LABELS[activeBranch]}</p>
           </div>
         )}
 
         {!loading && error && (
           <div className="yt-state yt-state--error">
-            <p>Could not load playlists. Check your connection and try again.</p>
+            <p className="yt-state__title">Oops! Something went wrong</p>
+            <p className="yt-state__sub">Could not load playlists. Check your connection and try again.</p>
             <code className="yt-state__code">{error}</code>
           </div>
         )}
 
         {!loading && !error && !hasSemesters && (
           <div className="yt-state">
-            <PlayCircle size={32} strokeWidth={1.2} />
-            <p>No playlists yet for {BRANCH_LABELS[activeBranch]}.</p>
-            <p className="yt-state__sub">Yogesh is adding them — check back soon.</p>
+            <PlayCircle size={40} strokeWidth={1.2} />
+            <p className="yt-state__title">No playlists yet</p>
+            <p className="yt-state__sub">Playlists for {BRANCH_LABELS[activeBranch]} are being curated. Check back soon!</p>
           </div>
         )}
 
@@ -201,6 +223,14 @@ export default function YouTube() {
         }
 
       </div>
+
+      {/* footer hint */}
+      {hasSemesters && (
+        <div className="yt-footer">
+          <p>💡 <strong>Tip:</strong> Start with Semester 1 fundamentals, then progress through each semester. Each playlist builds on the previous knowledge.</p>
+        </div>
+      )}
+
     </section>
   );
 }

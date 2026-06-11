@@ -1,572 +1,688 @@
-import { useState, useEffect, useRef } from "react";
-import { supabase } from '../lib/supabase';
+import { Link } from 'react-router-dom'
 import {
-  MessageSquare, ChevronDown, Send, Plus,
-  X, Loader2, User, Clock, ChevronRight
-} from "lucide-react";
+  ArrowRight, BookOpen, Map, Target, Lightbulb,
+  Trophy, PlaySquare, Search, Users, Calendar,
+  GraduationCap, Briefcase, GitBranchIcon, Zap,
+  CheckCircle, Sparkles, TrendingUp, Code
+} from 'lucide-react'
 
+const features = [
+  { icon: BookOpen,      label: 'Resources',    desc: 'PYQs, Notes, Syllabus',        path: '/resources'    },
+  { icon: Map,           label: 'Roadmaps',     desc: 'Career paths for CS/IT',        path: '/roadmaps'     },
+  { icon: Target,        label: 'Predictor',    desc: 'College admission prediction',  path: '/predictor'    },
+  { icon: Lightbulb,     label: 'Projects',     desc: 'ITR, Capstone & micro ideas',   path: '/projects'     },
+  { icon: Trophy,        label: 'DSA & CP',     desc: 'LeetCode, Striver, GFG',        path: '/dsa'          },
+  { icon: PlaySquare,    label: 'YouTube Hub',  desc: 'Best playlists Sem 1–6',        path: '/youtube'      },
+  { icon: Search,        label: 'Internships',  desc: 'Find & apply guide',            path: '/internships'  },
+  { icon: Users,         label: 'Community',    desc: 'Ask seniors, get answers',      path: '/community'    },
+  { icon: Calendar,      label: 'MSBTE Dates',  desc: 'Exam & deadline calendar',      path: '/msbte'        },
+  { icon: GraduationCap, label: 'Scholarships', desc: 'EBC, SC/ST, OBC guides',        path: '/scholarships' },
+  { icon: Briefcase,     label: 'Placement',    desc: 'Resume & interview prep',       path: '/placement'    },
+  { icon: GitBranchIcon, label: 'Open Source',  desc: 'Contribute to real projects',   path: '/opensource'   },
+]
 
-// ─── constants ─────────────────────────────────────────────────────────────────
+const stats = [
+  { value: '6',    label: 'Branches' },
+  { value: '13+',  label: 'Features' },
+  { value: '100%', label: 'Free' },
+  { value: '∞',    label: 'Resources' },
+]
 
-const BRANCHES = ["CS", "IT", "Mech", "Civil", "Elec", "ETC"];
-const BRANCH_LABELS = {
-  CS: "Computer Science", IT: "Information Technology",
-  Mech: "Mechanical", Civil: "Civil",
-  Elec: "Electrical", ETC: "Electronics & TC",
-};
-const SEMESTERS = [1, 2, 3, 4, 5, 6];
+const highlights = [
+  { icon: Zap, title: 'Lightning Fast', desc: 'Optimized for slow connections. Works offline.' },
+  { icon: Code, title: 'Open Source', desc: 'Contribute code, content, or ideas on GitHub.' },
+  { icon: TrendingUp, title: 'Career Focused', desc: 'From college to campus placement — we cover it all.' },
+  { icon: CheckCircle, title: 'Trusted by 1000s', desc: 'Built by students who got placed. Verified content.' },
+]
 
-function timeAgo(dateStr) {
-  const diff = Math.floor((Date.now() - new Date(dateStr)) / 1000);
-  if (diff < 60)    return "just now";
-  if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  return `${Math.floor(diff / 86400)}d ago`;
-}
-
-// ─── ask question modal ────────────────────────────────────────────────────────
-
-function AskModal({ onClose, onSubmitted, defaultBranch, defaultSem }) {
-  const [name, setName]       = useState("");
-  const [branch, setBranch]   = useState(defaultBranch || "CS");
-  const [sem, setSem]         = useState(defaultSem || 1);
-  const [text, setText]       = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(null);
-  const textRef               = useRef(null);
-
-  useEffect(() => { textRef.current?.focus(); }, []);
-
-  async function handleSubmit() {
-    if (!name.trim() || !text.trim()) return;
-    setLoading(true);
-    setError(null);
-
-    const { error: err } = await supabase.from("questions").insert({
-      name:          name.trim(),
-      branch,
-      semester:      sem,
-      question_text: text.trim(),
-    });
-
-    if (err) { setError("Could not post question. Try again."); setLoading(false); return; }
-    setLoading(false);
-    onSubmitted();
-    onClose();
-  }
-
+export default function Home() {
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center
-                    justify-center px-4 pb-4 sm:pb-0">
-      {/* backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-           onClick={onClose} />
+    <div style={{ background: 'var(--bg)' }}>
 
-      {/* modal */}
-      <div className="relative w-full max-w-lg bg-[#141414] border border-[#2a2a2a]
-                      rounded-xl overflow-hidden shadow-2xl">
+      {/* ── HERO ───────────────────────────────── */}
+      <section style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: '0 clamp(1.5rem, 6vw, 7rem)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
 
-        {/* header */}
-        <div className="flex items-center justify-between px-5 py-4
-                        border-b border-[#2a2a2a]">
-          <p className="font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6] text-base">
-            Ask a question
-          </p>
-          <button onClick={onClose}
-            className="text-[#888] hover:text-[#f0ede6] transition-colors">
-            <X size={18} strokeWidth={2} />
-          </button>
+        {/* Top accent line */}
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0,
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent, var(--accent), transparent)',
+          opacity: 0.4,
+        }} />
+
+        {/* Badge */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          marginBottom: '2.5rem',
+          width: 'fit-content',
+        }}>
+          <span style={{
+            width: 6, height: 6,
+            borderRadius: '50%',
+            background: 'var(--accent)',
+            display: 'inline-block',
+            boxShadow: '0 0 6px var(--accent)',
+          }} />
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.62rem',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+          }}>
+            Free & Open Source — MSBTE K-Scheme
+          </span>
         </div>
 
-        {/* body */}
-        <div className="p-5 flex flex-col gap-4">
+        {/* Main headline */}
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontWeight: 700,
+          fontSize: 'clamp(3rem, 8vw, 7rem)',
+          lineHeight: 1.0,
+          letterSpacing: '-0.03em',
+          color: 'var(--text)',
+          marginBottom: '0.15em',
+          maxWidth: '900px',
+        }}>
+          Built for diploma
+        </h1>
 
-          {/* name */}
-          <div className="flex flex-col gap-1.5">
-            <label className="font-['JetBrains_Mono'] text-[0.65rem] uppercase
-                              tracking-wider text-[#888]">
-              Your name
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. Rahul"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="px-3 py-2.5 rounded-lg border border-[#2a2a2a] bg-[#0d0e0f]
-                         font-['General_Sans'] text-sm text-[#f0ede6] placeholder:text-[#888]
-                         focus:border-[#e8453c] focus:outline-none transition-colors"
-            />
-          </div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontWeight: 700,
+          fontSize: 'clamp(3rem, 8vw, 7rem)',
+          lineHeight: 1.0,
+          letterSpacing: '-0.03em',
+          color: 'var(--text)',
+          marginBottom: '0.15em',
+          maxWidth: '900px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.3em',
+          flexWrap: 'wrap',
+        }}>
+          students.{' '}
+          <span style={{
+            fontFamily: 'var(--font-serif)',
+            fontStyle: 'italic',
+            fontWeight: 400,
+            color: 'var(--accent)',
+            fontSize: 'clamp(2.5rem, 7vw, 6rem)',
+          }}>
+            By them.
+          </span>
+        </h1>
 
-          {/* branch + sem */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1.5">
-              <label className="font-['JetBrains_Mono'] text-[0.65rem] uppercase
-                                tracking-wider text-[#888]">
-                Branch
-              </label>
-              <select
-                value={branch}
-                onChange={(e) => setBranch(e.target.value)}
-                className="px-3 py-2.5 rounded-lg border border-[#2a2a2a] bg-[#0d0e0f]
-                           font-['General_Sans'] text-sm text-[#f0ede6]
-                           focus:border-[#e8453c] focus:outline-none transition-colors"
-              >
-                {BRANCHES.map((b) => (
-                  <option key={b} value={b}>{b} — {BRANCH_LABELS[b]}</option>
-                ))}
-              </select>
-            </div>
+        {/* Subtext */}
+        <p style={{
+          fontFamily: 'var(--font-body)',
+          fontWeight: 400,
+          fontSize: 'clamp(0.9rem, 2vw, 1.05rem)',
+          color: 'var(--text-muted)',
+          lineHeight: 1.7,
+          maxWidth: '460px',
+          marginTop: '2rem',
+          marginBottom: '2.5rem',
+        }}>
+          PYQs, career guidance, college predictor, YouTube playlists —
+          everything a diploma CS/IT student needs. One platform. Zero rupees.
+        </p>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="font-['JetBrains_Mono'] text-[0.65rem] uppercase
-                                tracking-wider text-[#888]">
-                Semester
-              </label>
-              <select
-                value={sem}
-                onChange={(e) => setSem(Number(e.target.value))}
-                className="px-3 py-2.5 rounded-lg border border-[#2a2a2a] bg-[#0d0e0f]
-                           font-['General_Sans'] text-sm text-[#f0ede6]
-                           focus:border-[#e8453c] focus:outline-none transition-colors"
-              >
-                {SEMESTERS.map((s) => (
-                  <option key={s} value={s}>Semester {s}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* question */}
-          <div className="flex flex-col gap-1.5">
-            <label className="font-['JetBrains_Mono'] text-[0.65rem] uppercase
-                              tracking-wider text-[#888]">
-              Your question
-            </label>
-            <textarea
-              ref={textRef}
-              rows={4}
-              placeholder="What's confusing you? Be specific — good questions get better answers."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              className="px-3 py-2.5 rounded-lg border border-[#2a2a2a] bg-[#0d0e0f]
-                         font-['General_Sans'] text-sm text-[#f0ede6] placeholder:text-[#888]
-                         focus:border-[#e8453c] focus:outline-none transition-colors
-                         resize-none leading-relaxed"
-            />
-          </div>
-
-          {error && (
-            <p className="font-['General_Sans'] text-[0.75rem] text-[#e8453c]">{error}</p>
-          )}
-
-          <button
-            onClick={handleSubmit}
-            disabled={!name.trim() || !text.trim() || loading}
-            className={`flex items-center justify-center gap-2 py-3 rounded-lg
-                        font-['Cabinet_Grotesk'] font-semibold text-sm
-                        transition-all duration-150
-                        ${name.trim() && text.trim() && !loading
-                          ? "bg-[#e8453c] text-white hover:bg-[#d03d35]"
-                          : "bg-[#1a1a1a] text-[#888] border border-[#2a2a2a] cursor-not-allowed"
-                        }`}
-          >
-            {loading
-              ? <Loader2 size={15} className="animate-spin" />
-              : <><Send size={14} strokeWidth={2} /> Post question</>
-            }
-          </button>
+        {/* CTAs */}
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '5rem' }}>
+          <Link to="/resources" className="btn-primary">
+            Explore Resources <ArrowRight size={15} />
+          </Link>
+          <Link to="/predictor" className="btn-ghost">
+            College Predictor
+          </Link>
         </div>
-      </div>
-    </div>
-  );
-}
 
-// ─── answer box ────────────────────────────────────────────────────────────────
-
-function AnswerBox({ questionId, onAnswered }) {
-  const [name, setName]       = useState("");
-  const [text, setText]       = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(null);
-
-  async function handleSubmit() {
-    if (!name.trim() || !text.trim()) return;
-    setLoading(true);
-    setError(null);
-
-    const { error: err } = await supabase.from("answers").insert({
-      question_id:  questionId,
-      name:         name.trim(),
-      answer_text:  text.trim(),
-    });
-
-    if (err) { setError("Could not post answer. Try again."); setLoading(false); return; }
-    setName("");
-    setText("");
-    setLoading(false);
-    onAnswered();
-  }
-
-  return (
-    <div className="mt-3 pt-3 border-t border-[#1a1a1a]">
-      <p className="font-['JetBrains_Mono'] text-[0.62rem] uppercase tracking-wider
-                    text-[#888] mb-2">
-        Write an answer
-      </p>
-      <div className="flex flex-col gap-2">
-        <input
-          type="text"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="px-3 py-2 rounded-md border border-[#2a2a2a] bg-[#0d0e0f]
-                     font-['General_Sans'] text-xs text-[#f0ede6] placeholder:text-[#888]
-                     focus:border-[#e8453c] focus:outline-none transition-colors"
-        />
-        <textarea
-          rows={3}
-          placeholder="Share what you know — even a partial answer helps."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="px-3 py-2 rounded-md border border-[#2a2a2a] bg-[#0d0e0f]
-                     font-['General_Sans'] text-xs text-[#f0ede6] placeholder:text-[#888]
-                     focus:border-[#e8453c] focus:outline-none transition-colors
-                     resize-none leading-relaxed"
-        />
-        {error && (
-          <p className="font-['General_Sans'] text-[0.7rem] text-[#e8453c]">{error}</p>
-        )}
-        <button
-          onClick={handleSubmit}
-          disabled={!name.trim() || !text.trim() || loading}
-          className={`self-end flex items-center gap-1.5 px-4 py-2 rounded-md
-                      font-['General_Sans'] text-xs font-medium
-                      transition-all duration-150
-                      ${name.trim() && text.trim() && !loading
-                        ? "bg-[#e8453c] text-white hover:bg-[#d03d35]"
-                        : "bg-[#1a1a1a] text-[#888] border border-[#2a2a2a] cursor-not-allowed"
-                      }`}
-        >
-          {loading
-            ? <Loader2 size={12} className="animate-spin" />
-            : <><Send size={12} strokeWidth={2} /> Post answer</>
-          }
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ─── question card ─────────────────────────────────────────────────────────────
-
-function QuestionCard({ question }) {
-  const [open, setOpen]         = useState(false);
-  const [answers, setAnswers]   = useState([]);
-  const [loadingA, setLoadingA] = useState(false);
-  const [answerCount, setAnswerCount] = useState(question.answer_count || 0);
-
-  async function loadAnswers() {
-    if (!open) {
-      setOpen(true);
-      setLoadingA(true);
-      const { data } = await supabase
-        .from("answers")
-        .select("id, name, answer_text, created_at")
-        .eq("question_id", question.id)
-        .order("created_at", { ascending: true });
-      setAnswers(data || []);
-      setLoadingA(false);
-    } else {
-      setOpen(false);
-    }
-  }
-
-  async function refreshAnswers() {
-    const { data } = await supabase
-      .from("answers")
-      .select("id, name, answer_text, created_at")
-      .eq("question_id", question.id)
-      .order("created_at", { ascending: true });
-    setAnswers(data || []);
-    setAnswerCount((data || []).length);
-  }
-
-  return (
-    <div className={`border rounded-lg bg-[#141414] transition-colors duration-150
-                     ${open ? "border-[#e8453c]/30" : "border-[#2a2a2a] hover:border-[#888]/40"}`}>
-
-      {/* question header — clickable */}
-      <button
-        onClick={loadAnswers}
-        className="w-full text-left p-4 sm:p-5"
-      >
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            {/* meta */}
-            <div className="flex items-center gap-2 flex-wrap mb-2">
-              <span className="flex items-center gap-1 font-['General_Sans'] text-[0.72rem] text-[#888]">
-                <User size={11} strokeWidth={2} />
-                {question.name}
-              </span>
-              <span className="text-[#2a2a2a]">·</span>
-              <span className="font-['JetBrains_Mono'] text-[0.62rem] text-[#888]
-                               bg-[#1a1a1a] border border-[#2a2a2a] px-2 py-0.5 rounded">
-                {question.branch}
-              </span>
-              <span className="font-['JetBrains_Mono'] text-[0.62rem] text-[#888]
-                               bg-[#1a1a1a] border border-[#2a2a2a] px-2 py-0.5 rounded">
-                SEM {question.semester}
-              </span>
-              <span className="flex items-center gap-1 font-['General_Sans'] text-[0.68rem] text-[#888]">
-                <Clock size={10} strokeWidth={2} />
-                {timeAgo(question.created_at)}
-              </span>
-            </div>
-
-            {/* question text */}
-            <p className="font-['General_Sans'] text-[0.9rem] text-[#f0ede6] leading-relaxed">
-              {question.question_text}
-            </p>
-          </div>
-
-          {/* right — answer count + chevron */}
-          <div className="shrink-0 flex flex-col items-end gap-1.5">
-            <div className={`flex items-center gap-1 font-['JetBrains_Mono'] text-[0.65rem]
-                             px-2 py-1 rounded border
-                             ${answerCount > 0
-                               ? "text-[#c8f04d] bg-[#c8f04d]/5 border-[#c8f04d]/20"
-                               : "text-[#888] bg-[#1a1a1a] border-[#2a2a2a]"
-                             }`}>
-              <MessageSquare size={10} strokeWidth={2} />
-              {answerCount} {answerCount === 1 ? "answer" : "answers"}
-            </div>
-            <ChevronDown
-              size={14} strokeWidth={2}
-              className={`text-[#888] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-            />
-          </div>
-        </div>
-      </button>
-
-      {/* expanded — answers + answer box */}
-      {open && (
-        <div className="px-4 sm:px-5 pb-5">
-          {loadingA && (
-            <div className="flex items-center gap-2 py-4">
-              <Loader2 size={14} className="animate-spin text-[#e8453c]" />
-              <p className="font-['General_Sans'] text-[0.78rem] text-[#888]">
-                Loading answers…
-              </p>
-            </div>
-          )}
-
-          {!loadingA && answers.length === 0 && (
-            <p className="font-['General_Sans'] text-[0.78rem] text-[#888] py-2">
-              No answers yet — be the first to help.
-            </p>
-          )}
-
-          {!loadingA && answers.map((a) => (
-            <div key={a.id}
-              className="py-3 border-t border-[#1a1a1a] first:border-0">
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-5 h-5 rounded-full bg-[#e8453c]/10 border border-[#e8453c]/20
-                                flex items-center justify-center shrink-0">
-                  <User size={10} strokeWidth={2} className="text-[#e8453c]" />
+        {/* Stats row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0',
+          borderTop: '1px solid var(--border)',
+          paddingTop: '2rem',
+          flexWrap: 'wrap',
+        }}>
+          {stats.map((s, i) => (
+            <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
+              <div style={{ paddingRight: '2.5rem' }}>
+                <div style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 700,
+                  fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                  color: 'var(--text)',
+                  lineHeight: 1,
+                }}>
+                  {s.value}
                 </div>
-                <span className="font-['General_Sans'] text-[0.75rem] font-medium text-[#f0ede6]">
-                  {a.name}
-                </span>
-                <span className="font-['General_Sans'] text-[0.68rem] text-[#888]">
-                  {timeAgo(a.created_at)}
-                </span>
+                <div style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'var(--text-muted)',
+                  marginTop: '4px',
+                }}>
+                  {s.label}
+                </div>
               </div>
-              <p className="font-['General_Sans'] text-[0.85rem] text-[#f0ede6]/80
-                            leading-relaxed pl-7">
-                {a.answer_text}
-              </p>
+              {i < stats.length - 1 && (
+                <div style={{
+                  width: '1px',
+                  height: '2rem',
+                  background: 'var(--border)',
+                  marginRight: '2.5rem',
+                }} />
+              )}
             </div>
           ))}
-
-          <AnswerBox questionId={question.id} onAnswered={refreshAnswers} />
         </div>
-      )}
-    </div>
-  );
-}
+      </section>
 
-// ─── main page ─────────────────────────────────────────────────────────────────
+      {/* ── WHY DIPLOMA DOST ───────────────────── */}
+      <section style={{
+        padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
+        borderTop: '1px solid var(--border)',
+      }}>
 
-export default function Community() {
-  const [activeBranch, setActiveBranch] = useState("CS");
-  const [activeSem, setActiveSem]       = useState(null); // null = all sems
-  const [questions, setQuestions]       = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState(null);
-  const [showAsk, setShowAsk]           = useState(false);
-
-  async function fetchQuestions() {
-    setLoading(true);
-    setError(null);
-
-    let query = supabase
-      .from("questions")
-      .select("id, name, branch, semester, question_text, created_at")
-      .eq("branch", activeBranch)
-      .order("created_at", { ascending: false });
-
-    if (activeSem) query = query.eq("semester", activeSem);
-
-    const { data, error: err } = await query;
-    if (err) { setError(err.message); setLoading(false); return; }
-    setQuestions(data || []);
-    setLoading(false);
-  }
-
-  useEffect(() => { fetchQuestions(); }, [activeBranch, activeSem]);
-
-  return (
-    <section className="max-w-[860px] mx-auto px-6 py-20 pb-32">
-
-      {/* header */}
-      <div className="flex items-start justify-between gap-4 mb-10">
-        <div>
-          <p className="font-['JetBrains_Mono'] text-[0.7rem] uppercase
-                        tracking-[0.12em] text-[#e8453c] mb-3">
-            Juniors ask · Seniors answer
-          </p>
-          <h1 className="font-['Clash_Display'] font-semibold text-[#f0ede6]
-                         leading-[1.08] text-[clamp(2rem,5vw,3.25rem)] mb-3">
-            Community
-          </h1>
-          <p className="font-['General_Sans'] text-[#888] text-base max-w-[440px] leading-relaxed">
-            Stuck on a subject? Ask here. Know the answer? Help a junior out.
-          </p>
-        </div>
-
-        <button
-          onClick={() => setShowAsk(true)}
-          className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-lg
-                     bg-[#e8453c] text-white
-                     font-['Cabinet_Grotesk'] font-semibold text-sm
-                     hover:bg-[#d03d35] transition-colors duration-150"
-        >
-          <Plus size={15} strokeWidth={2.5} />
-          Ask
-        </button>
-      </div>
-
-      {/* branch tabs */}
-      <div className="flex flex-wrap gap-2 pb-5 mb-5 border-b border-[#2a2a2a]">
-        {BRANCHES.map((b) => (
-          <button
-            key={b}
-            onClick={() => setActiveBranch(b)}
-            className={`flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg
-                        border transition-colors duration-150
-                        ${activeBranch === b
-                          ? "border-[#e8453c] bg-[#e8453c]/5"
-                          : "border-[#2a2a2a] hover:border-[#888] hover:bg-[#141414]"
-                        }`}
-          >
-            <span className={`font-['JetBrains_Mono'] text-[0.75rem] font-bold tracking-wider
-                              ${activeBranch === b ? "text-[#e8453c]" : "text-[#f0ede6]"}`}>
-              {b}
-            </span>
-            <span className="font-['General_Sans'] text-[0.63rem] text-[#888]
-                             whitespace-nowrap hidden sm:block">
-              {BRANCH_LABELS[b]}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      {/* semester filter */}
-      <div className="flex items-center gap-2 flex-wrap mb-8">
-        <button
-          onClick={() => setActiveSem(null)}
-          className={`px-3 py-1.5 rounded-md font-['JetBrains_Mono'] text-[0.68rem]
-                      font-bold tracking-wider border transition-colors duration-150
-                      ${activeSem === null
-                        ? "border-[#e8453c] text-[#e8453c] bg-[#e8453c]/5"
-                        : "border-[#2a2a2a] text-[#888] hover:border-[#888]"
-                      }`}
-        >
-          ALL
-        </button>
-        {SEMESTERS.map((s) => (
-          <button
-            key={s}
-            onClick={() => setActiveSem(s)}
-            className={`px-3 py-1.5 rounded-md font-['JetBrains_Mono'] text-[0.68rem]
-                        font-bold tracking-wider border transition-colors duration-150
-                        ${activeSem === s
-                          ? "border-[#e8453c] text-[#e8453c] bg-[#e8453c]/5"
-                          : "border-[#2a2a2a] text-[#888] hover:border-[#888]"
-                        }`}
-          >
-            SEM {s}
-          </button>
-        ))}
-      </div>
-
-      {/* questions list */}
-      <div className="flex flex-col gap-3">
-        {loading && (
-          <div className="flex items-center gap-3 py-20 justify-center">
-            <Loader2 size={20} className="animate-spin text-[#e8453c]" />
-            <p className="font-['General_Sans'] text-[#888] text-sm">Loading questions…</p>
-          </div>
-        )}
-
-        {!loading && error && (
-          <div className="py-20 text-center">
-            <p className="font-['General_Sans'] text-[#e8453c] text-sm">{error}</p>
-          </div>
-        )}
-
-        {!loading && !error && questions.length === 0 && (
-          <div className="flex flex-col items-center gap-3 py-20 text-center">
-            <div className="w-12 h-12 rounded-full border border-[#2a2a2a]
-                            flex items-center justify-center mb-2">
-              <MessageSquare size={20} strokeWidth={1.5} className="text-[#888]" />
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginBottom: '3.5rem',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}>
+          <div>
+            <div className="section-label" style={{ marginBottom: '0.75rem' }}>
+              Why us
             </div>
-            <p className="font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6] text-base">
-              No questions yet
-            </p>
-            <p className="font-['General_Sans'] text-[#888] text-sm max-w-[280px] leading-relaxed">
-              Be the first to ask something for {BRANCH_LABELS[activeBranch]}
-              {activeSem ? ` Semester ${activeSem}` : ""}.
-            </p>
-            <button
-              onClick={() => setShowAsk(true)}
-              className="mt-2 flex items-center gap-2 px-5 py-2.5 rounded-lg
-                         border border-[#e8453c] text-[#e8453c]
-                         font-['General_Sans'] text-sm
-                         hover:bg-[#e8453c]/5 transition-colors duration-150"
-            >
-              <Plus size={14} strokeWidth={2.5} />
-              Ask a question
-            </button>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+              letterSpacing: '-0.03em',
+              color: 'var(--text)',
+              lineHeight: 1.05,
+              maxWidth: '600px',
+            }}>
+              Built by students who got placed
+            </h2>
           </div>
-        )}
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.875rem',
+            color: 'var(--text-muted)',
+            maxWidth: '280px',
+            lineHeight: 1.7,
+            textAlign: 'right',
+          }}>
+            We know the struggle. We've been there. That's why every resource here is battle-tested.
+          </p>
+        </div>
 
-        {!loading && !error && questions.map((q) => (
-          <QuestionCard key={q.id} question={q} />
-        ))}
-      </div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '1.5rem',
+        }}>
+          {highlights.map((item, idx) => {
+            const Icon = item.icon
+            return (
+              <div
+                key={idx}
+                style={{
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '1rem',
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                }}
+              >
+                <Icon size={24} color="var(--accent)" strokeWidth={1.5} />
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 800,
+                    fontSize: '1.05rem',
+                    color: 'var(--text)',
+                    marginBottom: '0.5rem',
+                    letterSpacing: '-0.01em',
+                  }}>
+                    {item.title}
+                  </h3>
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.9rem',
+                    color: 'var(--text-muted)',
+                    lineHeight: 1.7,
+                  }}>
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
 
-      {/* ask modal */}
-      {showAsk && (
-        <AskModal
-          onClose={() => setShowAsk(false)}
-          onSubmitted={fetchQuestions}
-          defaultBranch={activeBranch}
-          defaultSem={activeSem || 1}
-        />
-      )}
+      {/* ── FEATURES ───────────────────────────── */}
+      <section style={{
+        padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
+        borderTop: '1px solid var(--border)',
+      }}>
 
-    </section>
-  );
+        {/* Section header */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginBottom: '3.5rem',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}>
+          <div>
+            <div className="section-label" style={{ marginBottom: '0.75rem' }}>
+              What's inside
+            </div>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+              letterSpacing: '-0.03em',
+              color: 'var(--text)',
+              lineHeight: 1.05,
+              maxWidth: '600px',
+            }}>
+              13+ tools to ace your diploma
+            </h2>
+          </div>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.875rem',
+            color: 'var(--text-muted)',
+            maxWidth: '280px',
+            lineHeight: 1.7,
+            textAlign: 'right',
+          }}>
+            Everything curated for MSBTE K-scheme across all 6 branches. No fluff.
+          </p>
+        </div>
+
+        {/* Features grid — 4 cols desktop, 3 tablet, 2 mobile; 12 items = clean 3 rows */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '1px',
+          border: '1px solid var(--border)',
+          borderRadius: '1rem',
+          overflow: 'hidden',
+          background: 'var(--border)',
+        }}
+          className="features-grid"
+        >
+          {features.map(({ icon: Icon, label, desc, path }) => (
+            <Link
+              key={path}
+              to={path}
+              style={{
+                background: 'var(--bg)',
+                padding: '1.75rem 1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+                transition: 'background 0.2s ease',
+                position: 'relative',
+                overflow: 'hidden',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'var(--surface)'
+                const arrow = e.currentTarget.querySelector('.feature-arrow')
+                const bar = e.currentTarget.querySelector('.feature-accent-bar')
+                if (arrow) { arrow.style.opacity = '1'; arrow.style.transform = 'translateX(0)' }
+                if (bar) bar.style.transform = 'scaleY(1)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'var(--bg)'
+                const arrow = e.currentTarget.querySelector('.feature-arrow')
+                const bar = e.currentTarget.querySelector('.feature-accent-bar')
+                if (arrow) { arrow.style.opacity = '0'; arrow.style.transform = 'translateX(-6px)' }
+                if (bar) bar.style.transform = 'scaleY(0)'
+              }}
+            >
+              {/* Red left accent bar on hover */}
+              <div
+                className="feature-accent-bar"
+                style={{
+                  position: 'absolute',
+                  left: 0, top: 0, bottom: 0,
+                  width: '2px',
+                  background: 'var(--accent)',
+                  transform: 'scaleY(0)',
+                  transition: 'transform 0.2s ease',
+                }}
+              />
+
+              <Icon size={22} color="var(--text-muted)" strokeWidth={1.5} />
+
+              <div>
+                <div style={{
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 800,
+                  fontSize: '1rem',
+                  color: 'var(--text)',
+                  marginBottom: '0.3rem',
+                  letterSpacing: '-0.01em',
+                }}>
+                  {label}
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.875rem',
+                  color: 'var(--text-muted)',
+                  lineHeight: 1.5,
+                }}>
+                  {desc}
+                </div>
+              </div>
+
+              <div
+                className="feature-arrow"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.08em',
+                  color: 'var(--accent)',
+                  textTransform: 'uppercase',
+                  opacity: 0,
+                  transform: 'translateX(-6px)',
+                  transition: 'opacity 0.2s ease, transform 0.2s ease',
+                  marginTop: 'auto',
+                }}
+              >
+                Open <ArrowRight size={10} />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── JOURNEY SECTION ────────────────────── */}
+      <section style={{
+        padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
+        borderTop: '1px solid var(--border)',
+      }}>
+
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginBottom: '3.5rem',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}>
+          <div>
+            <div className="section-label" style={{ marginBottom: '0.75rem' }}>
+              Your journey
+            </div>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+              letterSpacing: '-0.03em',
+              color: 'var(--text)',
+              lineHeight: 1.05,
+              maxWidth: '600px',
+            }}>
+              From semester 1 to your first job
+            </h2>
+          </div>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '1.5rem',
+        }}>
+          {[
+            {
+              phase: 'Semester 1–4',
+              title: 'Master the Fundamentals',
+              items: [
+                'Access PYQs and model answers',
+                'Watch curated YouTube playlists',
+                'Build foundational projects',
+                'Learn DSA & competitive programming',
+              ],
+              cta: 'Resources',
+              path: '/resources'
+            },
+            {
+              phase: 'Semester 5–6',
+              title: 'Prepare for the Real World',
+              items: [
+                'Predict your college placement',
+                'Apply for internships',
+                'Prepare for technical interviews',
+                'Build your portfolio',
+              ],
+              cta: 'Internships',
+              path: '/internships'
+            },
+            {
+              phase: 'Post-Diploma',
+              title: 'Land Your Dream Job',
+              items: [
+                'Master placement interview rounds',
+                'Negotiate salary & offers',
+                'Explore further studies (B.E./B.Tech)',
+                'Contribute to open source',
+              ],
+              cta: 'Placement Guide',
+              path: '/placement'
+            },
+          ].map((journey, idx) => (
+            <div
+              key={idx}
+              style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: '1rem',
+                padding: '2rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem',
+              }}
+            >
+              <div>
+                <div style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.65rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'var(--accent)',
+                  marginBottom: '0.75rem',
+                }}>
+                  {journey.phase}
+                </div>
+                <h3 style={{
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 800,
+                  fontSize: '1.15rem',
+                  color: 'var(--text)',
+                  letterSpacing: '-0.01em',
+                }}>
+                  {journey.title}
+                </h3>
+              </div>
+
+              <ul style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+              }}>
+                {journey.items.map((item, i) => (
+                  <li key={i} style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.75rem',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.9rem',
+                    color: 'var(--text-muted)',
+                    lineHeight: 1.6,
+                  }}>
+                    <CheckCircle size={16} color="var(--accent-lime)" strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                to={journey.path}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  color: 'var(--accent)',
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 800,
+                  fontSize: '0.9rem',
+                  letterSpacing: '-0.01em',
+                  textDecoration: 'none',
+                  marginTop: 'auto',
+                  transition: 'gap 0.2s ease',
+                }}
+                onMouseEnter={e => e.currentTarget.style.gap = '0.75rem'}
+                onMouseLeave={e => e.currentTarget.style.gap = '0.5rem'}
+              >
+                {journey.cta} <ArrowRight size={14} />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── BOTTOM CTA ─────────────────────────── */}
+      <section style={{
+        padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
+        borderTop: '1px solid var(--border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '3rem',
+      }}>
+
+        <div style={{ maxWidth: '540px' }}>
+          <div className="section-label" style={{ marginBottom: '0.75rem' }}>
+            Open Source
+          </div>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 700,
+            fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+            letterSpacing: '-0.03em',
+            color: 'var(--text)',
+            lineHeight: 1.05,
+            marginBottom: '1.25rem',
+          }}>
+            If it helped you,<br />
+            <span style={{
+              fontFamily: 'var(--font-serif)',
+              fontStyle: 'italic',
+              fontWeight: 400,
+              color: 'var(--accent)',
+            }}>
+              pay it forward.
+            </span>
+          </h2>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.9rem',
+            color: 'var(--text-muted)',
+            lineHeight: 1.7,
+            marginBottom: '2rem',
+            maxWidth: '400px',
+          }}>
+            Diploma Dost is built by students, for students. Share it with your classmates, contribute code, or help improve content on GitHub.
+          </p>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <a
+              href="https://github.com/piush365/Diploma-Dost"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+            >
+              <GitBranchIcon size={14} /> View on GitHub
+            </a>
+            <Link to="/opensource" className="btn-ghost">
+              How to contribute
+            </Link>
+          </div>
+        </div>
+
+        {/* Right side — subtle stat block */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2rem',
+          borderLeft: '1px solid var(--border)',
+          paddingLeft: '3rem',
+        }}>
+          {[
+            { value: 'EST. 2024', label: 'Founded' },
+            { value: '6',        label: 'Branches' },
+            { value: '1000+',    label: 'Students helped' },
+          ].map(s => (
+            <div key={s.label}>
+              <div style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 700,
+                fontSize: '1.5rem',
+                color: 'var(--text)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1,
+              }}>
+                {s.value}
+              </div>
+              <div style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.58rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--text-muted)',
+                marginTop: '4px',
+              }}>
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </section>
+
+    </div>
+  )
 }

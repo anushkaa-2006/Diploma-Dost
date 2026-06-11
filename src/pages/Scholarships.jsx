@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown, ExternalLink, AlertCircle, CheckCircle } from "lucide-react";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -304,15 +305,19 @@ const QUICK_LINKS = [
   { label: "All Schemes List", url: "https://mahadbt.maharashtra.gov.in/SchemeData/SchemeList", color: "#b87aff" },
 ];
 
-// ─── FINDER WIZARD ───────────────────────────────────────────────────────────
+const TABS = [
+  { id: "finder", label: "Finder" },
+  { id: "all", label: "All Schemes" },
+  { id: "howto", label: "How to Apply" },
+  { id: "mistakes", label: "Common Mistakes" },
+];
 
 const CATEGORY_OPTIONS = ["SC", "ST", "OBC", "VJNT", "SBC", "Minority", "Open/General (EBC)"];
-const GENDER_OPTIONS = ["Male", "Female"];
+
+// ─── SCHOLARSHIP FINDER ─────────────────────────────────────────────────────
 
 function ScholarshipFinder({ onSelect }) {
   const [category, setCategory] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [income, setIncome] = useState(null);
   const [results, setResults] = useState(null);
 
   const find = () => {
@@ -324,8 +329,6 @@ function ScholarshipFinder({ onSelect }) {
 
     if (category === "Open/General (EBC)") {
       matched = SCHOLARSHIPS.filter((s) => s.categories.includes("Open/General") || s.categories.includes("EBC"));
-    } else if (category === "OBC" && gender === "Female") {
-      matched = SCHOLARSHIPS.filter((s) => s.categories.includes("OBC"));
     } else if (category) {
       matched = SCHOLARSHIPS.filter((s) => s.categories.includes(category));
     }
@@ -333,25 +336,27 @@ function ScholarshipFinder({ onSelect }) {
     setResults(matched);
   };
 
-  const reset = () => { setCategory(null); setGender(null); setIncome(null); setResults(null); };
+  const reset = () => { setCategory(null); setResults(null); };
 
   if (results) {
     return (
       <div>
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-1">Finder Results</div>
-            <div className="font-['Cabinet_Grotesk'] text-[15px] font-semibold text-[#f0ede6]">
+            <div className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase text-[#888] mb-1 font-bold">
+              Finder Results
+            </div>
+            <div className="font-['Cabinet_Grotesk'] text-[1.1rem] font-semibold text-[#f0ede6]">
               {results.length} scheme{results.length !== 1 ? "s" : ""} found for {category}
             </div>
           </div>
-          <button onClick={reset} className="font-mono text-[10px] tracking-widest uppercase text-[#555] hover:text-[#f0ede6] transition-colors border border-[#2a2a2a] px-3 py-1.5 rounded">
+          <button onClick={reset} className="font-['General_Sans'] text-[0.85rem] font-medium text-[#888] hover:text-[#f0ede6] transition-colors border border-[#2a2a2a] px-3 py-1.5 rounded-lg">
             ← Start over
           </button>
         </div>
         {results.length === 0 ? (
           <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg p-6 text-center">
-            <p className="font-['General_Sans'] text-[13px] text-[#555]">No specific schemes found. Browse all schemes below.</p>
+            <p className="font-['General_Sans'] text-[0.9rem] text-[#888]">No specific schemes found. Browse all schemes below.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -359,22 +364,22 @@ function ScholarshipFinder({ onSelect }) {
               <button
                 key={s.id}
                 onClick={() => onSelect(s)}
-                className="w-full text-left bg-[#141414] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-lg p-4 transition-all group"
+                className="w-full text-left bg-[#141414] border border-[#2a2a2a] hover:border-[#e8453c]/40 hover:bg-[#1a1a1a] rounded-lg p-4 transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <span className="font-mono text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full"
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <span className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase px-2.5 py-1 rounded-full font-bold"
                         style={{ color: s.color, background: `${s.color}18`, border: `1px solid ${s.color}40` }}>
                         {s.badge}
                       </span>
                     </div>
-                    <div className="font-['Cabinet_Grotesk'] text-[14px] font-semibold text-[#f0ede6] group-hover:text-white transition-colors mb-1">{s.shortName}</div>
-                    <p className="font-['General_Sans'] text-[12px] text-[#888] leading-relaxed">{s.summary}</p>
+                    <div className="font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold text-[#f0ede6] group-hover:text-white transition-colors mb-1">
+                      {s.shortName}
+                    </div>
+                    <p className="font-['General_Sans'] text-[0.85rem] text-[#888] leading-relaxed">{s.summary}</p>
                   </div>
-                  <svg className="text-[#444] group-hover:text-[#888] transition-colors flex-shrink-0 mt-1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                  </svg>
+                  <ChevronDown size={16} strokeWidth={2} className="text-[#444] group-hover:text-[#e8453c] transition-colors flex-shrink-0 mt-1 rotate-[-90deg]" />
                 </div>
               </button>
             ))}
@@ -385,151 +390,111 @@ function ScholarshipFinder({ onSelect }) {
   }
 
   return (
-    <div className="bg-[#141414] border border-[#2a2a2a] rounded-xl p-5">
-      <div className="font-mono text-[9px] tracking-[0.12em] uppercase text-[#555] mb-4">Answer 2 questions</div>
-
-      <div className="space-y-5">
-        <div>
-          <div className="font-['Cabinet_Grotesk'] text-[13px] font-semibold text-[#f0ede6] mb-2.5">What is your category?</div>
-          <div className="flex flex-wrap gap-2">
-            {CATEGORY_OPTIONS.map((c) => (
-              <button key={c} onClick={() => setCategory(c)}
-                className={`font-mono text-[11px] tracking-wide px-3 py-1.5 rounded border transition-all
-                  ${category === c ? "border-[#e8453c] text-[#e8453c] bg-[#e8453c]/8" : "border-[#2a2a2a] text-[#888] hover:border-[#3a3a3a] hover:text-[#f0ede6]"}`}>
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <div className="font-['Cabinet_Grotesk'] text-[13px] font-semibold text-[#f0ede6] mb-2.5">Gender?</div>
-          <div className="flex gap-2">
-            {GENDER_OPTIONS.map((g) => (
-              <button key={g} onClick={() => setGender(g)}
-                className={`font-mono text-[11px] tracking-wide px-3 py-1.5 rounded border transition-all
-                  ${gender === g ? "border-[#c8f04d] text-[#c8f04d] bg-[#c8f04d]/8" : "border-[#2a2a2a] text-[#888] hover:border-[#3a3a3a] hover:text-[#f0ede6]"}`}>
-                {g}
-              </button>
-            ))}
-          </div>
-        </div>
+    <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg p-6">
+      <div className="font-['JetBrains_Mono'] text-[0.65rem] tracking-[0.12em] uppercase text-[#888] mb-5 font-bold">
+        Answer 1 question
       </div>
 
-      <button
-        onClick={find}
-        disabled={!category || !gender}
-        className={`mt-5 w-full py-2.5 rounded-lg font-['Cabinet_Grotesk'] text-[13px] font-semibold transition-all
-          ${category && gender
-            ? "bg-[#e8453c] text-white hover:bg-[#d13530]"
-            : "bg-[#1a1a1a] text-[#444] cursor-not-allowed border border-[#2a2a2a]"}`}
-      >
-        Find my scholarships →
-      </button>
+      <div>
+        <div className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] mb-3">What is your category?</div>
+        <div className="flex flex-wrap gap-2 mb-6">
+          {CATEGORY_OPTIONS.map((c) => (
+            <button key={c} onClick={() => setCategory(c)}
+              className={`font-['General_Sans'] text-[0.85rem] font-medium px-3 py-2 rounded-lg border transition-all
+                ${category === c ? "border-[#e8453c] text-[#e8453c] bg-[#e8453c]/8" : "border-[#2a2a2a] text-[#888] hover:border-[#3a3a3a] hover:text-[#f0ede6]"}`}>
+              {c}
+            </button>
+          ))}
+        </div>
+        <button onClick={find}
+          className="w-full bg-[#e8453c] text-white font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold py-3 rounded-lg hover:bg-[#d63a2f] transition-colors">
+          Find Schemes
+        </button>
+      </div>
     </div>
   );
 }
 
-// ─── SCHEME DETAIL DRAWER ────────────────────────────────────────────────────
+// ─── SCHEME DETAIL MODAL ─────────────────────────────────────────────────────
 
-function SchemeDrawer({ scheme, onClose }) {
+function SchemeDetail({ scheme, onClose }) {
   if (!scheme) return null;
+
   return (
-    <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={onClose} />
-      <div className="fixed right-0 top-0 h-full w-full max-w-[500px] bg-[#141414] border-l border-[#2a2a2a] z-50 overflow-y-auto">
-        <div className="sticky top-0 bg-[#141414] border-b border-[#2a2a2a] px-6 py-4 flex items-start justify-between gap-4">
+    <div className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-[#141414] border-b border-[#2a2a2a] px-6 py-5 flex items-start justify-between gap-4">
           <div>
-            <span className="inline-block font-mono text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full mb-2"
-              style={{ color: scheme.color, background: `${scheme.color}18`, border: `1px solid ${scheme.color}40` }}>
+            <span className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase font-bold" style={{ color: scheme.color }}>
               {scheme.badge}
             </span>
-            <h2 className="font-['Clash_Display'] text-[18px] font-semibold text-[#f0ede6] leading-snug">{scheme.shortName}</h2>
-            <div className="font-mono text-[9px] tracking-wide text-[#555] mt-1">{scheme.dept}</div>
+            <h2 className="font-['Clash_Display'] text-[1.5rem] font-semibold text-[#f0ede6] mt-1">
+              {scheme.name}
+            </h2>
           </div>
-          <button onClick={onClose} className="mt-1 text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
+          <button onClick={onClose} className="text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
           </button>
         </div>
 
-        <div className="px-6 py-5 space-y-6">
-          <p className="font-['General_Sans'] text-[13px] text-[#888] leading-relaxed">{scheme.summary}</p>
-
-          {/* Benefit */}
-          <div className="rounded-lg border px-4 py-3" style={{ borderColor: `${scheme.color}30`, background: `${scheme.color}08` }}>
-            <div className="font-mono text-[9px] tracking-widest uppercase mb-1" style={{ color: scheme.color }}>What you get</div>
-            <p className="font-['General_Sans'] text-[13px] text-[#f0ede6] leading-relaxed">{scheme.benefit}</p>
-          </div>
-
-          {/* Eligibility */}
+        <div className="px-6 py-6 space-y-6">
           <div>
-            <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-3">Eligibility Criteria</div>
-            <div className="space-y-2">
+            <h3 className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] mb-2">Eligibility</h3>
+            <ul className="space-y-2">
               {scheme.eligibility.map((e, i) => (
-                <div key={i} className="flex gap-2.5 items-start">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#3a3a3a] flex-shrink-0 mt-1.5" />
-                  <span className="font-['General_Sans'] text-[13px] text-[#888] leading-snug">{e}</span>
-                </div>
+                <li key={i} className="flex gap-3 font-['General_Sans'] text-[0.9rem] text-[#888]">
+                  <CheckCircle size={16} className="flex-shrink-0 mt-0.5" style={{ color: scheme.color }} strokeWidth={1.5} />
+                  {e}
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
-          {/* Documents */}
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-4">
+            <h3 className="font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold text-[#f0ede6] mb-2">Benefit</h3>
+            <p className="font-['General_Sans'] text-[0.9rem] text-[#888] leading-relaxed">{scheme.benefit}</p>
+          </div>
+
           <div>
-            <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-3">Documents Required</div>
-            <div className="space-y-1.5">
+            <h3 className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] mb-3">Documents Required</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {scheme.documents.map((d, i) => (
-                <div key={i} className="flex gap-2.5 items-start bg-[#1a1a1a] rounded px-3 py-2">
-                  <span className="font-mono text-[10px] text-[#444] flex-shrink-0 mt-0.5">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="font-['General_Sans'] text-[12px] text-[#888] leading-snug">{d}</span>
+                <div key={i} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3">
+                  <p className="font-['General_Sans'] text-[0.85rem] text-[#888]">{d}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Notes */}
           {scheme.notes && (
-            <div className="bg-[#1e1e1e] border border-[#2a2a2a] rounded-lg px-4 py-3">
-              <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-1.5">Important Note</div>
-              <p className="font-['General_Sans'] text-[12px] text-[#c8f04d] leading-relaxed">{scheme.notes}</p>
+            <div className="bg-[#e8453c]/8 border border-[#e8453c]/20 rounded-lg p-4">
+              <p className="font-['General_Sans'] text-[0.9rem] text-[#e8453c] leading-relaxed">
+                <strong>Note:</strong> {scheme.notes}
+              </p>
             </div>
           )}
 
-          {/* Deadline */}
-          <div className="bg-[#1a1a1a] rounded-lg px-4 py-3 border border-[#2a2a2a]">
-            <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-1">AY 2025–26 Deadline</div>
-            <p className="font-['Cabinet_Grotesk'] text-[13px] font-semibold text-[#f0ede6]">{scheme.deadline}</p>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 pt-4">
             <a href={scheme.applyUrl} target="_blank" rel="noopener noreferrer"
-              className="flex-1 min-w-[140px] text-center py-2.5 rounded-lg font-['Cabinet_Grotesk'] text-[13px] font-semibold bg-[#e8453c] text-white hover:bg-[#d13530] transition-colors">
-              Apply on MahaDBT →
+              className="flex-1 bg-[#e8453c] text-white font-['Cabinet_Grotesk'] font-semibold py-3 rounded-lg hover:bg-[#d63a2f] transition-colors flex items-center justify-center gap-2">
+              Apply Now
+              <ExternalLink size={16} strokeWidth={1.5} />
             </a>
             <a href={scheme.infoUrl} target="_blank" rel="noopener noreferrer"
-              className="flex-1 min-w-[140px] text-center py-2.5 rounded-lg font-['Cabinet_Grotesk'] text-[13px] font-semibold border border-[#2a2a2a] text-[#888] hover:text-[#f0ede6] hover:border-[#3a3a3a] transition-colors">
-              Scheme Details →
+              className="flex-1 border border-[#e8453c] text-[#e8453c] font-['Cabinet_Grotesk'] font-semibold py-3 rounded-lg hover:bg-[#e8453c]/8 transition-colors flex items-center justify-center gap-2">
+              More Info
+              <ExternalLink size={16} strokeWidth={1.5} />
             </a>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-// ─── TABS ────────────────────────────────────────────────────────────────────
-
-const TABS = [
-  { id: "finder", label: "Find Mine" },
-  { id: "all", label: "All Schemes" },
-  { id: "howto", label: "How to Apply" },
-  { id: "mistakes", label: "Common Mistakes" },
-];
-
-// ─── PAGE ────────────────────────────────────────────────────────────────────
+// ─── MAIN PAGE ──────────────────────────────────────────────────────────────
 
 export default function Scholarships() {
   const [activeTab, setActiveTab] = useState("finder");
@@ -538,27 +503,33 @@ export default function Scholarships() {
 
   return (
     <div className="min-h-screen bg-[#0d0e0f] text-[#f0ede6]">
-      <div className="max-w-3xl mx-auto px-6 py-12">
+      <div className="max-w-4xl mx-auto px-6 py-20 pb-32">
 
         {/* Header */}
-        <div className="mb-10">
-          <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[#e8453c] mb-3">MahaDBT · AY 2025–26</div>
-          <h1 className="font-['Clash_Display'] text-5xl font-semibold tracking-tight mb-3">Scholarships</h1>
-          <p className="font-['General_Sans'] text-[15px] text-[#888] max-w-lg leading-relaxed">
+        <div className="mb-16">
+          <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[#e8453c] mb-3 font-bold">
+            MahaDBT · AY 2025–26
+          </p>
+          <h1 className="font-['Clash_Display'] text-[clamp(2rem,5vw,3.5rem)] font-semibold text-[#f0ede6] leading-tight mb-4">
+            Scholarships
+          </h1>
+          <p className="font-['General_Sans'] text-[1rem] text-[#888] max-w-[600px] leading-relaxed mb-4">
             Every major Maharashtra government scholarship for diploma students — eligibility, documents, deadlines, and how to apply without getting rejected.
           </p>
-          <div className="mt-4 inline-flex items-center gap-2 bg-[#c8f04d]/8 border border-[#c8f04d]/20 rounded px-3 py-2">
+          <div className="inline-flex items-center gap-2 bg-[#c8f04d]/8 border border-[#c8f04d]/20 rounded-lg px-3 py-2">
             <div className="w-1.5 h-1.5 rounded-full bg-[#c8f04d]" />
-            <span className="font-mono text-[10px] tracking-wide text-[#c8f04d]">AY 2025–26 applications open until 30 Jun 2026</span>
+            <span className="font-['General_Sans'] text-[0.8rem] text-[#c8f04d] font-medium">AY 2025–26 applications open until 30 Jun 2026</span>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 flex-wrap border-b border-[#2a2a2a] mb-10">
+        <div className="flex gap-2 flex-wrap border-b border-[#2a2a2a] mb-10 pb-6">
           {TABS.map((tab) => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`font-['Cabinet_Grotesk'] text-[13px] font-semibold px-5 py-2.5 border-b-2 -mb-px transition-colors
-                ${activeTab === tab.id ? "text-[#f0ede6] border-[#e8453c]" : "text-[#888] border-transparent hover:text-[#f0ede6]"}`}>
+              className={`font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold px-4 py-2.5 rounded-lg border transition-all
+                ${activeTab === tab.id 
+                  ? "border-[#e8453c] bg-[#e8453c]/5 text-[#f0ede6]" 
+                  : "border-[#2a2a2a] bg-transparent text-[#888] hover:border-[#3a3a3a] hover:text-[#f0ede6]"}`}>
               {tab.label}
             </button>
           ))}
@@ -568,12 +539,14 @@ export default function Scholarships() {
         {activeTab === "finder" && (
           <div className="space-y-8">
             <ScholarshipFinder onSelect={(s) => { setSelectedScheme(s); }} />
-            <div className="pt-4 border-t border-[#1e1e1e]">
-              <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-3">Or jump straight to a scheme</div>
+            <div className="pt-6 border-t border-[#1a1a1a]">
+              <div className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase text-[#888] mb-4 font-bold">
+                Or jump straight to a scheme
+              </div>
               <div className="flex flex-wrap gap-2">
                 {SCHOLARSHIPS.map((s) => (
                   <button key={s.id} onClick={() => setSelectedScheme(s)}
-                    className="font-mono text-[10px] tracking-wide px-2.5 py-1.5 rounded border border-[#2a2a2a] text-[#555] hover:text-[#f0ede6] hover:border-[#3a3a3a] transition-all">
+                    className="font-['General_Sans'] text-[0.8rem] font-medium px-3 py-2 rounded-lg border border-[#2a2a2a] text-[#888] hover:text-[#f0ede6] hover:border-[#e8453c]/40 transition-all">
                     {s.shortName}
                   </button>
                 ))}
@@ -587,44 +560,48 @@ export default function Scholarships() {
           <div className="space-y-3">
             {SCHOLARSHIPS.map((s) => (
               <button key={s.id} onClick={() => setSelectedScheme(s)}
-                className="w-full text-left bg-[#141414] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-lg p-4 transition-all group">
+                className="w-full text-left bg-[#141414] border border-[#2a2a2a] hover:border-[#e8453c]/40 hover:bg-[#1a1a1a] rounded-lg p-4 transition-all group">
                 <div className="flex items-start gap-3">
-                  <div className="w-1 h-full min-h-[40px] rounded-full flex-shrink-0 mt-1" style={{ background: s.color }} />
+                  <div className="w-1 h-full min-h-[50px] rounded-full flex-shrink-0 mt-1" style={{ background: s.color }} />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="font-mono text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full"
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <span className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase px-2.5 py-1 rounded-full font-bold"
                         style={{ color: s.color, background: `${s.color}18`, border: `1px solid ${s.color}40` }}>
                         {s.badge}
                       </span>
-                      <span className="font-mono text-[9px] text-[#444]">{s.dept}</span>
+                      <span className="font-['JetBrains_Mono'] text-[0.65rem] text-[#555]">{s.dept}</span>
                     </div>
-                    <div className="font-['Cabinet_Grotesk'] text-[14px] font-semibold text-[#f0ede6] group-hover:text-white transition-colors mb-1">{s.name}</div>
-                    <p className="font-['General_Sans'] text-[12px] text-[#888] leading-relaxed">{s.summary}</p>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
+                    <div className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] group-hover:text-white transition-colors mb-1">
+                      {s.name}
+                    </div>
+                    <p className="font-['General_Sans'] text-[0.85rem] text-[#888] leading-relaxed mb-2">{s.summary}</p>
+                    <div className="flex flex-wrap gap-1.5">
                       {s.categories.map((c) => (
-                        <span key={c} className="font-mono text-[9px] text-[#555] bg-[#1a1a1a] px-2 py-0.5 rounded">{c}</span>
+                        <span key={c} className="font-['General_Sans'] text-[0.75rem] text-[#555] bg-[#1a1a1a] px-2 py-0.5 rounded">
+                          {c}
+                        </span>
                       ))}
                     </div>
                   </div>
-                  <svg className="text-[#444] group-hover:text-[#888] transition-colors flex-shrink-0 mt-1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                  </svg>
+                  <ChevronDown size={16} strokeWidth={2} className="text-[#444] group-hover:text-[#e8453c] transition-colors flex-shrink-0 mt-1 rotate-[-90deg]" />
                 </div>
               </button>
             ))}
 
             {/* Quick Links */}
-            <div className="mt-8 pt-6 border-t border-[#1e1e1e]">
-              <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-3">MahaDBT Portal Links</div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="mt-10 pt-6 border-t border-[#1a1a1a]">
+              <div className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase text-[#888] mb-4 font-bold">
+                MahaDBT Portal Links
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {QUICK_LINKS.map((l, i) => (
                   <a key={i} href={l.url} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 p-3 bg-[#141414] border border-[#2a2a2a] rounded-lg hover:border-[#3a3a3a] transition-all group">
-                    <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: l.color }} />
-                    <span className="font-['Cabinet_Grotesk'] text-[12px] font-medium text-[#888] group-hover:text-[#f0ede6] transition-colors flex-1">{l.label}</span>
-                    <svg className="text-[#444] group-hover:text-[#777]" width="11" height="11" viewBox="0 0 12 12" fill="none">
-                      <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    className="flex items-center gap-3 p-4 bg-[#141414] border border-[#2a2a2a] rounded-lg hover:border-[#e8453c]/40 hover:bg-[#1a1a1a] transition-all group">
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: l.color }} />
+                    <span className="font-['Cabinet_Grotesk'] text-[0.9rem] font-medium text-[#888] group-hover:text-[#f0ede6] transition-colors flex-1">
+                      {l.label}
+                    </span>
+                    <ExternalLink size={14} strokeWidth={1.5} className="text-[#444] group-hover:text-[#e8453c] transition-colors" />
                   </a>
                 ))}
               </div>
@@ -637,20 +614,27 @@ export default function Scholarships() {
           <div>
             <div className="space-y-3 mb-8">
               {HOW_TO_APPLY_STEPS.map((s, i) => (
-                <div key={i} className="flex gap-4 bg-[#141414] border border-[#2a2a2a] rounded-lg p-4">
-                  <span className="font-mono text-[11px] text-[#e8453c] flex-shrink-0 w-6 mt-0.5">{s.n}</span>
-                  <div>
-                    <div className="font-['Cabinet_Grotesk'] text-[14px] font-semibold text-[#f0ede6] mb-1">{s.title}</div>
-                    <p className="font-['General_Sans'] text-[13px] text-[#888] leading-relaxed">{s.desc}</p>
+                <div key={i} className="flex gap-4 bg-[#141414] border border-[#2a2a2a] rounded-lg p-4 hover:border-[#e8453c]/20 transition-colors">
+                  <span className="font-['Clash_Display'] text-[1.2rem] font-bold text-[#e8453c] flex-shrink-0 w-8">{s.n}</span>
+                  <div className="flex-1">
+                    <div className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] mb-1">
+                      {s.title}
+                    </div>
+                    <p className="font-['General_Sans'] text-[0.9rem] text-[#888] leading-relaxed">{s.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="bg-[#1a1a1a] border border-[#c8f04d]/20 rounded-lg p-4">
-              <div className="font-mono text-[9px] tracking-widest uppercase text-[#c8f04d] mb-2">Pro tip</div>
-              <p className="font-['General_Sans'] text-[13px] text-[#888] leading-relaxed">
-                Apply at least 3 weeks before the deadline. MahaDBT servers overload close to closing dates. Early applicants also have more time to fix document issues.
-              </p>
+            <div className="bg-[#1a1a1a] border border-[#c8f04d]/20 rounded-lg p-5">
+              <div className="flex items-start gap-3">
+                <AlertCircle size={18} className="text-[#c8f04d] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                <div>
+                  <div className="font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold text-[#f0ede6] mb-1">Pro Tip</div>
+                  <p className="font-['General_Sans'] text-[0.9rem] text-[#888] leading-relaxed">
+                    Apply at least 3 weeks before the deadline. MahaDBT servers overload close to closing dates. Early applicants also have more time to fix document issues.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -661,27 +645,25 @@ export default function Scholarships() {
             {COMMON_MISTAKES.map((m, i) => {
               const isOpen = openMistake === i;
               return (
-                <div key={i} className={`border rounded-lg overflow-hidden transition-all ${isOpen ? "border-[#3a3a3a] bg-[#141414]" : "border-[#2a2a2a] bg-[#0f0f0f]"}`}>
+                <div key={i} className={`border rounded-lg overflow-hidden transition-all ${isOpen ? "border-[#e8453c]/40 bg-[#141414]" : "border-[#2a2a2a] bg-[#0f0f0f] hover:border-[#2a2a2a]"}`}>
                   <button onClick={() => setOpenMistake(isOpen ? null : i)}
-                    className="w-full flex items-center gap-4 px-4 py-3.5 text-left">
-                    <span className="font-mono text-[11px] text-[#e8453c] flex-shrink-0">✕</span>
-                    <span className="font-['Cabinet_Grotesk'] text-[14px] font-semibold text-[#f0ede6] flex-1">{m.title}</span>
-                    <svg className={`text-[#555] transition-transform flex-shrink-0 ${isOpen ? "rotate-180" : ""}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="6 9 12 15 18 9"/>
-                    </svg>
+                    className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-[#1a1a1a] transition-colors">
+                    <span className="font-['Clash_Display'] text-[1.2rem] font-bold text-[#e8453c] flex-shrink-0">✕</span>
+                    <span className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] flex-1">{m.title}</span>
+                    <ChevronDown size={18} strokeWidth={2} className={`text-[#555] transition-transform flex-shrink-0 ${isOpen ? "rotate-180" : ""}`} />
                   </button>
                   {isOpen && (
-                    <div className="px-4 pb-4 pl-10">
-                      <p className="font-['General_Sans'] text-[13px] text-[#888] leading-relaxed">{m.desc}</p>
+                    <div className="px-5 pb-4 pl-16">
+                      <p className="font-['General_Sans'] text-[0.9rem] text-[#888] leading-relaxed">{m.desc}</p>
                     </div>
                   )}
                 </div>
               );
             })}
 
-            <div className="mt-6 bg-[#141414] border border-[#2a2a2a] rounded-lg p-4">
-              <div className="font-mono text-[9px] tracking-widest uppercase text-[#555] mb-2">Remember</div>
-              <p className="font-['General_Sans'] text-[13px] text-[#555] leading-relaxed">
+            <div className="mt-8 bg-[#141414] border border-[#2a2a2a] rounded-lg p-5">
+              <div className="font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold text-[#f0ede6] mb-2">Remember</div>
+              <p className="font-['General_Sans'] text-[0.9rem] text-[#888] leading-relaxed">
                 You can only hold one government scholarship at a time. Choose the one with the highest benefit for your category. Applying to multiple overlapping schemes cancels both.
               </p>
             </div>
@@ -689,18 +671,20 @@ export default function Scholarships() {
         )}
 
         {/* Footer */}
-        <div className="mt-10 pt-6 border-t border-[#1e1e1e]">
-          <p className="font-['General_Sans'] text-[11px] text-[#444] leading-relaxed">
+        <div className="mt-12 pt-6 border-t border-[#1a1a1a]">
+          <p className="font-['General_Sans'] text-[0.8rem] text-[#555] leading-relaxed">
             Data based on MahaDBT official portal and AY 2025–26 guidelines. Always verify eligibility and deadlines at{" "}
-            <a href="https://mahadbt.maharashtra.gov.in" target="_blank" rel="noopener noreferrer" className="text-[#555] hover:text-[#888] underline underline-offset-2 transition-colors">
+            <a href="https://mahadbt.maharashtra.gov.in" target="_blank" rel="noopener noreferrer" className="text-[#888] hover:text-[#f0ede6] underline underline-offset-2 transition-colors">
               mahadbt.maharashtra.gov.in
             </a>{" "}
             before applying.
           </p>
         </div>
+
       </div>
 
-      {selectedScheme && <SchemeDrawer scheme={selectedScheme} onClose={() => setSelectedScheme(null)} />}
+      {/* Scheme Detail Modal */}
+      <SchemeDetail scheme={selectedScheme} onClose={() => setSelectedScheme(null)} />
     </div>
   );
 }

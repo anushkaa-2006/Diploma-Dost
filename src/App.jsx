@@ -4,7 +4,7 @@ import Home         from './pages/Home'
 import Resources    from './pages/Resources'
 import Roadmaps     from './pages/Roadmaps'
 import Predictor    from './pages/Predictor'
-import Projects     from './pages/Projects'
+import InnovationHub     from './pages/InnovationHub'
 import DSA          from './pages/DSA'
 import YouTube      from './pages/YouTube'
 import Internships  from './pages/Internships'
@@ -30,7 +30,7 @@ export default function App() {
             <Route path="/resources"    element={<Resources />} />
             <Route path="/roadmaps"     element={<Roadmaps />} />
             <Route path="/predictor"    element={<Predictor />} />
-            <Route path="/projects"     element={<Projects />} />
+            <Route path="/innovation-hub"     element={<InnovationHub />} />
             <Route path="/dsa"          element={<DSA />} />
             <Route path="/youtube"      element={<YouTube />} />
             <Route path="/internships"  element={<Internships />} />

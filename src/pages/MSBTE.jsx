@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown, Calendar, AlertCircle, CheckCircle, Clock, ExternalLink, FileText } from "lucide-react";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -117,63 +118,130 @@ const NOTICES = [
   },
 ];
 
-// ─── ICONS ───────────────────────────────────────────────────────────────────
-
-function Icon({ name, size = 16 }) {
-  const s = { width: size, height: size };
-  const icons = {
-    globe: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
-    user: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-    calendar: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
-    award: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>,
-    "id-card": <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 10h2M16 14h2M7 10h.01"/><circle cx="9" cy="12" r="2"/><path d="M6 16c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2"/></svg>,
-    download: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-    external: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>,
-    info: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>,
-    chevron: <svg {...s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>,
-  };
-  return icons[name] || null;
-}
-
 // ─── SECTION HEADER ──────────────────────────────────────────────────────────
 
-function SectionHeader({ eyebrow, title }) {
+function SectionHeader({ eyebrow, title, subtitle }) {
   return (
-    <div className="mb-6">
-      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#e8453c] mb-2">{eyebrow}</div>
-      <h2 className="font-['Clash_Display'] text-2xl font-semibold text-[#f0ede6]">{title}</h2>
+    <div className="mb-8">
+      <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[#e8453c] mb-2 font-bold">
+        {eyebrow}
+      </p>
+      <h2 className="font-['Clash_Display'] text-[clamp(1.5rem,3vw,2.5rem)] font-semibold text-[#f0ede6] leading-tight mb-2">
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="font-['General_Sans'] text-[0.95rem] text-[#888] max-w-[560px] leading-relaxed">
+          {subtitle}
+        </p>
+      )}
     </div>
   );
 }
 
-// ─── NOTICES STRIP ───────────────────────────────────────────────────────────
+// ─── TIMELINE SECTION ────────────────────────────────────────────────────────
+
+function TimelineSection() {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? TERM_SCHEDULE : TERM_SCHEDULE.slice(0, 10);
+
+  const statusConfig = {
+    done:     { dot: "bg-[#2a2a2a]", text: "text-[#666]", dateTxt: "text-[#555]", icon: CheckCircle },
+    current:  { dot: "bg-[#e8453c] ring-4 ring-[#e8453c]/20", text: "text-[#f0ede6] font-semibold", dateTxt: "text-[#e8453c]", icon: Clock },
+    upcoming: { dot: "bg-[#2a2a2a] border-2 border-[#4d9ef0]", text: "text-[#888]", dateTxt: "text-[#666]", icon: Calendar },
+  };
+
+  return (
+    <div className="mb-12">
+      <SectionHeader eyebrow={`Academic Year ${ACADEMIC_YEAR}`} title="Important Dates" subtitle="Key milestones and exam schedules for your diploma journey." />
+      
+      <div className="relative">
+        {/* vertical line */}
+        <div className="absolute left-[15px] top-6 bottom-0 w-0.5 bg-gradient-to-b from-[#e8453c] via-[#2a2a2a] to-[#2a2a2a]" />
+        
+        <div className="space-y-4">
+          {visible.map((item, i) => {
+            const config = statusConfig[item.status];
+            const Icon = config.icon;
+            return (
+              <div key={i} className="flex gap-6 relative">
+                <div className="flex-shrink-0 mt-1 relative z-10">
+                  <div className={`w-8 h-8 rounded-full ${config.dot} flex items-center justify-center`}>
+                    <Icon size={14} color={item.status === 'done' ? '#555' : item.status === 'current' ? '#fff' : '#4d9ef0'} strokeWidth={2} />
+                  </div>
+                </div>
+                <div className="flex-1 flex items-start justify-between gap-4 min-w-0 pb-4 border-b border-[#1a1a1a] last:border-0">
+                  <span className={`font-['General_Sans'] text-[0.95rem] leading-snug ${config.text}`}>
+                    {item.label}
+                  </span>
+                  <span className={`font-['JetBrains_Mono'] text-[0.8rem] flex-shrink-0 ${config.dateTxt}`}>
+                    {item.date}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      
+      {!expanded && TERM_SCHEDULE.length > visible.length && (
+        <button
+          onClick={() => setExpanded(true)}
+          className="mt-6 inline-flex items-center gap-2 font-['General_Sans'] text-[0.9rem] text-[#e8453c] hover:text-[#f0a843] transition-colors"
+        >
+          <ChevronDown size={16} strokeWidth={2} />
+          Show all {TERM_SCHEDULE.length} dates
+        </button>
+      )}
+      
+      {expanded && (
+        <button
+          onClick={() => setExpanded(false)}
+          className="mt-6 inline-flex items-center gap-2 font-['General_Sans'] text-[0.9rem] text-[#888] hover:text-[#f0ede6] transition-colors"
+        >
+          <ChevronDown size={16} strokeWidth={2} className="rotate-180" />
+          Show less
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ─── NOTICES SECTION ─────────────────────────────────────────────────────────
 
 function NoticesSection() {
   return (
     <div className="mb-12">
       <SectionHeader eyebrow="Live Updates" title="Important Notices" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {NOTICES.map((n, i) => (
-          <div key={i} className="bg-[#141414] border border-[#2a2a2a] rounded-lg p-4 flex flex-col gap-2">
-            <div className="flex items-center gap-2">
+          <div
+            key={i}
+            className="bg-[#141414] border border-[#2a2a2a] rounded-lg p-5 hover:border-[#e8453c]/30 transition-colors duration-150"
+          >
+            <div className="flex items-start justify-between gap-3 mb-3">
               <span
-                className="font-mono text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full"
+                className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase px-2.5 py-1 rounded-full font-bold"
                 style={{ color: n.color, background: `${n.color}18`, border: `1px solid ${n.color}40` }}
               >
                 {n.tag}
               </span>
             </div>
-            <div className="font-['Cabinet_Grotesk'] text-[14px] font-semibold text-[#f0ede6]">{n.title}</div>
-            <p className="font-['General_Sans'] text-[12px] text-[#888] leading-relaxed">{n.desc}</p>
+            <h3 className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] mb-2">
+              {n.title}
+            </h3>
+            <p className="font-['General_Sans'] text-[0.9rem] text-[#888] leading-relaxed mb-3">
+              {n.desc}
+            </p>
             {n.link && (
               <a
                 href={n.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[10px] tracking-wide mt-1 hover:opacity-80 transition-opacity"
+                className="inline-flex items-center gap-1.5 font-['General_Sans'] text-[0.85rem] font-medium transition-colors"
                 style={{ color: n.color }}
               >
                 {n.linkLabel}
+                <ExternalLink size={12} strokeWidth={2} />
               </a>
             )}
           </div>
@@ -183,61 +251,12 @@ function NoticesSection() {
   );
 }
 
-// ─── TIMELINE ────────────────────────────────────────────────────────────────
-
-function TimelineSection() {
-  const [expanded, setExpanded] = useState(false);
-  const visible = expanded ? TERM_SCHEDULE : TERM_SCHEDULE.slice(0, 8);
-
-  const statusStyles = {
-    done:     { dot: "bg-[#333]", text: "text-[#555]", dateTxt: "text-[#444]" },
-    current:  { dot: "bg-[#e8453c] ring-4 ring-[#e8453c]/20", text: "text-[#f0ede6] font-semibold", dateTxt: "text-[#e8453c]" },
-    upcoming: { dot: "bg-[#2a2a2a] border border-[#444]", text: "text-[#888]", dateTxt: "text-[#666]" },
-  };
-
-  return (
-    <div className="mb-12">
-      <SectionHeader eyebrow={`AY ${ACADEMIC_YEAR}`} title="Academic Calendar" />
-      <div className="relative">
-        {/* vertical line */}
-        <div className="absolute left-[7px] top-2 bottom-0 w-px bg-[#2a2a2a]" />
-        <div className="space-y-0">
-          {visible.map((item, i) => {
-            const s = statusStyles[item.status];
-            return (
-              <div key={i} className="flex gap-4 relative pb-5">
-                <div className="flex-shrink-0 mt-1">
-                  <div className={`w-3.5 h-3.5 rounded-full ${s.dot}`} />
-                </div>
-                <div className="flex-1 flex items-start justify-between gap-4 min-w-0">
-                  <span className={`font-['General_Sans'] text-[13px] leading-snug ${s.text}`}>{item.label}</span>
-                  <span className={`font-mono text-[11px] flex-shrink-0 ${s.dateTxt}`}>{item.date}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        {!expanded && (
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0d0e0f] to-transparent pointer-events-none" />
-        )}
-      </div>
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="mt-3 flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase text-[#555] hover:text-[#f0ede6] transition-colors"
-      >
-        <span className={`transition-transform ${expanded ? "rotate-180" : ""}`}><Icon name="chevron" size={12} /></span>
-        {expanded ? "Show less" : `Show all ${TERM_SCHEDULE.length} dates`}
-      </button>
-    </div>
-  );
-}
-
-// ─── QUICK LINKS ─────────────────────────────────────────────────────────────
+// ─── QUICK LINKS SECTION ─────────────────────────────────────────────────────
 
 function QuickLinksSection() {
   return (
     <div className="mb-12">
-      <SectionHeader eyebrow="MSBTE Portals" title="Quick Links" />
+      <SectionHeader eyebrow="MSBTE Portals" title="Quick Links" subtitle="Direct access to official MSBTE portals and resources." />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {QUICK_LINKS.map((link, i) => (
           <a
@@ -245,18 +264,23 @@ function QuickLinksSection() {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-3 p-3.5 bg-[#141414] border border-[#2a2a2a] rounded-lg hover:border-[#3a3a3a] transition-all"
+            className="group flex items-center gap-3 p-4 bg-[#141414] border border-[#2a2a2a] rounded-lg hover:border-[#e8453c]/40 hover:bg-[#1a1a1a] transition-all duration-150"
           >
             <span
-              className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 transition-colors"
+              className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
               style={{ background: `${link.color}18`, color: link.color }}
             >
-              <Icon name={link.icon} size={15} />
+              {link.icon === 'globe' && <ExternalLink size={18} strokeWidth={1.5} />}
+              {link.icon === 'user' && <FileText size={18} strokeWidth={1.5} />}
+              {link.icon === 'calendar' && <Calendar size={18} strokeWidth={1.5} />}
+              {link.icon === 'award' && <CheckCircle size={18} strokeWidth={1.5} />}
+              {link.icon === 'id-card' && <FileText size={18} strokeWidth={1.5} />}
+              {link.icon === 'download' && <ExternalLink size={18} strokeWidth={1.5} />}
             </span>
-            <span className="font-['Cabinet_Grotesk'] text-[13px] font-medium text-[#f0ede6] flex-1 leading-snug">{link.label}</span>
-            <span className="text-[#444] group-hover:text-[#888] transition-colors flex-shrink-0">
-              <Icon name="external" size={12} />
+            <span className="font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold text-[#f0ede6] flex-1 leading-snug">
+              {link.label}
             </span>
+            <ExternalLink size={14} strokeWidth={1.5} className="text-[#555] group-hover:text-[#e8453c] transition-colors flex-shrink-0" />
           </a>
         ))}
       </div>
@@ -264,38 +288,22 @@ function QuickLinksSection() {
   );
 }
 
-// ─── FEES TABLE ──────────────────────────────────────────────────────────────
-
-function FeesTable() {
-  return (
-    <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg overflow-hidden mb-8">
-      <div className="px-4 py-3 border-b border-[#2a2a2a]">
-        <div className="font-mono text-[9px] tracking-[0.12em] uppercase text-[#555]">Fee Reference</div>
-      </div>
-      <div className="divide-y divide-[#1e1e1e]">
-        {FEES.map((f, i) => (
-          <div key={i} className="flex items-center justify-between px-4 py-3">
-            <span className="font-['General_Sans'] text-[13px] text-[#888]">{f.item}</span>
-            <span className="font-mono text-[12px] text-[#c8f04d]">{f.amount}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── RECHECKING GUIDE ────────────────────────────────────────────────────────
+// ─── RECHECKING SECTION ──────────────────────────────────────────────────────
 
 function RecheckingSection() {
   const [openStep, setOpenStep] = useState(null);
 
   return (
     <div className="mb-12">
-      <SectionHeader eyebrow="After Results" title="Photocopy & Rechecking Guide" />
+      <SectionHeader 
+        eyebrow="After Results" 
+        title="Photocopy & Rechecking Guide" 
+        subtitle="Step-by-step process to request photocopy or re-evaluation of your answer sheets."
+      />
 
-      <div className="bg-[#1a1a1a] border border-[#c8f04d]/20 rounded-lg px-4 py-3 mb-6 flex gap-3">
-        <span className="text-[#c8f04d] flex-shrink-0 mt-0.5"><Icon name="info" size={14} /></span>
-        <p className="font-['General_Sans'] text-[12px] text-[#888] leading-relaxed">
+      <div className="bg-[#1a1a1a] border border-[#c8f04d]/20 rounded-lg px-5 py-4 mb-6 flex gap-3">
+        <AlertCircle size={18} className="text-[#c8f04d] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+        <p className="font-['General_Sans'] text-[0.9rem] text-[#888] leading-relaxed">
           The rechecking window opens roughly 1–2 days after results are published and stays open for only 2–3 days. Watch msbte.ac.in and your college notice board closely right after results.
         </p>
       </div>
@@ -306,24 +314,34 @@ function RecheckingSection() {
           return (
             <div
               key={i}
-              className={`border rounded-lg overflow-hidden transition-all ${isOpen ? "border-[#3a3a3a] bg-[#141414]" : "border-[#2a2a2a] bg-[#0f0f0f]"}`}
+              className={`border rounded-lg overflow-hidden transition-all ${isOpen ? "border-[#e8453c]/40 bg-[#141414]" : "border-[#2a2a2a] bg-[#0f0f0f] hover:border-[#2a2a2a]"}`}
             >
               <button
                 onClick={() => setOpenStep(isOpen ? null : i)}
-                className="w-full flex items-center gap-4 px-4 py-3.5 text-left"
+                className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-[#1a1a1a] transition-colors"
               >
-                <span className="font-mono text-[11px] text-[#e8453c] flex-shrink-0 w-6">{s.step}</span>
-                <span className="font-['Cabinet_Grotesk'] text-[14px] font-semibold text-[#f0ede6] flex-1">{s.title}</span>
-                <span className={`text-[#555] transition-transform flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}>
-                  <Icon name="chevron" size={14} />
+                <span className="font-['Clash_Display'] text-[1.2rem] font-bold text-[#e8453c] flex-shrink-0 w-8">
+                  {s.step}
                 </span>
+                <span className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] flex-1">
+                  {s.title}
+                </span>
+                <ChevronDown
+                  size={18}
+                  strokeWidth={2}
+                  className={`text-[#888] transition-transform flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {isOpen && (
-                <div className="px-4 pb-4 pl-14 space-y-2">
-                  <p className="font-['General_Sans'] text-[13px] text-[#888] leading-relaxed">{s.desc}</p>
+                <div className="px-5 pb-5 pl-20 space-y-3 border-t border-[#1a1a1a]">
+                  <p className="font-['General_Sans'] text-[0.95rem] text-[#888] leading-relaxed">
+                    {s.desc}
+                  </p>
                   {s.note && (
-                    <div className="bg-[#e8453c]/8 border border-[#e8453c]/20 rounded px-3 py-2">
-                      <p className="font-['General_Sans'] text-[12px] text-[#e8453c] leading-relaxed">{s.note}</p>
+                    <div className="bg-[#e8453c]/8 border border-[#e8453c]/20 rounded-lg px-4 py-3">
+                      <p className="font-['General_Sans'] text-[0.9rem] text-[#e8453c] leading-relaxed">
+                        <strong>⚠️ {s.note.split(':')[0]}:</strong> {s.note.split(':')[1]}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -333,85 +351,79 @@ function RecheckingSection() {
         })}
       </div>
 
-      <FeesTable />
+      {/* Fees Table */}
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg overflow-hidden mb-6">
+        <div className="px-5 py-4 border-b border-[#2a2a2a]">
+          <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.12em] text-[#888] font-bold">
+            Fee Reference
+          </p>
+        </div>
+        <div className="divide-y divide-[#1a1a1a]">
+          {FEES.map((f, i) => (
+            <div key={i} className="flex items-center justify-between px-5 py-3.5 hover:bg-[#1a1a1a] transition-colors">
+              <span className="font-['General_Sans'] text-[0.95rem] text-[#888]">
+                {f.item}
+              </span>
+              <span className="font-['JetBrains_Mono'] text-[0.9rem] font-bold text-[#c8f04d]">
+                {f.amount}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-      <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg p-4">
-        <div className="font-mono text-[9px] tracking-[0.12em] uppercase text-[#555] mb-3">Apply here when window opens</div>
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg p-5">
+        <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.12em] text-[#888] mb-3 font-bold">
+          Apply when window opens
+        </p>
         <a
           href="https://online.msbte.co.in/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-['Cabinet_Grotesk'] text-[13px] font-semibold text-[#4d9ef0] hover:text-[#6db4ff] transition-colors"
+          className="inline-flex items-center gap-2 font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#4d9ef0] hover:text-[#6db4ff] transition-colors"
         >
           online.msbte.co.in — Student Login
-          <Icon name="external" size={12} />
+          <ExternalLink size={16} strokeWidth={1.5} />
         </a>
-        <p className="font-['General_Sans'] text-[11px] text-[#555] mt-1.5">Login with your enrollment number and password (same as exam form login)</p>
+        <p className="font-['General_Sans'] text-[0.85rem] text-[#555] mt-2">
+          Login with your enrollment number and password (same as exam form login)
+        </p>
       </div>
     </div>
   );
 }
 
-// ─── TABS ────────────────────────────────────────────────────────────────────
+// ─── MAIN PAGE ─────────────────────────────────────────────────────────────────
 
-const TABS = [
-  { id: "notices", label: "Notices" },
-  { id: "calendar", label: "Calendar" },
-  { id: "links", label: "Quick Links" },
-  { id: "rechecking", label: "Rechecking Guide" },
-];
-
-// ─── PAGE ────────────────────────────────────────────────────────────────────
-
-export default function Dates() {
-  const [activeTab, setActiveTab] = useState("notices");
-
+export default function MSBTE() {
   return (
-    <div className="min-h-screen bg-[#0d0e0f] text-[#f0ede6]">
-      <div className="max-w-3xl mx-auto px-6 py-12">
+    <section className="max-w-[1100px] mx-auto px-6 py-20 pb-32">
 
-        {/* Header */}
-        <div className="mb-10">
-          <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[#e8453c] mb-3">MSBTE · AY {ACADEMIC_YEAR}</div>
-          <h1 className="font-['Clash_Display'] text-5xl font-semibold tracking-tight mb-3">Dates & Deadlines</h1>
-          <p className="font-['General_Sans'] text-[15px] text-[#888] max-w-lg leading-relaxed">
-            Academic calendar, exam schedule, important deadlines, and a step-by-step rechecking guide — all in one place.
-          </p>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-1 flex-wrap border-b border-[#2a2a2a] mb-10">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`font-['Cabinet_Grotesk'] text-[13px] font-semibold px-5 py-2.5 border-b-2 -mb-px transition-colors
-                ${activeTab === tab.id
-                  ? "text-[#f0ede6] border-[#e8453c]"
-                  : "text-[#888] border-transparent hover:text-[#f0ede6]"}`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        {activeTab === "notices" && <NoticesSection />}
-        {activeTab === "calendar" && <TimelineSection />}
-        {activeTab === "links" && <QuickLinksSection />}
-        {activeTab === "rechecking" && <RecheckingSection />}
-
-        {/* Footer note */}
-        <div className="mt-6 pt-6 border-t border-[#1e1e1e]">
-          <p className="font-['General_Sans'] text-[11px] text-[#444] leading-relaxed">
-            Dates are based on the official MSBTE Academic Calendar 2025–26 and may be revised. Always verify at{" "}
-            <a href="https://msbte.ac.in" target="_blank" rel="noopener noreferrer" className="text-[#555] hover:text-[#888] underline underline-offset-2 transition-colors">
-              msbte.ac.in
-            </a>{" "}
-            before acting on any deadline.
-          </p>
-        </div>
+      {/* ── header ── */}
+      <div className="mb-16">
+        <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[#e8453c] mb-3 font-bold">
+          MSBTE K-Scheme
+        </p>
+        <h1 className="font-['Clash_Display'] text-[clamp(2rem,5vw,3.5rem)] font-semibold text-[#f0ede6] leading-tight mb-4">
+          Important Dates & Deadlines
+        </h1>
+        <p className="font-['General_Sans'] text-[1rem] text-[#888] max-w-[600px] leading-relaxed">
+          Stay on top of exam schedules, form submission deadlines, and important MSBTE announcements. Never miss a critical date again.
+        </p>
       </div>
-    </div>
+
+      {/* ── timeline ── */}
+      <TimelineSection />
+
+      {/* ── notices ── */}
+      <NoticesSection />
+
+      {/* ── quick links ── */}
+      <QuickLinksSection />
+
+      {/* ── rechecking ── */}
+      <RecheckingSection />
+
+    </section>
   );
 }

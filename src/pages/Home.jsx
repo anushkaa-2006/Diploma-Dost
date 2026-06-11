@@ -2,14 +2,17 @@ import { Link } from 'react-router-dom'
 import {
   ArrowRight, BookOpen, Map, Target, Lightbulb,
   Trophy, PlaySquare, Search, Users, Calendar,
-  GraduationCap, Briefcase, GitBranchIcon
+  GraduationCap, Briefcase, GitBranchIcon, Zap,
+  CheckCircle, Sparkles, TrendingUp, Code
 } from 'lucide-react'
+
+import { FaGithub } from 'react-icons/fa'
 
 const features = [
   { icon: BookOpen,      label: 'Resources',    desc: 'PYQs, Notes, Syllabus',        path: '/resources'    },
   { icon: Map,           label: 'Roadmaps',     desc: 'Career paths for CS/IT',        path: '/roadmaps'     },
   { icon: Target,        label: 'Predictor',    desc: 'College admission prediction',  path: '/predictor'    },
-  { icon: Lightbulb,     label: 'Projects',     desc: 'ITR, Capstone & micro ideas',   path: '/projects'     },
+  { icon: Lightbulb,     label: 'Innovation Hub',     desc: 'ITR, Capstone & micro ideas',   path: '/innovation-hub'     },
   { icon: Trophy,        label: 'DSA & CP',     desc: 'LeetCode, Striver, GFG',        path: '/dsa'          },
   { icon: PlaySquare,    label: 'YouTube Hub',  desc: 'Best playlists Sem 1–6',        path: '/youtube'      },
   { icon: Search,        label: 'Internships',  desc: 'Find & apply guide',            path: '/internships'  },
@@ -25,6 +28,13 @@ const stats = [
   { value: '13+',  label: 'Features' },
   { value: '100%', label: 'Free' },
   { value: '∞',    label: 'Resources' },
+]
+
+const highlights = [
+  { icon: Zap, title: 'Lightning Fast', desc: 'Optimized for slow connections. Works offline.' },
+  { icon: Code, title: 'Open Source', desc: 'Contribute code, content, or ideas on GitHub.' },
+  { icon: TrendingUp, title: 'Career Focused', desc: 'From college to campus placement — we cover it all.' },
+  { icon: CheckCircle, title: 'Trusted by 1000s', desc: 'Built by students who got placed. Verified content.' },
 ]
 
 export default function Home() {
@@ -187,6 +197,95 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── WHY DIPLOMA DOST ───────────────────── */}
+      <section style={{
+        padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
+        borderTop: '1px solid var(--border)',
+      }}>
+
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginBottom: '3.5rem',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}>
+          <div>
+            <div className="section-label" style={{ marginBottom: '0.75rem' }}>
+              Why us
+            </div>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+              letterSpacing: '-0.03em',
+              color: 'var(--text)',
+              lineHeight: 1.05,
+              maxWidth: '600px',
+            }}>
+              Built by students who got placed
+            </h2>
+          </div>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.875rem',
+            color: 'var(--text-muted)',
+            maxWidth: '280px',
+            lineHeight: 1.7,
+            textAlign: 'right',
+          }}>
+            We know the struggle. We've been there. That's why every resource here is battle-tested.
+          </p>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '1.5rem',
+        }}>
+          {highlights.map((item, idx) => {
+            const Icon = item.icon
+            return (
+              <div
+                key={idx}
+                style={{
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '1rem',
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                }}
+              >
+                <Icon size={24} color="var(--accent)" strokeWidth={1.5} />
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-ui)',
+                    fontWeight: 800,
+                    fontSize: '1.05rem',
+                    color: 'var(--text)',
+                    marginBottom: '0.5rem',
+                    letterSpacing: '-0.01em',
+                  }}>
+                    {item.title}
+                  </h3>
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.9rem',
+                    color: 'var(--text-muted)',
+                    lineHeight: 1.7,
+                  }}>
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
       {/* ── FEATURES ───────────────────────────── */}
       <section style={{
         padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
@@ -213,9 +312,9 @@ export default function Home() {
               letterSpacing: '-0.03em',
               color: 'var(--text)',
               lineHeight: 1.05,
-              maxWidth: '500px',
+              maxWidth: '600px',
             }}>
-              Everything you need,<br />nothing you don't.
+              13+ tools to ace your diploma
             </h2>
           </div>
           <p style={{
@@ -226,7 +325,7 @@ export default function Home() {
             lineHeight: 1.7,
             textAlign: 'right',
           }}>
-            Curated specifically for MSBTE K-scheme students across 6 branches.
+            Everything curated for MSBTE K-scheme across all 6 branches. No fluff.
           </p>
         </div>
 
@@ -332,6 +431,161 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── JOURNEY SECTION ────────────────────── */}
+      <section style={{
+        padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
+        borderTop: '1px solid var(--border)',
+      }}>
+
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginBottom: '3.5rem',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}>
+          <div>
+            <div className="section-label" style={{ marginBottom: '0.75rem' }}>
+              Your journey
+            </div>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+              letterSpacing: '-0.03em',
+              color: 'var(--text)',
+              lineHeight: 1.05,
+              maxWidth: '600px',
+            }}>
+              From semester 1 to your first job
+            </h2>
+          </div>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '1.5rem',
+        }}>
+          {[
+            {
+              phase: 'Semester 1–4',
+              title: 'Master the Fundamentals',
+              items: [
+                'Access PYQs and model answers',
+                'Watch curated YouTube playlists',
+                'Build foundational projects',
+                'Learn DSA & competitive programming',
+              ],
+              cta: 'Resources',
+              path: '/resources'
+            },
+            {
+              phase: 'Semester 5–6',
+              title: 'Prepare for the Real World',
+              items: [
+                'Predict your college placement',
+                'Apply for internships',
+                'Prepare for technical interviews',
+                'Build your portfolio',
+              ],
+              cta: 'Internships',
+              path: '/internships'
+            },
+            {
+              phase: 'Post-Diploma',
+              title: 'Land Your Dream Job',
+              items: [
+                'Master placement interview rounds',
+                'Negotiate salary & offers',
+                'Explore further studies (B.E./B.Tech)',
+                'Contribute to open source',
+              ],
+              cta: 'Placement Guide',
+              path: '/placement'
+            },
+          ].map((journey, idx) => (
+            <div
+              key={idx}
+              style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: '1rem',
+                padding: '2rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem',
+              }}
+            >
+              <div>
+                <div style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.65rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'var(--accent)',
+                  marginBottom: '0.75rem',
+                }}>
+                  {journey.phase}
+                </div>
+                <h3 style={{
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 800,
+                  fontSize: '1.15rem',
+                  color: 'var(--text)',
+                  letterSpacing: '-0.01em',
+                }}>
+                  {journey.title}
+                </h3>
+              </div>
+
+              <ul style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+              }}>
+                {journey.items.map((item, i) => (
+                  <li key={i} style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.75rem',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.9rem',
+                    color: 'var(--text-muted)',
+                    lineHeight: 1.6,
+                  }}>
+                    <CheckCircle size={16} color="var(--accent-lime)" strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                to={journey.path}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  color: 'var(--accent)',
+                  fontFamily: 'var(--font-ui)',
+                  fontWeight: 800,
+                  fontSize: '0.9rem',
+                  letterSpacing: '-0.01em',
+                  textDecoration: 'none',
+                  marginTop: 'auto',
+                  transition: 'gap 0.2s ease',
+                }}
+                onMouseEnter={e => e.currentTarget.style.gap = '0.75rem'}
+                onMouseLeave={e => e.currentTarget.style.gap = '0.5rem'}
+              >
+                {journey.cta} <ArrowRight size={14} />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── BOTTOM CTA ─────────────────────────── */}
       <section style={{
         padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
@@ -374,8 +628,7 @@ export default function Home() {
             marginBottom: '2rem',
             maxWidth: '400px',
           }}>
-            Diploma Dost is built by students, for students. Share it with your
-            classmates or contribute to it on GitHub.
+            Diploma Dost is built by students, for students. Share it with your classmates, contribute code, or help improve content on GitHub.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <a
@@ -384,10 +637,10 @@ export default function Home() {
               rel="noopener noreferrer"
               className="btn-primary"
             >
-              <GitBranchIcon size={14} /> View on GitHub
+              <FaGithub size={14} /> View on GitHub
             </a>
-            <Link to="/about" className="btn-ghost">
-              About the project
+            <Link to="/opensource" className="btn-ghost">
+              How to contribute
             </Link>
           </div>
         </div>
@@ -396,14 +649,14 @@ export default function Home() {
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '1.5rem',
+          gap: '2rem',
           borderLeft: '1px solid var(--border)',
           paddingLeft: '3rem',
         }}>
           {[
             { value: 'EST. 2024', label: 'Founded' },
-            { value: '6',        label: 'Branches covered' },
-            { value: 'WCE',      label: 'Origin — Sangli' },
+            { value: '6',        label: 'Branches' },
+            { value: '1000+',    label: 'Students helped' },
           ].map(s => (
             <div key={s.label}>
               <div style={{

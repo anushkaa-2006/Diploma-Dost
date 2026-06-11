@@ -301,24 +301,38 @@ export default function Predictor() {
     setError(null);
     setResults([]);
 
-    // TODO: wire real Supabase query once Shraddha's cutoffs table is confirmed
+    // Wire Supabase query for cutoffs table
     // Expected columns: college_code, college_name, district, branch,
     //                   category, cutoff_percentage, cap_round, year
-    //
-    // let query = supabase
-    //   .from("cutoffs")
-    //   .select("college_code, college_name, district, branch, category, cutoff_percentage, cap_round, year")
-    //   .in("branch", branches)
-    //   .eq("category", category)
-    //   .lte("cutoff_percentage", percentageNum)
-    //   .order("cutoff_percentage", { ascending: false });
-    //
-    // const { data, error: err } = await query;
-    // if (err) { setError(err.message); setLoading(false); return; }
-    // setResults(data || []);
-    // setLoading(false);
+    let query = supabase
+      .from("cutoffs")
+      .select("college_code, college_name, district, branch, category, cutoff_percentage, cap_round, year")
+      .in("branch", branches)
+      .eq("category", category)
+      .lte("cutoff_percentage", percentageNum)
+      .order("cutoff_percentage", { ascending: false });
 
-    setTimeout(() => { setResults([]); setLoading(false); }, 600);
+    const { data, error: err } = await query;
+    if (err) { 
+      setError("Could not fetch cutoff data. Please try again."); 
+      setLoading(false); 
+      return; 
+    }
+    
+    // Transform data to match ResultCard expectations
+    const transformedData = (data || []).map(row => ({
+      college_code: row.college_code,
+      college_name: row.college_name,
+      district: row.district,
+      branch: row.branch,
+      category: row.category,
+      cutoff: row.cutoff_percentage,
+      cap_round: row.cap_round,
+      year: row.year
+    }));
+    
+    setResults(transformedData);
+    setLoading(false);
   }
 
   return (
