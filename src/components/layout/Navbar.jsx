@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-import ddLogo from '../../assets/dd-logo.png'
 
 const navLinks = [
   { label: 'Resources',   path: '/resources' },
@@ -39,7 +38,7 @@ export default function Navbar() {
           style={{ textDecoration: 'none' }}
         >
           <img
-            src={ddLogo}
+            src={"https://aujimkqsmxjaeusspxtp.supabase.co/storage/v1/object/public/model/dd-logo.png"}
             alt="Diploma Dost"
             style={{
               width: '52px',
