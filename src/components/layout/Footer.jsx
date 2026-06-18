@@ -39,6 +39,7 @@ export default function Footer() {
               {[
                 { label: 'Resources', path: '/resources' },
                 { label: 'Roadmaps', path: '/roadmaps' },
+                { label: 'CAP Updates', path: '/admission-progress' },
                 { label: 'Predictor', path: '/predictor' },
                 { label: 'DSA & CP', path: '/dsa' },
                 { label: 'Internships', path: '/internships' },
