@@ -35,6 +35,7 @@ export default function Community() {
   }, [])
 
   async function fetchQuestions() {
+    let cancelled = false
     setLoading(true)
     setError(null)
     const { data, error } = await supabase
@@ -42,12 +43,15 @@ export default function Community() {
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (error) {
-      setError(error.message)
-    } else {
-      setQuestions(data || [])
+    if (!cancelled) {
+      if (error) {
+        setError(error.message)
+      } else {
+        setQuestions(data || [])
+      }
+      setLoading(false)
     }
-    setLoading(false)
+    return () => { cancelled = true }
   }
 
   async function fetchAnswers(questionId) {
@@ -79,6 +83,7 @@ export default function Community() {
       setExpanded(questionId)
       fetchAnswers(questionId)
       setAnswerForm({ name: '', answer_text: '' })
+      setAnswerError(null)
     }
   }
 

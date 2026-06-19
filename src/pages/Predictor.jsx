@@ -316,13 +316,15 @@ function CollegeSearch({ value, onChange, onSelect }) {
   const [suggestions, setSuggestions] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
   const debounceRef = useRef(null);
 
   useEffect(() => {
-    if (value.length < 2) { setSuggestions([]); setOpen(false); return; }
+    if (value.length < 2) { setSuggestions([]); setOpen(false); setFetchError(false); return; }
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
+      setFetchError(false);
       const { data, error } = await supabase
         .from("cutoffs")
         .select("college_code, college_name, district")
@@ -330,7 +332,10 @@ function CollegeSearch({ value, onChange, onSelect }) {
         .eq("year", 2025)
         .order("college_name")
         .limit(8);
-      if (!error) {
+      if (error) {
+        setFetchError(true);
+        setOpen(true);
+      } else {
         // deduplicate by college_code
         const seen = new Set();
         const unique = (data || []).filter((r) => {
@@ -377,17 +382,23 @@ function CollegeSearch({ value, onChange, onSelect }) {
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute top-full left-0 mt-1 z-20 w-full border border-[#2a2a2a]
                           rounded-lg bg-[#141414] shadow-2xl overflow-hidden">
-            {suggestions.map((s) => (
-              <button key={s.college_code}
-                onClick={() => { onChange(s.college_name); onSelect(s); setOpen(false); }}
-                className="w-full text-left px-4 py-3 hover:bg-[#1a1a1a] transition-colors duration-100
-                           border-b border-[#1a1a1a] last:border-0">
-                <p className="font-['General_Sans'] text-sm text-[#f0ede6] leading-snug">{s.college_name}</p>
-                <p className="font-['JetBrains_Mono'] text-[0.6rem] text-[#888] mt-0.5 flex items-center gap-1">
-                  <MapPin size={9} strokeWidth={2} />{s.district} · {s.college_code}
-                </p>
-              </button>
-            ))}
+            {fetchError ? (
+              <div className="px-4 py-3 text-center font-['General_Sans'] text-[0.75rem] text-[#e8453c]">
+                Search failed — please try again
+              </div>
+            ) : (
+              suggestions.map((s) => (
+                <button key={s.college_code}
+                  onClick={() => { onChange(s.college_name); onSelect(s); setOpen(false); }}
+                  className="w-full text-left px-4 py-3 hover:bg-[#1a1a1a] transition-colors duration-100
+                             border-b border-[#1a1a1a] last:border-0">
+                  <p className="font-['General_Sans'] text-sm text-[#f0ede6] leading-snug">{s.college_name}</p>
+                  <p className="font-['JetBrains_Mono'] text-[0.6rem] text-[#888] mt-0.5 flex items-center gap-1">
+                    <MapPin size={9} strokeWidth={2} />{s.district} · {s.college_code}
+                  </p>
+                </button>
+              ))
+            )}
           </div>
         </>
       )}
@@ -462,12 +473,14 @@ function ResultCard({ college, isShortlisted, onToggle }) {
 // ─── college search results (all branches for one college) ───────────────────
 
 function CollegeAllBranches({ college, category, onClose }) {
-  const [rows, setRows]     = useState([]);
+  const [rows, setRows]       = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
+      setFetchError(false);
       const { data, error } = await supabase
         .from("cutoffs")
         .select("course_name, category, cap_round, cutoff_open, cutoff_percent")
@@ -475,7 +488,11 @@ function CollegeAllBranches({ college, category, onClose }) {
         .eq("year", 2025)
         .eq("category", category)
         .order("cutoff_percent", { ascending: false });
-      if (!error) setRows(data || []);
+      if (error) {
+        setFetchError(true);
+      } else {
+        setRows(data || []);
+      }
       setLoading(false);
     }
     load();
@@ -505,7 +522,15 @@ function CollegeAllBranches({ college, category, onClose }) {
         </div>
       )}
 
-      {!loading && rows.length === 0 && (
+      {!loading && fetchError && (
+        <div className="py-10 text-center">
+          <p className="font-['General_Sans'] text-[#e8453c] text-sm">
+            Failed to load data. Check your connection and try again.
+          </p>
+        </div>
+      )}
+
+      {!loading && !fetchError && rows.length === 0 && (
         <div className="py-10 text-center">
           <p className="font-['General_Sans'] text-[#888] text-sm">
             No 2025 data for {category} in this college.
