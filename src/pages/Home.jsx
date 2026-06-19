@@ -24,8 +24,6 @@ import {
 
 import { FaGithub } from "react-icons/fa";
 
-const HeroScene = lazy(() => import("../components/HeroScene"));
-
 const features = [
   {
     icon: BookOpen,
@@ -292,9 +290,6 @@ export default function Home() {
             position: "relative",
           }}
         >
-          <Suspense fallback={<div style={{ width: "100%", height: "100%" }} />}>
-            <HeroScene />
-          </Suspense>
         </div>
       </section>
       <div className="grid grid-cols-2 divide-x divide-[var(--border)] border-t border-[var(--border)] py-8">

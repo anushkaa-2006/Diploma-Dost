@@ -7,7 +7,6 @@ const navLinks = [
   { label: 'Resources',   path: '/resources' },
   { label: 'Roadmaps',    path: '/roadmaps' },
   { label: 'CAP Updates', path: '/admission-progress' },
-  { label: 'Predictor',   path: '/predictor' },
   { label: 'Innovations', path: '/innovation-hub' },
   { label: 'DSA & CP',    path: '/dsa' },
   { label: 'YouTube',     path: '/youtube' },
