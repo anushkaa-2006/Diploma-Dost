@@ -254,5 +254,12 @@
     opacity: 1 !important;
   }
 
+  /* ── Glass card ── */
+  .glass {
+    background: rgba(20, 20, 20, 0.94);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
 
 }

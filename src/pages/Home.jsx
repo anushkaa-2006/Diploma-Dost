@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
 import {
   ArrowRight,
   BookOpen,
@@ -258,6 +259,11 @@ export default function Home() {
             PYQs, career guidance, college predictor, YouTube playlists —
             everything a diploma CS/IT student needs. One platform. Zero rupees.
           </p>
+
+          {/* Search */}
+          <div className="w-full max-w-[600px] mt-2 mb-6">
+            <SearchBar placeholder="Search pages, resources, playlists…" />
+          </div>
 
           {/* CTAs */}
           <div className="hero-ctas flex flex-col sm:flex-row gap-3 sm:gap-3 mb-20">

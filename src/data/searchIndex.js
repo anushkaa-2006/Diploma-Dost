@@ -1,0 +1,92 @@
+export const searchIndex = [
+  {
+    title: 'Home',
+    description: 'Diploma Dost — built for diploma CS/IT students, by them',
+    path: '/',
+    category: 'Pages',
+  },
+  {
+    title: 'Resources',
+    description: 'PYQs, model answers, and notes for every subject across all branches',
+    path: '/resources',
+    category: 'Pages',
+  },
+  {
+    title: 'Roadmaps',
+    description: 'Career paths and learning roadmaps for CS/IT diploma students',
+    path: '/roadmaps',
+    category: 'Pages',
+  },
+  {
+    title: 'College Predictor',
+    description: 'Predict your college admission based on MSBTE percentile and cutoffs',
+    path: '/predictor',
+    category: 'Pages',
+  },
+  {
+    title: 'CAP Updates',
+    description: 'Live CAP admission progress tracker for Maharashtra diploma admissions',
+    path: '/admission-progress',
+    category: 'Pages',
+  },
+  {
+    title: 'Innovation Hub',
+    description: 'ITR project ideas, capstone projects, and micro-innovation topics',
+    path: '/innovation-hub',
+    category: 'Pages',
+  },
+  {
+    title: 'DSA & Competitive Programming',
+    description: 'Data structures, algorithms, LeetCode, Striver sheet, and GFG resources',
+    path: '/dsa',
+    category: 'Pages',
+  },
+  {
+    title: 'YouTube Hub',
+    description: 'Best curated YouTube playlists for MSBTE subjects, Semester 1 to 6',
+    path: '/youtube',
+    category: 'Pages',
+  },
+  {
+    title: 'Internships',
+    description: 'Find internships, application tips, and resume guide for diploma students',
+    path: '/internships',
+    category: 'Pages',
+  },
+  {
+    title: 'Community',
+    description: 'Ask questions and get answers from seniors and fellow diploma students',
+    path: '/community',
+    category: 'Pages',
+  },
+  {
+    title: 'MSBTE Dates',
+    description: 'MSBTE exam schedule, important dates, and academic calendar',
+    path: '/msbte',
+    category: 'Pages',
+  },
+  {
+    title: 'Scholarships',
+    description: 'EBC, SC/ST, OBC and other scholarship guides for diploma students',
+    path: '/scholarships',
+    category: 'Pages',
+  },
+  {
+    title: 'Placement Guide',
+    description: 'Resume building, interview preparation, and campus placement tips',
+    path: '/placement',
+    category: 'Pages',
+  },
+  {
+    title: 'Open Source',
+    description: 'How to contribute to open source projects as a diploma student',
+    path: '/opensource',
+    category: 'Pages',
+  },
+  {
+    title: 'About',
+    description: 'About the Diploma Dost team — built by students who got placed',
+    path: '/about',
+    category: 'Pages',
+  },
+];
