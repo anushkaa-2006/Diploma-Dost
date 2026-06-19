@@ -301,7 +301,6 @@ export default function Resources() {
                           font-['General_Sans'] text-[#e8453c] text-sm text-center">
             <p className="font-['Cabinet_Grotesk'] font-semibold">Could not load resources</p>
             <p>Check your connection and try again.</p>
-            <code className="font-['JetBrains_Mono'] text-[0.7rem] opacity-55 mt-2 bg-[#1a1a1a] px-2 py-1 rounded">{error}</code>
           </div>
         )}
 
