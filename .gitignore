@@ -31,3 +31,5 @@ github-issues.sh
 .fuse_hidden*
 public/models/
 .claude/
+
+.lore
