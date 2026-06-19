@@ -41,7 +41,7 @@ function buildOrdered(staticRes, dynamic) {
     .slice(0, MAX_RESULTS);
 }
 
-export default function SearchBar({ className = '', placeholder = 'Search pages, resources…' }) {
+export default function SearchBar({ className = '', placeholder = 'Search pages, resources…', autoFocus = false }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [open, setOpen] = useState(false);
@@ -238,6 +238,7 @@ export default function SearchBar({ className = '', placeholder = 'Search pages,
           aria-label="Search"
           aria-expanded={open}
           aria-haspopup="listbox"
+          autoFocus={autoFocus}
           style={{
             fontFamily: 'var(--font-body)',
             background: 'var(--surface)',

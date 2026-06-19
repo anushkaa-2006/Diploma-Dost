@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, Search } from 'lucide-react'
 import SearchBar from '../SearchBar'
@@ -19,16 +19,38 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [mobileSearch, setMobileSearch] = useState(false)
+  const [desktopSearch, setDesktopSearch] = useState(false)
   const { pathname } = useLocation()
   const isHome = pathname === '/'
+  const navRef = useRef(null)
 
   useEffect(() => {
     setOpen(false)
     setMobileSearch(false)
+    setDesktopSearch(false)
   }, [pathname])
+
+  // close desktop panel on Escape
+  useEffect(() => {
+    if (!desktopSearch) return
+    const handle = (e) => { if (e.key === 'Escape') setDesktopSearch(false) }
+    document.addEventListener('keydown', handle)
+    return () => document.removeEventListener('keydown', handle)
+  }, [desktopSearch])
+
+  // close desktop panel on outside click
+  useEffect(() => {
+    if (!desktopSearch) return
+    const handle = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) setDesktopSearch(false)
+    }
+    document.addEventListener('mousedown', handle)
+    return () => document.removeEventListener('mousedown', handle)
+  }, [desktopSearch])
 
   return (
     <nav
+      ref={navRef}
       style={{
         background: 'rgba(13, 14, 15, 0.85)',
         borderBottom: '1px solid var(--border)',
@@ -101,12 +123,20 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* ── Desktop right: SearchBar + CTA ── */}
+        {/* ── Desktop right: Search icon + CTA ── */}
         <div className="hidden md:flex items-center gap-3">
           {!isHome && (
-            <div className="w-48">
-              <SearchBar placeholder="Search…" />
-            </div>
+            <button
+              className="p-2 rounded-lg transition-colors duration-200 outline-none"
+              style={{ color: desktopSearch ? 'var(--accent)' : 'var(--text-muted)' }}
+              onClick={() => setDesktopSearch(v => !v)}
+              aria-label={desktopSearch ? 'Close search' : 'Open search'}
+              aria-expanded={desktopSearch}
+              onFocus={e => { e.currentTarget.style.boxShadow = '0 0 0 2px var(--accent)' }}
+              onBlur={e => { e.currentTarget.style.boxShadow = 'none' }}
+            >
+              {desktopSearch ? <X size={18} /> : <Search size={18} />}
+            </button>
           )}
           <Link
             to="/predictor"
@@ -154,6 +184,21 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+
+      {/* ── Desktop search panel ── */}
+      {!isHome && desktopSearch && (
+        <div
+          className="hidden md:block"
+          style={{
+            background: 'var(--surface)',
+            borderBottom: '1px solid var(--border)',
+          }}
+        >
+          <div className="max-w-7xl mx-auto px-6 py-3">
+            <SearchBar autoFocus placeholder="Search pages, resources, playlists…" />
+          </div>
+        </div>
+      )}
 
       {/* ── Mobile search panel ── */}
       {!isHome && mobileSearch && (

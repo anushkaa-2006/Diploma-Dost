@@ -39,10 +39,6 @@ export default function HeroScene() {
     accentLight.position.set(0, -0.5, 2)
     scene.add(accentLight)
 
-    const wingGlow = new THREE.PointLight(0xe8453c, 2.5, 12)
-    wingGlow.position.set(0, 0.2, 1.5)
-    scene.add(wingGlow)
-
     const rimLight = new THREE.DirectionalLight(0xff8c30, 1.6)
     rimLight.position.set(2, 1, -4)
     scene.add(rimLight)
@@ -50,10 +46,6 @@ export default function HeroScene() {
     const topLight = new THREE.DirectionalLight(0xffffff, 1.2)
     topLight.position.set(0, 6, 2)
     scene.add(topLight)
-
-    const eyeLight = new THREE.PointLight(0xe8453c, 6.0, 3)
-    eyeLight.position.set(0, 0.8, 2.8)
-    scene.add(eyeLight)
 
     // ── GROUP ──────────────────────────────────────────────
     const group = new THREE.Group()
@@ -67,7 +59,6 @@ export default function HeroScene() {
     const loader = new GLTFLoader()
     loader.setDRACOLoader(dracoLoader)
 
-    let eagleMixer = null
     let capMixer = null
     const clock = new THREE.Clock()
 
@@ -79,47 +70,6 @@ export default function HeroScene() {
       color: 0xe8453c, emissive: 0xe8453c, emissiveIntensity: 3.5,
       metalness: 0.1, roughness: 0.4, side: THREE.DoubleSide
     })
-
-    // ── LOAD EAGLE ─────────────────────────────────────────
-    // Eagle has baked PBR textures — preserve them, don't override
-    let eagleRef = null
-    loader.load(`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/model/mechanical_eagle.glb`, (gltf) => {
-      const eagle = gltf.scene
-
-      eagle.traverse(child => {
-        if (!child.isMesh) return
-        child.castShadow = true
-        if (child.material) {
-          const mats = Array.isArray(child.material) ? child.material : [child.material]
-          mats.forEach(mat => {
-            if (mat.map) mat.map.colorSpace = THREE.SRGBColorSpace
-            if (mat.emissiveMap) mat.emissiveMap.colorSpace = THREE.SRGBColorSpace
-            mat.needsUpdate = true
-          })
-        }
-      })
-
-      const box = new THREE.Box3().setFromObject(eagle)
-      const size = new THREE.Vector3()
-      box.getSize(size)
-      const maxDim = Math.max(size.x, size.y, size.z)
-      eagle.scale.setScalar(4.5 / maxDim)
-
-      const box2 = new THREE.Box3().setFromObject(eagle)
-      const center = new THREE.Vector3()
-      box2.getCenter(center)
-      eagle.position.sub(center)
-      eagle.position.y += 0.6
-      eagle.rotation.y = -0.3
-
-      eagleRef = eagle
-      group.add(eagle)
-
-      if (gltf.animations?.length > 0) {
-        eagleMixer = new THREE.AnimationMixer(eagle)
-        gltf.animations.forEach(clip => eagleMixer.clipAction(clip).play())
-      }
-    }, undefined, (err) => console.error('Eagle load error:', err))
 
     // ── LOAD CAP ───────────────────────────────────────────
     // Hat has no textures — flat material colors only
@@ -344,7 +294,6 @@ export default function HeroScene() {
       const delta = clock.getDelta()
       const elapsed = clock.getElapsedTime()
 
-      if (eagleMixer) eagleMixer.update(delta)
       if (capMixer) capMixer.update(delta)
 
       smoothMouse.x += (mouse.x - smoothMouse.x) * 0.03
@@ -366,12 +315,6 @@ export default function HeroScene() {
 
       const pulse = Math.sin(elapsed * 2.2) * 0.8
       accentLight.intensity = 3.5 + pulse
-      wingGlow.intensity    = 2.0 + Math.sin(elapsed * 1.8 + 1) * 0.6
-      eyeLight.intensity    = 5.0 + Math.sin(elapsed * 3.0) * 2.0
-
-      if (eagleRef) {
-        eyeLight.position.x = Math.sin(group.rotation.y) * 0.3
-      }
 
       textMesh.position.y = -1.9 + Math.sin(elapsed * 0.7 + 1.5) * 0.04
       renderer.render(scene, camera)
