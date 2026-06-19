@@ -652,7 +652,7 @@ export const ROADMAPS = {
             type: "core",
             time: "2–3 weeks",
             description: "Kotlin is the official language for Android development. Learn variables, functions, OOP, null safety, coroutines, collections, and functional programming concepts in Kotlin.",
-            why: "Google has deprecated Java as a primary language for Android. Kotlin is concise, safer, and 100% interoperable with Java.",
+            why: "Kotlin is Google's recommended language for modern Android development. Java is still supported, but Kotlin is concise, safer, and 100% interoperable with Java.",
             resources: [
               { type: "yt", label: "Kotlin Full Course — freeCodeCamp", url: "https://www.youtube.com/watch?v=F9UC9DY-vIU" },
               { type: "yt", label: "Kotlin for Beginners — Philipp Lackner", url: "https://www.youtube.com/watch?v=5flXf8ewAqM" },
