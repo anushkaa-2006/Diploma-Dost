@@ -51,123 +51,114 @@ export default function AdmissionProgress() {
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10 text-white">
+    <div className="max-w-6xl mx-auto px-6 py-10">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-4xl md:text-5xl font-bold mb-3">
+        <h1 className="font-['Clash_Display'] text-4xl md:text-5xl font-bold mb-3 text-[var(--text)]">
           Admission Progress
         </h1>
-
-        <p className="text-gray-400 text-lg">
+        <p className="font-['General_Sans'] text-lg text-[var(--text-muted)]">
           Live updates for Diploma to Degree admissions.
         </p>
       </div>
 
       {/* Current Update */}
-      <div className="bg-zinc-900 border border-green-500/30 rounded-2xl p-6 mb-8">
+      <div className="bg-[var(--surface)] border border-[#c8f04d]/30 rounded-2xl p-6 mb-8">
         <div className="flex items-center gap-2 mb-3">
-          <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse"></span>
-          <span className="text-green-400 font-semibold">
-            CURRENT UPDATE
+          <span className="h-3 w-3 rounded-full bg-[#c8f04d] animate-pulse flex-shrink-0"></span>
+          <span className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.12em] text-[#c8f04d] font-bold">
+            Current Update
           </span>
         </div>
-
-        <h2 className="text-2xl font-bold">
+        <h2 className="font-['Clash_Display'] text-2xl font-bold text-[var(--text)] mb-2">
           {currentStep?.title}
         </h2>
-
-        <p className="text-gray-400 mt-2">
+        <p className="font-['General_Sans'] text-[var(--text-muted)]">
           MSBTE Summer 2026 Result has been declared. Admission registration
           schedule is yet to be announced.
         </p>
-
         <a
           href={currentStep?.link}
           target="_blank"
           rel="noreferrer"
-          className="inline-block mt-4 bg-green-600 hover:bg-green-700 transition px-5 py-2 rounded-lg font-medium"
+          className="inline-block mt-4 bg-[#c8f04d] text-[var(--bg)] hover:opacity-90 transition-opacity
+                     px-5 py-2 rounded-lg font-['Cabinet_Grotesk'] font-semibold text-sm"
         >
           Check Result
         </a>
       </div>
 
       {/* Progress */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-8">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 mb-8">
         <div className="flex justify-between mb-3">
-          <span className="font-semibold">
+          <span className="font-['Cabinet_Grotesk'] font-semibold text-[var(--text)]">
             Admission Journey Progress
           </span>
-
-          <span className="text-green-400 font-bold">
+          <span className="font-['JetBrains_Mono'] font-bold text-[#c8f04d]">
             {progress}%
           </span>
         </div>
-
-        <div className="w-full h-4 bg-zinc-800 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-[var(--surface2)] rounded-full overflow-hidden">
           <div
-            className="h-full bg-green-500 transition-all duration-500"
+            className="h-full bg-[#c8f04d] transition-all duration-500 rounded-full"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
       {/* Timeline */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-        <h2 className="text-2xl font-bold mb-6">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6">
+        <h2 className="font-['Clash_Display'] text-2xl font-bold mb-6 text-[var(--text)]">
           Admission Timeline
         </h2>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {admissionSteps.map((step, index) => (
             <div
               key={index}
               className={`flex flex-col md:flex-row md:items-center md:justify-between p-4 rounded-xl border ${
                 step.status === "completed"
-                  ? "border-red-500/30 bg-red-500/10"
+                  ? "border-[#e8453c]/30 bg-[#e8453c]/10"
                   : step.status === "current"
-                  ? "border-green-500/30 bg-green-500/10"
-                  : "border-zinc-700 bg-zinc-800/50"
+                  ? "border-[#c8f04d]/30 bg-[#c8f04d]/10"
+                  : "border-[var(--border)] bg-[var(--surface2)]"
               }`}
             >
               <div className="flex items-center gap-4">
                 <div
-                  className={`h-4 w-4 rounded-full ${
+                  className={`h-3.5 w-3.5 rounded-full flex-shrink-0 ${
                     step.status === "completed"
-                      ? "bg-red-500"
+                      ? "bg-[#e8453c]"
                       : step.status === "current"
-                      ? "bg-green-500"
-                      : "bg-zinc-600"
+                      ? "bg-[#c8f04d]"
+                      : "bg-[var(--border)]"
                   }`}
                 />
-
                 <div>
-                  <h3 className="font-medium">
+                  <h3 className="font-['Cabinet_Grotesk'] font-medium text-[var(--text)]">
                     {step.title}
                   </h3>
-
                   {step.date && (
-                    <p className="text-sm text-gray-400">
+                    <p className="font-['General_Sans'] text-sm text-[var(--text-muted)] mt-0.5">
                       {step.date}
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className="mt-3 md:mt-0">
+              <div className="mt-3 md:mt-0 md:flex-shrink-0">
                 {step.status === "completed" && (
-                  <span className="text-red-400 text-sm font-semibold">
+                  <span className="font-['JetBrains_Mono'] text-[0.6rem] uppercase tracking-wider text-[#e8453c] font-bold">
                     Completed
                   </span>
                 )}
-
                 {step.status === "current" && (
-                  <span className="text-green-400 text-sm font-semibold">
+                  <span className="font-['JetBrains_Mono'] text-[0.6rem] uppercase tracking-wider text-[#c8f04d] font-bold">
                     Current
                   </span>
                 )}
-
                 {step.status === "upcoming" && (
-                  <span className="text-gray-400 text-sm">
+                  <span className="font-['General_Sans'] text-sm text-[var(--text-muted)]">
                     Upcoming
                   </span>
                 )}
@@ -180,24 +171,22 @@ export default function AdmissionProgress() {
       {/* Legend */}
       <div className="mt-8 flex flex-wrap gap-6 justify-center">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-red-500"></div>
-          <span className="text-gray-300">Completed</span>
+          <div className="w-3.5 h-3.5 rounded-full bg-[#e8453c]"></div>
+          <span className="font-['General_Sans'] text-sm text-[var(--text-muted)]">Completed</span>
         </div>
-
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-green-500"></div>
-          <span className="text-gray-300">Current</span>
+          <div className="w-3.5 h-3.5 rounded-full bg-[#c8f04d]"></div>
+          <span className="font-['General_Sans'] text-sm text-[var(--text-muted)]">Current</span>
         </div>
-
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-zinc-500"></div>
-          <span className="text-gray-300">Upcoming</span>
+          <div className="w-3.5 h-3.5 rounded-full bg-[var(--border)]"></div>
+          <span className="font-['General_Sans'] text-sm text-[var(--text-muted)]">Upcoming</span>
         </div>
       </div>
 
       {/* Note */}
-      <div className="mt-8 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-5">
-        <p className="text-yellow-300">
+      <div className="mt-8 bg-[#f0a843]/10 border border-[#f0a843]/30 rounded-xl p-5">
+        <p className="font-['General_Sans'] text-sm text-[#f0a843]">
           ⚠️ As of now, only the MSBTE Result (18 June 2026) has been declared.
           Admission registration and CAP round dates are yet to be announced by
           the CET Cell.

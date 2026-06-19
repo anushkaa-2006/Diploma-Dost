@@ -97,8 +97,11 @@
     --text-muted: #888888;
 
     /* Accents */
-    --accent:      #e8453c;
-    --accent-lime: #c8f04d;
+    --accent:        #e8453c;
+    --accent-lime:   #c8f04d;
+    --accent-blue:   #4d9ef0;
+    --accent-purple: #b87aff;
+    --accent-orange: #f0a843;
 
     /* Font families */
     --font-display: 'ClashDisplay',   sans-serif;
