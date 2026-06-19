@@ -30,3 +30,4 @@ create-issues.sh
 github-issues.sh
 .fuse_hidden*
 public/models/
+.claude/
