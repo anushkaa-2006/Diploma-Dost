@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import { ExternalLink, FileText, BookOpen, Loader2, ChevronDown, Download, Link2 } from "lucide-react";
 
 
-const BRANCHES = ["CS", "IT", "Mech", "Civil", "Elec", "ETC"];
+const BRANCHES = ["CS", "IT", "ME", "CE", "EE", "ENTC"];
 const BRANCH_LABELS = {
   CS: "Computer Science",
   IT: "Information Technology",
