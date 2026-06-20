@@ -1,189 +1,260 @@
+<div align="center">
+
 # Contributing to Diploma Dost
 
-First of all — thanks for being here. This project exists to help thousands of diploma students who don't have proper guidance. Every contribution, big or small, matters.
+**Thank you for being here.** This platform exists to help diploma students who have no senior to ask, no organised resources, and no clear path forward. Every contribution — code, content, or a single typo fix — makes it better for thousands of students.
 
-This guide tells you everything you need to know to get started.
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-4d9ef0?style=flat-square)](https://github.com/piush365/Diploma-Dost/pulls)
+[![Good First Issues](https://img.shields.io/github/issues/piush365/Diploma-Dost/good%20first%20issue?style=flat-square&color=c8f04d&label=Good%20First%20Issues)](https://github.com/piush365/Diploma-Dost/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+[![Open Issues](https://img.shields.io/github/issues/piush365/Diploma-Dost?style=flat-square&color=e8453c)](https://github.com/piush365/Diploma-Dost/issues)
 
----
-
-## Before you start
-
-1. Read the [README](README.md) to understand what the project is and what we're building.
-2. Check the [Issues](../../issues) tab — pick something that's open and unassigned.
-3. Comment on the issue saying you want to work on it. Wait for the maintainer (Piush) to assign it to you.
-4. Then fork, branch, code, and raise a PR.
-
-> Don't start coding without picking an issue first. Two people working on the same thing is wasted effort.
+</div>
 
 ---
 
-## Types of contributions
+## Before You Start
 
-You don't have to write code to contribute. Here's what we need:
+1. **Read the [README](README.md)** to understand the project — what it is, who it's for, and how it's structured.
+2. **Browse [open issues](https://github.com/piush365/Diploma-Dost/issues)** — find something unassigned that interests you.
+3. **Comment on the issue** to say you're working on it. This prevents two people duplicating effort.
+4. **Wait for assignment** before you start writing code.
 
-| Type | Examples |
-|---|---|
-| 🖥️ Frontend (React) | Build a page, fix a bug, improve mobile layout |
-| ⚙️ Backend (Supabase) | Create tables, set up RLS policies, write queries |
-| 📝 Content | Write guide text, collect PYQ links, curate YouTube playlists |
-| 🐛 Bug reports | Found something broken? Open an issue |
-| 🎨 Design | Suggest better UI, fix spacing/typography issues |
-| 🐍 Python | Data cleaning scripts for college predictor CSVs |
-| 📖 Docs | Improve README, add code comments, fix typos |
+> Don't open a PR for something that isn't tracked in an issue. If you have a new idea, open the issue first and discuss scope.
 
 ---
 
-## Branch naming
+## What You Can Contribute
 
-Always create a new branch for your work. Never work directly on `main`.
+You don't have to write code to contribute. Here's everything we need:
 
-Format: `type/your-name-short-description`
-
-```
-feature/ravi-git-guide-page
-feature/shraddha-csv-cleaner
-fix/yogesh-navbar-mobile
-content/anushka-career-roadmap-text
-docs/piush-update-readme
-```
-
-### Branch types
-- `feature/` — new page or feature
-- `fix/` — bug fix
-- `content/` — adding or editing content (no code changes)
-- `docs/` — documentation only
-- `style/` — UI/CSS changes only, no logic changes
+| Type | Examples | Skill needed |
+|---|---|---|
+| 🖥️ **Frontend** | New page, bug fix, mobile layout improvements | React, Tailwind CSS |
+| ⚙️ **Backend** | Supabase tables, RLS policies, queries | SQL, Supabase |
+| 📝 **Content** | PYQ links, YouTube playlists, guide text | None — just accuracy |
+| 🗺️ **Roadmap data** | Add / improve nodes in `src/data/roadmaps.js` | JSON editing |
+| 🐛 **Bug reports** | Found something broken? Open an issue | None |
+| 🎨 **Design** | Better UI, spacing, typography, accessibility | Eye for detail |
+| 🐍 **Scripts** | Data cleaning for college predictor CSVs | Python |
+| 📖 **Docs** | Improve README, CONTRIBUTING, code comments | Writing |
 
 ---
 
-## Step-by-step workflow
+## Workflow
+
+### 1. Fork & clone
 
 ```bash
-# 1. Fork the repo (click Fork on GitHub)
+# Fork on GitHub first, then:
+git clone https://github.com/YOUR_USERNAME/Diploma-Dost.git
+cd Diploma-Dost
 
-# 2. Clone your fork
-git clone https://github.com/YOUR_USERNAME/diploma-dost.git
-cd diploma-dost
-
-# 3. Add upstream remote (to stay updated with main repo)
-git remote add upstream https://github.com/piush365/diploma-dost.git
-
-# 4. Create your branch from main
-git checkout -b feature/your-name-task-name
-
-# 5. Make your changes
-
-# 6. Stage and commit
-git add .
-git commit -m "feat: add git guide page"
-
-# 7. Push to your fork
-git push origin feature/your-name-task-name
-
-# 8. Open a Pull Request on GitHub
-# Base: piush365/diploma-dost → main
-# Compare: your fork → your branch
+# Add the upstream remote so you can pull future changes
+git remote add upstream https://github.com/piush365/Diploma-Dost.git
 ```
 
----
+### 2. Create a branch
 
-## Commit message format
+**Never commit directly to `main`.** Always branch off it.
 
-Keep it short and clear. Use one of these prefixes:
+```bash
+git checkout main
+git pull upstream main          # stay in sync first
+git checkout -b type/short-description
+```
 
-| Prefix | When to use |
+**Branch naming format:** `type/short-description`
+
+| Prefix | Use for |
+|---|---|
+| `feature/` | New page or feature |
+| `fix/` | Bug fix |
+| `content/` | Content changes — no logic |
+| `style/` | CSS / UI only — no logic |
+| `docs/` | Documentation only |
+
+Examples:
+```
+feature/dsa-tracker-page
+fix/navbar-mobile-close
+content/sem4-youtube-playlists
+style/resources-card-spacing
+docs/update-setup-steps
+```
+
+### 3. Make your changes
+
+Keep changes focused. One PR should do one thing.
+
+```bash
+# Check the build passes before you commit anything
+npm run build
+```
+
+### 4. Commit
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+type: short description in present tense
+```
+
+| Prefix | When |
 |---|---|
 | `feat:` | Adding something new |
 | `fix:` | Fixing a bug |
 | `content:` | Adding or editing content |
-| `style:` | CSS or UI changes |
-| `docs:` | README or documentation |
+| `style:` | CSS / UI tweaks |
+| `docs:` | Documentation |
 | `refactor:` | Code cleanup, no behaviour change |
+| `chore:` | Config, tooling, deps |
 
-Examples:
+```bash
+# Good
+git commit -m "feat: add DSA topic progress tracker"
+git commit -m "fix: mobile menu not closing on route change"
+git commit -m "content: add Sem 4 Mech YouTube playlists"
+
+# Bad
+git commit -m "fixed stuff"
+git commit -m "WIP"
+git commit -m "changes"
 ```
-feat: add internship guide page
-fix: mobile navbar menu not closing
-content: add sem 3 youtube playlists
-style: fix card spacing on small screens
-docs: add setup steps to README
+
+### 5. Push & open a PR
+
+```bash
+git push origin your-branch-name
+```
+
+Then open a Pull Request on GitHub targeting `piush365/Diploma-Dost → main`. The PR template will pre-fill — complete every item in the checklist honestly.
+
+---
+
+## Code Conventions
+
+These aren't suggestions. PRs that violate them will be asked to fix before merge.
+
+### React
+
+- **Functional components only** — no class components
+- **One component per file** — no multi-export files
+- Pages → `src/pages/` · Reusable components → `src/components/`
+- New routes must be registered in `src/App.jsx`
+- Remove all `console.log` before raising a PR
+
+### Styling
+
+- **CSS variables only** — never write a hex value in a component
+
+  ```jsx
+  // ✅ Correct
+  className="bg-[var(--surface)] border border-[var(--border)] text-[var(--text)]"
+
+  // ❌ Wrong
+  className="bg-[#141414] border border-[#2a2a2a] text-[#f0ede6]"
+  ```
+
+- **Error / destructive** states → `var(--accent)` (`#e8453c`)
+- **Success** states → `var(--accent-lime)` (`#c8f04d`) via `style={{ color: 'var(--accent-lime)' }}`
+- Use `btn-primary` / `btn-ghost` for buttons, `.glass` for cards
+- **Mobile-first always** — design at 375px, then scale up
+
+### Design system reference
+
+```css
+--bg:           #0d0e0f    /* Page background     */
+--surface:      #141414    /* Cards, panels       */
+--surface2:     #1a1a1a    /* Nested surfaces     */
+--border:       #2a2a2a    /* All borders         */
+--text:         #f0ede6    /* Primary text        */
+--text-muted:   #888888    /* Secondary text      */
+--accent:       #e8453c    /* Red — primary/error */
+--accent-lime:  #c8f04d    /* Lime — success      */
+--accent-blue:  #4d9ef0    /* Blue — info         */
 ```
 
 ---
 
-## Pull Request format
+## Content Contributions (No Code Required)
 
-When you open a PR, use this format in the description:
+If you're adding YouTube playlists, PYQ links, roadmap nodes, or guide text — you don't need to be a developer.
 
-```
-## What does this PR do?
-[Short description — one or two lines]
+**Roadmap nodes** — edit `src/data/roadmaps.js`. Each node looks like this:
 
-## Related issue
-Closes #[issue number]
-
-## Changes made
-- [List of what you changed]
-
-## Screenshots (if UI change)
-[Paste a screenshot if you changed anything visual]
-
-## Tested on mobile?
-Yes / No
-```
-
----
-
-## Code style
-
-- Use functional React components only (no class components)
-- Use Tailwind for all styling — no inline styles unless absolutely necessary
-- One component per file
-- Keep components in `src/components/`, pages in `src/pages/`
-- No console.log left in production code — remove before raising PR
-- If you're adding a new page, add its route in `src/App.jsx`
-
----
-
-## Content contributions (no code)
-
-If you're contributing content — YouTube links, PYQ links, guide text, roadmap content — use this format:
-
-**For resource links:** Add them to the relevant JSON file in `src/data/`. Example for YouTube playlists:
-
-```json
+```js
 {
-  "semester": 3,
-  "subject": "Data Structures using C",
-  "channel": "Jenny's Lectures",
-  "url": "https://youtube.com/playlist/...",
-  "language": "English"
+  id: "unique-id",
+  label: "Topic Name",
+  phase: "Foundation",       // Foundation | Intermediate | Advanced
+  type: "core",              // core | optional
+  time: "3–5 days",
+  description: "What this topic is and why it matters.",
+  why: "Why developers need to know this.",
+  resources: [
+    { type: "yt",  label: "Video title", url: "https://youtube.com/..." },
+    { type: "doc", label: "Docs title",  url: "https://..." },
+  ],
 }
 ```
 
-**For guide content:** Write it in a `.md` file and place it in `src/data/content/`. The page component will render it.
+**Resources / PYQs** — upload directly via the Resources page on the live site (login required). No code needed.
 
-If you're not sure where something goes, just ask in the group or drop a comment on the issue.
-
----
-
-## Need help?
-
-- Stuck on something? Drop a message in the WhatsApp group.
-- Found a bug but don't know how to fix it? Open an issue anyway — someone else might.
-- Not sure if your idea is in scope? Open a Discussion on GitHub or ask Piush.
+**If you're unsure where content goes**, open an issue and ask.
 
 ---
 
-## Code of conduct
+## Pull Request Checklist
 
-This is a friendly project. Everyone here is learning.
+The PR template will guide you, but here's what reviewers look for:
 
-- Be helpful, not harsh in PR reviews
-- If someone's code is wrong, explain why and suggest the fix
-- No gatekeeping — if someone asks a "basic" question, answer it properly
-- Credit people for their contributions
+- [ ] Branch is **not** `main`
+- [ ] `npm run build` passes with zero errors or warnings
+- [ ] No hardcoded hex values — CSS variables used throughout
+- [ ] No off-palette Tailwind colours (`red-500`, `green-400`, etc.)
+- [ ] Tested on a small screen (375px)
+- [ ] New routes added to `App.jsx`
+- [ ] No `console.log` left in the code
+- [ ] PR description clearly explains what changed and why
 
 ---
 
-> This project started as one person's ITR project. It can become something thousands of diploma students rely on — but only if we build it together. Welcome to the team.
+## Reporting Bugs
+
+Open an issue with:
+
+1. **What you expected** to happen
+2. **What actually happened** — include screenshots if it's visual
+3. **Steps to reproduce** — exact steps, not "it just broke"
+4. **Device / browser** — especially for layout bugs
+
+---
+
+## Code of Conduct
+
+This is a project by students, for students. Everyone here is learning at different speeds.
+
+- Be helpful in reviews, not harsh — suggest the fix, don't just flag the problem
+- Answer "basic" questions properly — you were there once too
+- Credit people for their work
+- No gatekeeping — a content contribution is as valid as a code contribution
+
+Persistent bad behaviour gets you removed from the project. No warnings.
+
+---
+
+## Need Help?
+
+- **Stuck on the codebase?** Drop a comment on your issue — we'll respond
+- **Have an idea that's not an issue yet?** [Open a Discussion](https://github.com/piush365/Diploma-Dost/discussions) or raise it as an issue
+- **Found a security problem?** Do **not** open a public issue — contact [@piush365](https://github.com/piush365) directly
+
+---
+
+<div align="center">
+
+*This started as one person's ITR project. It can become something every diploma student in Maharashtra relies on — but only if people like you help build it.*
+
+**Welcome to the team.**
+
+</div>

@@ -329,58 +329,6 @@ Today    →  A growing platform by diploma students, for diploma students.
 
 Every feature on this platform exists because someone on the team felt the same gap you probably felt.
 
----
-
-## Team
-
-<table>
-<tr>
-<td align="center" width="140">
-<img src="https://aujimkqsmxjaeusspxtp.supabase.co/storage/v1/object/public/model/Piush.jpeg" width="72" style="border-radius:50%" /><br />
-<b>Piush</b><br />
-<sub>Lead Developer &amp; Maintainer</sub><br />
-<a href="https://github.com/piush365"><code>@piush365</code></a>
-</td>
-<td align="center" width="140">
-<img src="https://aujimkqsmxjaeusspxtp.supabase.co/storage/v1/object/public/model/Anjali.jpeg" width="72" style="border-radius:50%" /><br />
-<b>Anjali</b><br />
-<sub>Backend · Supabase</sub>
-</td>
-<td align="center" width="140">
-<img src="https://aujimkqsmxjaeusspxtp.supabase.co/storage/v1/object/public/model/Sharayu.jpeg" width="72" style="border-radius:50%" /><br />
-<b>Sharayu</b><br />
-<sub>Frontend · React</sub>
-</td>
-<td align="center" width="140">
-<img src="https://aujimkqsmxjaeusspxtp.supabase.co/storage/v1/object/public/model/Yogesh.jpeg" width="72" style="border-radius:50%" /><br />
-<b>Yogesh</b><br />
-<sub>Frontend · YouTube Curation</sub>
-</td>
-<td align="center" width="140">
-<img src="https://aujimkqsmxjaeusspxtp.supabase.co/storage/v1/object/public/model/Anushkaa.jpeg" width="72" style="border-radius:50%" /><br />
-<b>Anushkaa</b><br />
-<sub>ML Research · Career Content</sub>
-</td>
-</tr>
-<tr>
-<td align="center" width="140">
-<b>Ravi</b><br />
-<sub>Frontend · Resource Collection</sub>
-</td>
-<td align="center" width="140">
-<b>Shraddha</b><br />
-<sub>Python Scripts · Content</sub>
-</td>
-<td align="center" width="140">
-<b>Sanket</b><br />
-<sub>Advisor · UI/UX Design</sub>
-</td>
-<td></td>
-<td></td>
-</tr>
-</table>
-
----
 
 <div align="center">
 
