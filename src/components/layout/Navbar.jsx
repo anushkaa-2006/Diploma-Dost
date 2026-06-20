@@ -266,6 +266,15 @@ export default function Navbar() {
               </Link>
             )
           })}
+          {user && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="px-3 py-2 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+            >
+              Logout
+            </button>
+          )}
         </div>
       )}
     </nav>

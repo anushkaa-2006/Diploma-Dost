@@ -97,47 +97,47 @@ export default function Signup() {
 
   return (
     <section className="max-w-[720px] mx-auto px-6 py-20">
-      <div className="bg-[#141414] border border-[#2a2a2a] rounded-3xl p-10 shadow-[0_0_40px_rgba(0,0,0,0.15)]">
-        <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[#e8453c] mb-3 font-bold">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-10 shadow-[0_0_40px_rgba(0,0,0,0.15)]">
+        <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[var(--accent)] mb-3 font-bold">
           Create account
         </p>
-        <h1 className="font-['Clash_Display'] text-[#f0ede6] text-[clamp(2rem,4vw,3rem)] font-semibold mb-4">
+        <h1 className="font-['Clash_Display'] text-[var(--text)] text-[clamp(2rem,4vw,3rem)] font-semibold mb-4">
           Join Diploma Dost
         </h1>
-        <p className="font-['General_Sans'] text-[#888] leading-relaxed mb-8">
+        <p className="font-['General_Sans'] text-[var(--text-muted)] leading-relaxed mb-8">
           Sign up to upload notes, manuals, and community resources. Your account will keep uploads organized and trusted.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <label className="block text-sm text-[#f0ede6]">
+          <label className="block text-sm text-[var(--text)]">
             Username
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="mt-2 w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-[var(--accent)]"
             />
           </label>
 
-          <label className="block text-sm text-[#f0ede6]">
+          <label className="block text-sm text-[var(--text)]">
             Email address
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-2 w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-[var(--accent)]"
             />
           </label>
 
-          <label className="block text-sm text-[#f0ede6]">
+          <label className="block text-sm text-[var(--text)]">
             Password
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-2 w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-[var(--accent)]"
             />
           </label>
 
@@ -149,13 +149,13 @@ export default function Signup() {
             {loading ? 'Creating account…' : 'Sign up'}
           </button>
 
-          {error && <p className="text-sm text-[#e8453c]">{error}</p>}
-          {message && <p className="text-sm text-[#888]">{message}</p>}
+          {error && <p className="text-sm text-[var(--accent)]">{error}</p>}
+          {message && <p className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
         </form>
 
-        <p className="mt-6 text-sm text-[#888]">
+        <p className="mt-6 text-sm text-[var(--text-muted)]">
           Already have an account?{' '}
-          <Link to={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="text-[#e8453c] hover:text-[#f0ede6]">
+          <Link to={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="text-[var(--accent)] hover:text-[var(--text)]">
             Sign in.
           </Link>
         </p>
