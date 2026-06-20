@@ -19,6 +19,7 @@ const Internships  = lazy(() => import('./pages/Internships'))
 const Community    = lazy(() => import('./pages/Community'))
 const Login        = lazy(() => import('./pages/Login'))
 const Signup       = lazy(() => import('./pages/Signup'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
 const MSBTE        = lazy(() => import('./pages/MSBTE'))
 const Scholarships = lazy(() => import('./pages/Scholarships'))
 const Placement    = lazy(() => import('./pages/Placement'))
@@ -52,6 +53,7 @@ export default function App() {
                 <Route path="/community"     element={<Community />} />
                 <Route path="/login"         element={<Login />} />
                 <Route path="/signup"        element={<Signup />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/msbte"         element={<MSBTE />} />
                 <Route path="/scholarships"  element={<Scholarships />} />
                 <Route path="/placement"     element={<Placement />} />

@@ -176,7 +176,7 @@ export default function Resources() {
 
   const [uploadForm, setUploadForm] = useState({
     name: "",
-    type: UPLOAD_TYPES[0],
+    subject: UPLOAD_TYPES[0],
     semester: 1,
     drive_link: "",
   });
