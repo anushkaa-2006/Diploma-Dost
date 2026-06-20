@@ -7,11 +7,11 @@ import { ExternalLink, FileText, BookOpen, Loader2, ChevronDown, Download, Link2
 const BRANCHES = ["CS", "IT", "ME", "CE", "EE", "ENTC"];
 const BRANCH_LABELS = {
   CS: "Computer Science",
-  IT: "Information Technology",
-  Mech: "Mechanical",
-  Civil: "Civil",
-  Elec: "Electrical",
-  ETC: "Electronics & TC",
+  IT: "Information Technology", 
+  ME: "Mechanical",
+  CE: "Civil",
+  EE: "Electrical",
+  ENTC: "Electronics & Telecommunication",
 };
 
 const SEMESTERS = [1, 2, 3, 4, 5, 6];
