@@ -1,0 +1,165 @@
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+
+export default function Signup() {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+
+  const redirectTo = searchParams.get('redirect') || '/resources'
+
+  useEffect(() => {
+    let mounted = true
+
+    async function checkSession() {
+      const { data } = await supabase.auth.getSession()
+      if (!mounted) return
+      if (data?.session) {
+        navigate(redirectTo, { replace: true })
+      }
+    }
+
+    checkSession()
+
+    return () => {
+      mounted = false
+    }
+  }, [navigate, redirectTo])
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    setLoading(true)
+    setError('')
+    setMessage('')
+
+    if (!username.trim()) {
+      setError('Username is required.')
+      setLoading(false)
+      return
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          data: {
+            username: username.trim(),
+          },
+        },
+      })
+
+      if (error) {
+        throw error
+      }
+
+      const user = data?.user
+      const session = data?.session
+
+      if (!user && !session) {
+        setMessage('Signup successful. Please check your email to confirm your account.')
+        return
+      }
+
+      const userId = user?.id || session?.user?.id
+      if (!userId) {
+        throw new Error('Failed to identify the new user.')
+      }
+
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert(
+          {
+            id: userId,
+            email: email.trim(),
+            username: username.trim() || null,
+          },
+          { onConflict: 'id' }
+        )
+
+      if (profileError) {
+        throw profileError
+      }
+
+      navigate(redirectTo)
+    } catch (err) {
+      setError(err?.message || 'Unable to create account. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <section className="max-w-[720px] mx-auto px-6 py-20">
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-3xl p-10 shadow-[0_0_40px_rgba(0,0,0,0.15)]">
+        <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[#e8453c] mb-3 font-bold">
+          Create account
+        </p>
+        <h1 className="font-['Clash_Display'] text-[#f0ede6] text-[clamp(2rem,4vw,3rem)] font-semibold mb-4">
+          Join Diploma Dost
+        </h1>
+        <p className="font-['General_Sans'] text-[#888] leading-relaxed mb-8">
+          Sign up to upload notes, manuals, and community resources. Your account will keep uploads organized and trusted.
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <label className="block text-sm text-[#f0ede6]">
+            Username
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="mt-2 w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+            />
+          </label>
+
+          <label className="block text-sm text-[#f0ede6]">
+            Email address
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-2 w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+            />
+          </label>
+
+          <label className="block text-sm text-[#f0ede6]">
+            Password
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-2 w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="btn-primary w-full px-5 py-3 rounded-lg text-sm"
+            disabled={loading}
+          >
+            {loading ? 'Creating account…' : 'Sign up'}
+          </button>
+
+          {error && <p className="text-sm text-[#e8453c]">{error}</p>}
+          {message && <p className="text-sm text-[#888]">{message}</p>}
+        </form>
+
+        <p className="mt-6 text-sm text-[#888]">
+          Already have an account?{' '}
+          <Link to={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="text-[#e8453c] hover:text-[#f0ede6]">
+            Sign in.
+          </Link>
+        </p>
+      </div>
+    </section>
+  )
+}

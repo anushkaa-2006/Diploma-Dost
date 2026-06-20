@@ -17,6 +17,8 @@ const DSA          = lazy(() => import('./pages/DSA'))
 const YouTube      = lazy(() => import('./pages/YouTube'))
 const Internships  = lazy(() => import('./pages/Internships'))
 const Community    = lazy(() => import('./pages/Community'))
+const Login        = lazy(() => import('./pages/Login'))
+const Signup       = lazy(() => import('./pages/Signup'))
 const MSBTE        = lazy(() => import('./pages/MSBTE'))
 const Scholarships = lazy(() => import('./pages/Scholarships'))
 const Placement    = lazy(() => import('./pages/Placement'))
@@ -48,6 +50,8 @@ export default function App() {
                 <Route path="/youtube"       element={<YouTube />} />
                 <Route path="/internships"   element={<Internships />} />
                 <Route path="/community"     element={<Community />} />
+                <Route path="/login"         element={<Login />} />
+                <Route path="/signup"        element={<Signup />} />
                 <Route path="/msbte"         element={<MSBTE />} />
                 <Route path="/scholarships"  element={<Scholarships />} />
                 <Route path="/placement"     element={<Placement />} />
