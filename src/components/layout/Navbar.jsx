@@ -1,33 +1,55 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X, Search } from 'lucide-react'
+import { supabase } from '../../lib/supabase'
 import SearchBar from '../SearchBar'
 
 const navLinks = [
-  { label: 'Resources',   path: '/resources' },
-  { label: 'Roadmaps',    path: '/roadmaps' },
+  { label: 'Resources', path: '/resources' },
+  { label: 'Roadmaps', path: '/roadmaps' },
   { label: 'CAP Updates', path: '/admission-progress' },
   { label: 'Innovations', path: '/innovation-hub' },
-  { label: 'DSA & CP',    path: '/dsa' },
-  { label: 'YouTube',     path: '/youtube' },
+  { label: 'DSA & CP', path: '/dsa' },
+  { label: 'YouTube', path: '/youtube' },
   { label: 'Internships', path: '/internships' },
-  { label: 'Community',   path: '/community' },
-  { label: 'About',       path: '/about' },
+  { label: 'Community', path: '/community' },
+  { label: 'About', path: '/about' },
 ]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [mobileSearch, setMobileSearch] = useState(false)
   const [desktopSearch, setDesktopSearch] = useState(false)
+  const [user, setUser] = useState(null)
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const isHome = pathname === '/'
   const navRef = useRef(null)
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    navigate('/')
+  }
 
   useEffect(() => {
     setOpen(false)
     setMobileSearch(false)
     setDesktopSearch(false)
   }, [pathname])
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   // close desktop panel on Escape
   useEffect(() => {
@@ -105,19 +127,19 @@ export default function Navbar() {
             const isActive = pathname === link.path
             return (
               <Link
-          key={link.path}
-          to={link.path}
-          aria-current={isActive ? 'page' : undefined}
-          className={`font-ui text-sm px-2 py-2 rounded-lg transition-colors duration-200 outline-none ${isActive ? 'text-[#e8453c] bg-[#e8453c]/10' : 'text-[#888] hover:text-[#f0ede6] hover:bg-[#1a1a1a]'}`}
-          onFocus={e => {
-            e.currentTarget.style.boxShadow = '0 0 0 2px var(--accent)'
-          }}
-          onBlur={e => {
-            e.currentTarget.style.boxShadow = 'none'
-          }}
-        >
-          {link.label}
-        </Link>
+                key={link.path}
+                to={link.path}
+                aria-current={isActive ? 'page' : undefined}
+                className={`font-ui text-sm px-2 py-2 rounded-lg transition-colors duration-200 outline-none ${isActive ? 'text-[#e8453c] bg-[#e8453c]/10' : 'text-[#888] hover:text-[#f0ede6] hover:bg-[#1a1a1a]'}`}
+                onFocus={e => {
+                  e.currentTarget.style.boxShadow = '0 0 0 2px var(--accent)'
+                }}
+                onBlur={e => {
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
+              >
+                {link.label}
+              </Link>
             )
           })}
         </div>
@@ -149,6 +171,15 @@ export default function Navbar() {
           >
             College Predictor
           </Link>
+          {user && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="px-3 py-2 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+            >
+              Logout
+            </button>
+          )}
         </div>
 
         {/* ── Mobile right: search icon + hamburger ── */}
