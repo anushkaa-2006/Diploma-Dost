@@ -8,7 +8,6 @@ const navLinks = [
   { label: 'Resources', path: '/resources' },
   { label: 'Roadmaps', path: '/roadmaps' },
   { label: 'CAP Updates', path: '/admission-progress' },
-  { label: 'Innovations', path: '/innovation-hub' },
   { label: 'DSA & CP', path: '/dsa' },
   { label: 'YouTube', path: '/youtube' },
   { label: 'Internships', path: '/internships' },
@@ -175,7 +174,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={handleLogout}
-              className="px-3 py-2 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition whitespace-nowrap"
+              className="ml-4 px-4 py-2 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition whitespace-nowrap"
             >
               Logout
             </button>
@@ -277,7 +276,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={handleLogout}
-              className="px-3 py-2 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+              className="mt-4 px-3 py-3 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
             >
               Logout
             </button>
