@@ -59,34 +59,18 @@ export default function Signup() {
         throw error
       }
 
-      const user = data?.user
+      // The profile row is created automatically by the
+      // handle_new_user() trigger on auth.users — the client never
+      // touches the profiles table.
       const session = data?.session
 
-      if (!user && !session) {
+      // Confirmation ON  → no session yet (trigger still made the profile)
+      if (!session) {
         setMessage('Signup successful. Please check your email to confirm your account.')
         return
       }
 
-      const userId = user?.id || session?.user?.id
-      if (!userId) {
-        throw new Error('Failed to identify the new user.')
-      }
-
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert(
-          {
-            id: userId,
-            email: email.trim(),
-            username: username.trim() || null,
-          },
-          { onConflict: 'id' }
-        )
-
-      if (profileError) {
-        throw profileError
-      }
-
+      // Confirmation OFF → live session immediately, go straight in
       navigate(redirectTo)
     } catch (err) {
       setError(err?.message || 'Unable to create account. Please try again.')
