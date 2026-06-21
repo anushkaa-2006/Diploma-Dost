@@ -166,8 +166,8 @@ export default function AdmissionProgress() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [showLastYear, setShowLastYear] = useState(false);
 
-  const fetchData = () => {
-    fetch(`${SHEET_URL}&cachebust=${Date.now()}`)
+  const fetchData = (signal) => {
+    fetch(`${SHEET_URL}&cachebust=${Date.now()}`, signal ? { signal } : {})
       .then((r) => { if (!r.ok) throw new Error("Failed to fetch sheet"); return r.text(); })
       .then((csv) => {
         setSteps(parseCSV(csv));
@@ -176,15 +176,17 @@ export default function AdmissionProgress() {
         setError(null);
       })
       .catch((err) => {
+        if (err.name === 'AbortError') return;
         setError(err.message);
         setLoading(false);
       });
   };
 
   useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, 10 * 60 * 1000); // refresh every 10 min
-    return () => clearInterval(interval);
+    const controller = new AbortController();
+    fetchData(controller.signal);
+    const interval = setInterval(() => fetchData(), 10 * 60 * 1000); // refresh every 10 min
+    return () => { controller.abort(); clearInterval(interval); };
   }, []);
 
   const currentStep     = steps.find((s) => s.status === "current");
@@ -219,7 +221,7 @@ export default function AdmissionProgress() {
               {error}. Try refreshing the page.
             </p>
             <button
-              onClick={fetchData}
+              onClick={() => fetchData()}
               className="mt-3 font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-wider
                          border border-[#e8453c]/40 text-[#e8453c] px-3 py-1.5 rounded
                          hover:bg-[#e8453c]/10 transition-colors"
@@ -248,7 +250,7 @@ export default function AdmissionProgress() {
                 updated {lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
               </span>
               <button
-                onClick={fetchData}
+                onClick={() => fetchData()}
                 title="Refresh"
                 className="text-[var(--border)] hover:text-[var(--text-muted)] transition-colors text-xs ml-1"
               >

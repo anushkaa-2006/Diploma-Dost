@@ -773,10 +773,8 @@ export default function Predictor() {
         .lte("cutoff_percent", maxCutoff)
         .order("cutoff_percent", { ascending: false });
 
-      // Apply multiple district filters (OR logic)
       if (districtFilters.length > 0) {
-        const districtFilter = districtFilters.map((d) => `district.eq.${d}`).join(",");
-        query = query.or(districtFilter);
+        query = query.in('district', districtFilters);
       }
 
       const { data, error: err } = await query;

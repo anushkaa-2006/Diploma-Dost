@@ -373,7 +373,10 @@ export default function InnovationHub() {
         </div>
 
         {/* Project Types Tabs */}
-        <div className="mb-12 flex gap-3 border-b border-[#2a2a2a] pb-6">
+        <div
+          className="mb-12 flex flex-nowrap gap-3 border-b border-[#2a2a2a] pb-6 overflow-x-auto"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {[
             { id: "micro", label: "Micro-Projects", icon: "💡" },
             { id: "itr", label: "ITR Projects", icon: "🚀" },
@@ -382,7 +385,7 @@ export default function InnovationHub() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold px-4 py-2 rounded-lg transition-all ${
+              className={`whitespace-nowrap font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold px-4 py-2 rounded-lg transition-all ${
                 activeTab === tab.id
                   ? "bg-[#e8453c] text-white"
                   : "text-[#888] hover:text-[#f0ede6] border border-[#2a2a2a]"

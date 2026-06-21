@@ -15,6 +15,7 @@ export default function Community() {
 
   const [showForm, setShowForm] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
   const [form, setForm] = useState({
     name: '',
     branch: 'CS',
@@ -93,6 +94,7 @@ export default function Community() {
     if (!form.name.trim() || !form.question_text.trim()) return
 
     setSubmitting(true)
+    setSubmitError(null)
     try {
       const { data, error } = await supabase
         .from('questions')
@@ -109,10 +111,10 @@ export default function Community() {
         setForm({ name: '', branch: 'CS', semester: 1, question_text: '' })
         setShowForm(false)
       } else if (error) {
-        setError('Failed to post your question. Please try again.')
+        setSubmitError('Failed to post your question. Please try again.')
       }
     } catch {
-      setError('Failed to post your question. Please try again.')
+      setSubmitError('Failed to post your question. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -329,6 +331,9 @@ export default function Community() {
               {submitting ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
               {submitting ? 'Posting...' : 'Post Question'}
             </button>
+            {submitError && (
+              <p className="text-[#e8453c] text-sm font-['General_Sans'] mt-1">{submitError}</p>
+            )}
           </form>
         </section>
       )}

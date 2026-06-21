@@ -7,6 +7,7 @@ export const ROADMAPS = {
         id: "cs-fullstack",
         name: "Full-Stack Web Dev",
         tag: "Most Hired",
+        duration: null,
         nodes: [
           {
             id: "cs-fs-1",
@@ -271,6 +272,7 @@ export const ROADMAPS = {
         id: "cs-core",
         name: "CS Core + DSA",
         tag: "FAANG / Product",
+        duration: null,
         nodes: [
           {
             id: "cs-core-1",
@@ -545,7 +547,7 @@ export const ROADMAPS = {
             description: "Regression, classification, clustering, decision trees, random forests, SVMs, model evaluation (train/test split, cross-validation, metrics like accuracy, precision, recall, F1, AUC-ROC).",
             why: "These are the building blocks of ML. Even deep learning models use these concepts. You need this to understand what's happening under the hood.",
             resources: [
-              { type: "yt", label: "Machine Learning — Andrew Ng (Coursera)", url: "https://www.coursera.org/learn/machine-learning" },
+              { type: "doc", label: "Machine Learning — Andrew Ng (Coursera)", url: "https://www.coursera.org/learn/machine-learning" },
               { type: "yt", label: "ML with Python — freeCodeCamp", url: "https://www.youtube.com/watch?v=NWONeJKn6kc" },
               { type: "doc", label: "scikit-learn Official Docs", url: "https://scikit-learn.org/stable/" },
               { type: "practice", label: "Kaggle — Housing Prices", url: "https://www.kaggle.com/c/house-prices-advanced-regression-techniques" },
@@ -560,7 +562,7 @@ export const ROADMAPS = {
             description: "Neural networks, backpropagation, activation functions, CNNs for computer vision, RNNs/Transformers for NLP. Build and train models with TensorFlow/Keras or PyTorch.",
             why: "Deep learning powers modern AI: ChatGPT, Stable Diffusion, self-driving cars, etc. This is where the magic happens.",
             resources: [
-              { type: "yt", label: "Deep Learning Specialization — Andrew Ng", url: "https://www.coursera.org/specializations/deep-learning" },
+              { type: "doc", label: "Deep Learning Specialization — Andrew Ng", url: "https://www.coursera.org/specializations/deep-learning" },
               { type: "yt", label: "TensorFlow 2.0 Course — freeCodeCamp", url: "https://www.youtube.com/watch?v=tPYj3fFJGjk" },
               { type: "yt", label: "PyTorch Tutorial — freeCodeCamp", url: "https://www.youtube.com/watch?v=GIsg-ZUy0MY" },
               { type: "doc", label: "TensorFlow Docs", url: "https://www.tensorflow.org/" },
@@ -768,6 +770,7 @@ export const ROADMAPS = {
         id: "it-cloud",
         name: "Cloud & DevOps",
         tag: "Highest Growth",
+        duration: null,
         nodes: [
           {
             id: "it-cloud-1",
@@ -952,6 +955,7 @@ export const ROADMAPS = {
         id: "it-dev",
         name: "Software Development",
         tag: "Traditional + Stable",
+        duration: null,
         nodes: [
           {
             id: "it-dev-1",
@@ -1190,7 +1194,7 @@ export const ROADMAPS = {
             why: "These are the tools you'll use every day as a cybersecurity professional. Mastering them makes you effective.",
             resources: [
               { type: "yt", label: "Wireshark Tutorial — freeCodeCamp", url: "https://www.youtube.com/watch?v=lb1Dw0elw0Q" },
-              { type: "yt", label: "Nmap Tutorial — freeCodeCamp", url: "https://www.youtube.com/watch?v=5gFrx5j43h4" },
+              { type: "yt", label: "Nmap Tutorial — freeCodeCamp", url: "https://www.youtube.com/watch?v=4t4kBkMsDbQ" },
               { type: "doc", label: "Kali Linux Docs", url: "https://www.kali.org/docs/" },
             ],
           },
