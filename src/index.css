@@ -7,19 +7,19 @@
 
 /* ── Clash Display ── */
 @font-face {
-  font-family: 'ClashDisplay';
+  font-family: 'Clash Display';
   src: url('./assets/fonts/ClashDisplay-Medium.woff2') format('woff2');
   font-weight: 500;
   font-display: swap;
 }
 @font-face {
-  font-family: 'ClashDisplay';
+  font-family: 'Clash Display';
   src: url('./assets/fonts/ClashDisplay-Semibold.woff2') format('woff2');
   font-weight: 600;
   font-display: swap;
 }
 @font-face {
-  font-family: 'ClashDisplay';
+  font-family: 'Clash Display';
   src: url('./assets/fonts/ClashDisplay-Bold.woff2') format('woff2');
   font-weight: 700;
   font-display: swap;
@@ -27,19 +27,19 @@
 
 /* ── Cabinet Grotesk ── */
 @font-face {
-  font-family: 'CabinetGrotesk';
+  font-family: 'Cabinet Grotesk';
   src: url('./assets/fonts/CabinetGrotesk-Medium.woff2') format('woff2');
   font-weight: 500;
   font-display: swap;
 }
 @font-face {
-  font-family: 'CabinetGrotesk';
+  font-family: 'Cabinet Grotesk';
   src: url('./assets/fonts/CabinetGrotesk-Extrabold.woff2') format('woff2');
   font-weight: 800;
   font-display: swap;
 }
 @font-face {
-  font-family: 'CabinetGrotesk';
+  font-family: 'Cabinet Grotesk';
   src: url('./assets/fonts/CabinetGrotesk-Black.woff2') format('woff2');
   font-weight: 900;
   font-display: swap;
@@ -47,13 +47,13 @@
 
 /* ── General Sans ── */
 @font-face {
-  font-family: 'GeneralSans';
+  font-family: 'General Sans';
   src: url('./assets/fonts/GeneralSans-Regular.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
-  font-family: 'GeneralSans';
+  font-family: 'General Sans';
   src: url('./assets/fonts/GeneralSans-Medium.woff2') format('woff2');
   font-weight: 500;
   font-display: swap;
@@ -104,9 +104,9 @@
     --accent-orange: #f0a843;
 
     /* Font families */
-    --font-display: 'ClashDisplay',   sans-serif;
-    --font-ui:      'CabinetGrotesk', sans-serif;
-    --font-body:    'GeneralSans',    sans-serif;
+    --font-display: 'Clash Display',   sans-serif;
+    --font-ui:      'Cabinet Grotesk', sans-serif;
+    --font-body:    'General Sans',    sans-serif;
     --font-serif:   'Sentient',       serif;
     --font-mono:    'JetBrains Mono', monospace;
   }

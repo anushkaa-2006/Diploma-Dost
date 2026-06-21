@@ -208,6 +208,10 @@ export default function Resources() {
       if (err) { setError(err.message); setLoading(false); return; }
       setData(rows || []);
       setLoading(false);
+    }).catch(() => {
+      if (cancelled) return;
+      setError('Failed to load resources. Check your connection.');
+      setLoading(false);
     });
 
     return () => { cancelled = true; };
@@ -555,7 +559,7 @@ export default function Resources() {
                 <p className="text-[0.9rem] text-[#888]">
                   {user ? `Logged in as ${user.user_metadata?.username || user.email}` : 'Login to upload resources.'}
                 </p>
-                <button type="submit" className="btn-primary inline-flex items-center justify-center px-5 py-3 rounded-lg">
+                <button type="submit" disabled={uploading} className="btn-primary inline-flex items-center justify-center px-5 py-3 rounded-lg">
                   {uploading ? 'Uploading…' : 'Upload'}
                 </button>
               </div>
@@ -638,7 +642,7 @@ export default function Resources() {
                         {formatDate(upload.created_at)}
                       </span>
                       <a
-                        href={upload.drive_link || '#'}
+                        href={upload.drive_link || undefined}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-2 text-sm text-[#f0ede6] hover:border-[#e8453c] hover:text-[#e8453c] transition-colors"

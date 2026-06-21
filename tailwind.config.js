@@ -29,9 +29,9 @@ export default {
         }
       },
       fontFamily: {
-        display: ['ClashDisplay', 'sans-serif'],
-        ui: ['CabinetGrotesk', 'sans-serif'],
-        body: ['GeneralSans', 'sans-serif'],
+        display: ['Clash Display', 'sans-serif'],
+        ui: ['Cabinet Grotesk', 'sans-serif'],
+        body: ['General Sans', 'sans-serif'],
         serif: ['Sentient', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },

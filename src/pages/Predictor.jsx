@@ -759,49 +759,54 @@ export default function Predictor() {
       return;
     }
 
-    const patterns  = branches.flatMap((b) => BRANCH_PATTERNS[b]);
-    const orFilter  = patterns.map((p) => `course_name.ilike.%${p}%`).join(",");
-    const maxCutoff = percentageNum + PCT_MARGIN;
+    try {
+      const patterns  = branches.flatMap((b) => BRANCH_PATTERNS[b]);
+      const orFilter  = patterns.map((p) => `course_name.ilike.%${p}%`).join(",");
+      const maxCutoff = percentageNum + PCT_MARGIN;
 
-    let query = supabase
-      .from("cutoffs")
-      .select("college_code, college_name, district, course_name, category, cap_round, year, cutoff_open, cutoff_percent")
-      .eq("category", category)
-      .or(orFilter)
-      .eq("year", 2025)
-      .lte("cutoff_percent", maxCutoff)
-      .order("cutoff_percent", { ascending: false });
+      let query = supabase
+        .from("cutoffs")
+        .select("college_code, college_name, district, course_name, category, cap_round, year, cutoff_open, cutoff_percent")
+        .eq("category", category)
+        .or(orFilter)
+        .eq("year", 2025)
+        .lte("cutoff_percent", maxCutoff)
+        .order("cutoff_percent", { ascending: false });
 
-    // Apply multiple district filters (OR logic)
-    if (districtFilters.length > 0) {
-      const districtFilter = districtFilters.map((d) => `district.eq.${d}`).join(",");
-      query = query.or(districtFilter);
+      // Apply multiple district filters (OR logic)
+      if (districtFilters.length > 0) {
+        const districtFilter = districtFilters.map((d) => `district.eq.${d}`).join(",");
+        query = query.or(districtFilter);
+      }
+
+      const { data, error: err } = await query;
+      if (err) { setError("Could not fetch cutoff data. Please try again."); return; }
+
+      // Deduplicate: per college+course keep the highest cap_round (Round II > Round I)
+      const groups = new Map();
+      for (const row of data || []) {
+        const key = `${row.college_code}__${row.course_name}`;
+        const existing = groups.get(key);
+        if (!existing || row.cap_round > existing.cap_round) groups.set(key, row);
+      }
+
+      const transformed = [];
+      for (const row of groups.values()) {
+        let chance;
+        if (percentageNum >= row.cutoff_percent + 2)  chance = "high";
+        else if (percentageNum >= row.cutoff_percent)  chance = "good";
+        else                                           chance = "reach";
+
+        transformed.push({ ...row, chance });
+      }
+
+      transformed.sort((a, b) => b.cutoff_percent - a.cutoff_percent);
+      setResults(transformed);
+    } catch {
+      setError("Could not fetch cutoff data. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    const { data, error: err } = await query;
-    if (err) { setError("Could not fetch cutoff data. Please try again."); setLoading(false); return; }
-
-    // Deduplicate: per college+course keep the highest cap_round (Round II > Round I)
-    const groups = new Map();
-    for (const row of data || []) {
-      const key = `${row.college_code}__${row.course_name}`;
-      const existing = groups.get(key);
-      if (!existing || row.cap_round > existing.cap_round) groups.set(key, row);
-    }
-
-    const transformed = [];
-    for (const row of groups.values()) {
-      let chance;
-      if (percentageNum >= row.cutoff_percent + 2)  chance = "high";
-      else if (percentageNum >= row.cutoff_percent)  chance = "good";
-      else                                           chance = "reach";
-
-      transformed.push({ ...row, chance });
-    }
-
-    transformed.sort((a, b) => b.cutoff_percent - a.cutoff_percent);
-    setResults(transformed);
-    setLoading(false);
   }
 
   // when mode switches, reset results

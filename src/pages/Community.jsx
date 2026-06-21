@@ -31,28 +31,29 @@ export default function Community() {
   const [answerError, setAnswerError] = useState(null)
 
   useEffect(() => {
-    fetchQuestions()
-  }, [])
-
-  async function fetchQuestions() {
     let cancelled = false
-    setLoading(true)
-    setError(null)
-    const { data, error } = await supabase
-      .from('questions')
-      .select('*')
-      .order('created_at', { ascending: false })
 
-    if (!cancelled) {
-      if (error) {
-        setError(error.message)
-      } else {
-        setQuestions(data || [])
+    async function fetchQuestions() {
+      setLoading(true)
+      setError(null)
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (!cancelled) {
+        if (error) {
+          setError(error.message)
+        } else {
+          setQuestions(data || [])
+        }
+        setLoading(false)
       }
-      setLoading(false)
     }
+
+    fetchQuestions()
     return () => { cancelled = true }
-  }
+  }, [])
 
   async function fetchAnswers(questionId) {
     if (answers[questionId]) return

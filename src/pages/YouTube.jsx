@@ -125,6 +125,11 @@ export default function YouTube() {
         if (err) { setError(err.message); setLoading(false); return; }
         setData(rows || []);
         setLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setError('Failed to load resources. Check your connection.');
+        setLoading(false);
       });
 
     return () => { cancelled = true; };
