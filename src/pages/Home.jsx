@@ -99,13 +99,6 @@ const features = [
   },
 ];
 
-const stats = [
-  { value: "6", label: "Branches" },
-  { value: "13+", label: "Features" },
-  { value: "100%", label: "Free" },
-  { value: "∞", label: "Resources" },
-];
-
 const highlights = [
   {
     icon: Zap,
@@ -133,14 +126,6 @@ export default function Home() {
   return (
     <div style={{ background: "var(--bg)" }}>
       {/* ── HERO ───────────────────────────────── */}
-      <style>{`
-        @media (max-width: 767px) {
-          .hero-section { flex-direction: column !important; padding-top: 3rem !important; padding-bottom: 2rem !important; align-items: flex-start !important; }
-          .hero-left { width: 100% !important; }
-          .hero-right { display: none !important; }
-          .hero-ctas { margin-bottom: 2.5rem !important; }
-        }
-      `}</style>
       <section
         className="hero-section"
         style={{

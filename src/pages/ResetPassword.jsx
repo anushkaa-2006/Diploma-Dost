@@ -88,10 +88,10 @@ export default function ResetPassword() {
     return (
       <section className="max-w-[720px] mx-auto px-6 py-20">
         <div className="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-10">
-          <h1 className="font-['Clash_Display'] text-[var(--text)] text-2xl font-semibold mb-4">
+          <h1 className="font-display text-[var(--text)] text-2xl font-semibold mb-4">
             Invalid or expired link
           </h1>
-          <p className="font-['General_Sans'] text-[var(--text-muted)] mb-6">
+          <p className="font-body text-[var(--text-muted)] mb-6">
             Request a new password reset from the login page.
           </p>
           <Link to="/login" className="text-[var(--accent)] hover:text-[var(--text)]">
@@ -105,22 +105,23 @@ export default function ResetPassword() {
   return (
     <section className="max-w-[720px] mx-auto px-6 py-20">
       <div className="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-10 shadow-[0_0_40px_rgba(0,0,0,0.15)]">
-        <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[var(--accent)] mb-3 font-bold">
+        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--accent)] mb-3 font-bold">
           Reset password
         </p>
 
-        <h1 className="font-['Clash_Display'] text-[var(--text)] text-[clamp(2rem,4vw,3rem)] font-semibold mb-4">
+        <h1 className="font-display text-[var(--text)] text-[clamp(2rem,4vw,3rem)] font-semibold mb-4">
           Set a new password
         </h1>
 
-        <p className="font-['General_Sans'] text-[var(--text-muted)] leading-relaxed mb-8">
+        <p className="font-body text-[var(--text-muted)] leading-relaxed mb-8">
           Enter your new password below.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <label className="block text-sm text-[var(--text)]">
+          <label htmlFor="password" className="block text-sm text-[var(--text)]">
             New password
             <input
+              id="password"
               type="password"
               autoComplete="new-password"
               value={password}
@@ -131,9 +132,10 @@ export default function ResetPassword() {
             />
           </label>
 
-          <label className="block text-sm text-[var(--text)]">
+          <label htmlFor="confirm-password" className="block text-sm text-[var(--text)]">
             Confirm password
             <input
+              id="confirm-password"
               type="password"
               autoComplete="new-password"
               value={confirmPassword}
@@ -154,7 +156,7 @@ export default function ResetPassword() {
           </button>
 
           {error && <p role="alert" className="text-sm text-[var(--accent)]">{error}</p>}
-          {message && <p role="status" className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
+          {message && <p role="status" className="text-sm text-accent-lime">{message}</p>}
         </form>
       </div>
     </section>

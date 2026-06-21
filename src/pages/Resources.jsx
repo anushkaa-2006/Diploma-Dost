@@ -511,7 +511,7 @@ export default function Resources() {
                     value={uploadForm.name}
                     onChange={(e) => handleUploadField('name', e.target.value)}
                     placeholder="Example: CS PYQ Set 2024"
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+                    className="w-full rounded-lg border border-[#2a2a2a] bg-[var(--surface)] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
                   />
                 </label>
 
@@ -520,7 +520,7 @@ export default function Resources() {
                   <select
                     value={uploadForm.subject}
                     onChange={(e) => handleUploadField('subject', e.target.value)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+                    className="w-full rounded-lg border border-[#2a2a2a] bg-[var(--surface)] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
                   >
                     {UPLOAD_TYPES.map((subject) => (
                       <option key={subject} value={subject}>{subject}</option>
@@ -535,7 +535,7 @@ export default function Resources() {
                   <select
                     value={uploadForm.semester}
                     onChange={(e) => handleUploadField('semester', parseInt(e.target.value, 10))}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+                    className="w-full rounded-lg border border-[#2a2a2a] bg-[var(--surface)] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
                   >
                     {SEMESTERS.map((sem) => (
                       <option key={sem} value={sem}>Semester {sem} — {SEM_LABELS[sem]}</option>
@@ -550,7 +550,7 @@ export default function Resources() {
                     value={uploadForm.drive_link}
                     onChange={(e) => handleUploadField('drive_link', e.target.value)}
                     placeholder="https://drive.google.com/..."
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
+                    className="w-full rounded-lg border border-[#2a2a2a] bg-[var(--surface)] px-4 py-3 text-sm text-[#f0ede6] outline-none focus:border-[#e8453c]"
                   />
                 </label>
               </div>
@@ -645,7 +645,7 @@ export default function Resources() {
                         href={upload.drive_link || undefined}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] px-4 py-2 text-sm text-[#f0ede6] hover:border-[#e8453c] hover:text-[#e8453c] transition-colors"
+                        className="inline-flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[var(--surface)] px-4 py-2 text-sm text-[#f0ede6] hover:border-[#e8453c] hover:text-[#e8453c] transition-colors"
                       >
                         Open / View
                       </a>

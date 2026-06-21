@@ -1,7 +1,5 @@
 import { ChevronRight } from 'lucide-react';
-import { FaGithub } from 'react-icons/fa';
-import { FaInstagram } from 'react-icons/fa';
-import { FaLinkedin } from 'react-icons/fa';
+import { FaGithub, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 
 import { Link } from 'react-router-dom';

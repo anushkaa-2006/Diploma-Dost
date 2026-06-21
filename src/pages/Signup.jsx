@@ -82,20 +82,21 @@ export default function Signup() {
   return (
     <section className="max-w-[720px] mx-auto px-6 py-20">
       <div className="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-10 shadow-[0_0_40px_rgba(0,0,0,0.15)]">
-        <p className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[var(--accent)] mb-3 font-bold">
+        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--accent)] mb-3 font-bold">
           Create account
         </p>
-        <h1 className="font-['Clash_Display'] text-[var(--text)] text-[clamp(2rem,4vw,3rem)] font-semibold mb-4">
+        <h1 className="font-display text-[var(--text)] text-[clamp(2rem,4vw,3rem)] font-semibold mb-4">
           Join Diploma Dost
         </h1>
-        <p className="font-['General_Sans'] text-[var(--text-muted)] leading-relaxed mb-8">
+        <p className="font-body text-[var(--text-muted)] leading-relaxed mb-8">
           Sign up to upload notes, manuals, and community resources. Your account will keep uploads organized and trusted.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <label className="block text-sm text-[var(--text)]">
+          <label htmlFor="username" className="block text-sm text-[var(--text)]">
             Username
             <input
+              id="username"
               type="text"
               name="username"
               autoComplete="username"
@@ -106,9 +107,10 @@ export default function Signup() {
             />
           </label>
 
-          <label className="block text-sm text-[var(--text)]">
+          <label htmlFor="email" className="block text-sm text-[var(--text)]">
             Email address
             <input
+              id="email"
               type="email"
               autoComplete="email"
               value={email}
@@ -118,9 +120,10 @@ export default function Signup() {
             />
           </label>
 
-          <label className="block text-sm text-[var(--text)]">
+          <label htmlFor="password" className="block text-sm text-[var(--text)]">
             Password
             <input
+              id="password"
               type="password"
               autoComplete="new-password"
               value={password}
@@ -140,7 +143,7 @@ export default function Signup() {
           </button>
 
           {error && <p role="alert" className="text-sm text-[var(--accent)]">{error}</p>}
-          {message && <p role="status" className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
+          {message && <p role="status" className="text-sm text-accent-lime">{message}</p>}
         </form>
 
         <p className="mt-6 text-sm text-[var(--text-muted)]">

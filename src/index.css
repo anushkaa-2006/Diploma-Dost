@@ -98,6 +98,7 @@
 
     /* Accents */
     --accent:        #e8453c;
+    --accent-rgb:    232, 69, 60;
     --accent-lime:   #c8f04d;
     --accent-blue:   #4d9ef0;
     --accent-purple: #b87aff;
@@ -194,7 +195,7 @@
   }
 
   .card:hover {
-    border-color: rgba(232, 69, 60, 0.4);
+    border-color: rgba(var(--accent-rgb), 0.4);
     transform: translateY(-2px);
   }
 
@@ -240,8 +241,8 @@
   }
 
   .btn-ghost:hover {
-    border-color: rgba(232, 69, 60, 0.4);
-    background: rgba(232, 69, 60, 0.05);
+    border-color: rgba(var(--accent-rgb), 0.4);
+    background: rgba(var(--accent-rgb), 0.05);
   }
 
   /* ── Surface helpers ── */
@@ -256,10 +257,21 @@
 
   /* ── Glass card ── */
   .glass {
+    /* Hardcoded rgba is intentional: CSS variables can't be used inside rgba()
+       with alpha in this context without --surface-rgb, and the 94% opacity
+       backdrop is a specific visual requirement for the glass effect. */
     background: rgba(20, 20, 20, 0.94);
     border: 1px solid var(--border);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+  }
+
+  /* ── Home hero responsive layout ── */
+  @media (max-width: 767px) {
+    .hero-section { flex-direction: column !important; padding-top: 3rem !important; padding-bottom: 2rem !important; align-items: flex-start !important; }
+    .hero-left    { width: 100% !important; }
+    .hero-right   { display: none !important; }
+    .hero-ctas    { margin-bottom: 2.5rem !important; }
   }
 
 }

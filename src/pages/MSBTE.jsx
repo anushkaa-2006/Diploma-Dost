@@ -312,7 +312,7 @@ function RecheckingSection() {
           return (
             <div
               key={i}
-              className={`border rounded-lg overflow-hidden transition-all ${isOpen ? "border-[#e8453c]/40 bg-[#141414]" : "border-[#2a2a2a] bg-[#0f0f0f] hover:border-[#2a2a2a]"}`}
+              className={`border rounded-lg overflow-hidden transition-all ${isOpen ? "border-[#e8453c]/40 bg-[#141414]" : "border-[#2a2a2a] bg-[var(--surface)] hover:border-[#2a2a2a]"}`}
             >
               <button
                 onClick={() => setOpenStep(isOpen ? null : i)}
