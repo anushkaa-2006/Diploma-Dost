@@ -80,7 +80,7 @@ export default function Navbar() {
       }}
       className="sticky top-0 z-50"
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-6 flex items-center h-16 gap-4">
 
         {/* ── Logo ── */}
         <Link
@@ -122,7 +122,7 @@ export default function Navbar() {
         </Link>
 
         {/* ── Desktop nav links ── */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden md:flex flex-1 justify-center items-center gap-1">
           {navLinks.map(link => {
             const isActive = pathname === link.path
             return (
@@ -144,8 +144,8 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* ── Desktop right: Search icon + CTA ── */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* ── Desktop right: Search icon + CTA + Logout ── */}
+        <div className="hidden md:flex items-center gap-3 flex-shrink-0 ml-auto">
           {!isHome && (
             <button
               className="p-2 rounded-lg transition-colors duration-200 outline-none"
@@ -175,7 +175,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={handleLogout}
-              className="px-3 py-2 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+              className="px-3 py-2 text-sm rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition whitespace-nowrap"
             >
               Logout
             </button>
@@ -183,7 +183,7 @@ export default function Navbar() {
         </div>
 
         {/* ── Mobile right: search icon + hamburger ── */}
-        <div className="md:hidden flex items-center gap-0.5">
+        <div className="md:hidden flex items-center gap-0.5 ml-auto">
           {!isHome && (
             <button
               className="p-2 rounded-lg transition-colors duration-200 outline-none"
@@ -266,6 +266,13 @@ export default function Navbar() {
               </Link>
             )
           })}
+          <Link
+            to="/predictor"
+            onClick={() => setOpen(false)}
+            className="btn-primary text-sm px-4 py-3 outline-none text-center"
+          >
+            College Predictor
+          </Link>
           {user && (
             <button
               type="button"
