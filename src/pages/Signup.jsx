@@ -96,6 +96,9 @@ export default function Signup() {
           <label className="block text-sm text-[var(--text)]">
             Username
             <input
+              type="text"
+              name="username"
+              autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -107,6 +110,7 @@ export default function Signup() {
             Email address
             <input
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -118,6 +122,7 @@ export default function Signup() {
             Password
             <input
               type="password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

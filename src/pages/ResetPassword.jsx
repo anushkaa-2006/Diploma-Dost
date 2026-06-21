@@ -122,6 +122,7 @@ export default function ResetPassword() {
             New password
             <input
               type="password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -134,6 +135,7 @@ export default function ResetPassword() {
             Confirm password
             <input
               type="password"
+              autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required

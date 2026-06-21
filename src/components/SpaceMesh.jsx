@@ -111,9 +111,19 @@ export default function SpaceMesh() {
     const ro = new ResizeObserver(resize)
     ro.observe(canvas)
 
+    function handleVisibility() {
+      if (document.hidden) {
+        cancelAnimationFrame(frameId)
+      } else {
+        draw()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+
     return () => {
       cancelAnimationFrame(frameId)
       ro.disconnect()
+      document.removeEventListener('visibilitychange', handleVisibility)
     }
   }, [])
 

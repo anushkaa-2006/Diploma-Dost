@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ROADMAPS } from "../data/roadmaps";
 import { ChevronRight, X, BookOpen, Play, Code, CheckCircle, Flag } from "lucide-react";
 import { FaGithub } from 'react-icons/fa';
@@ -33,11 +33,17 @@ function ResourceIcon({ type }) {
 }
 
 function NodeDrawer({ node, onClose }) {
+  const closeRef = useRef(null)
+
   useEffect(() => {
     const handler = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
+
+  useEffect(() => {
+    if (node) closeRef.current?.focus()
+  }, [node])
 
   if (!node) return null;
   const phase = PHASE_STYLES[node.phase] || PHASE_STYLES.Foundation;
@@ -45,7 +51,7 @@ function NodeDrawer({ node, onClose }) {
   return (
     <>
       <div className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm" onClick={onClose} />
-      <div className="fixed right-0 top-0 h-full w-full md:max-w-[500px] bg-[#141414] border-l border-[#2a2a2a] z-50 overflow-y-auto">
+      <div role="dialog" aria-modal="true" aria-label="Node details" className="fixed right-0 top-0 h-full w-full md:max-w-[500px] bg-[#141414] border-l border-[#2a2a2a] z-50 overflow-y-auto">
         <div className="sticky top-0 bg-[#141414] border-b border-[#2a2a2a] px-6 py-5 flex items-start justify-between gap-4">
           <div className="min-w-0">
             <div className={`font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase mb-2 font-bold ${phase.text}`}>
@@ -55,7 +61,7 @@ function NodeDrawer({ node, onClose }) {
               {node.label}
             </h2>
           </div>
-          <button onClick={onClose} className="mt-1 text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
+          <button ref={closeRef} onClick={onClose} className="mt-1 text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
             <X size={20} strokeWidth={2} />
           </button>
         </div>
@@ -228,14 +234,16 @@ export default function Roadmaps() {
         </div>
 
         {/* Branch Tabs */}
-        <div className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide border-b border-[#2a2a2a] mb-10 pb-6">
+        <div role="tablist" className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide border-b border-[#2a2a2a] mb-10 pb-6">
           {BRANCHES.map((b) => (
             <button
               key={b}
+              role="tab"
+              aria-selected={activeBranch === b}
               onClick={() => handleBranchChange(b)}
               className={`font-['Cabinet_Grotesk'] text-[0.9rem] font-semibold px-4 py-2.5 rounded-lg border transition-all duration-150
-                ${activeBranch === b 
-                  ? "border-[#e8453c] bg-[#e8453c]/5 text-[#f0ede6]" 
+                ${activeBranch === b
+                  ? "border-[#e8453c] bg-[#e8453c]/5 text-[#f0ede6]"
                   : "border-[#2a2a2a] bg-transparent text-[#888] hover:border-[#3a3a3a] hover:text-[#f0ede6]"}`}
             >
               {b}
@@ -263,10 +271,12 @@ export default function Roadmaps() {
             </p>
 
             {/* Track Selector */}
-            <div className="flex gap-3 flex-wrap mb-12">
+            <div role="tablist" className="flex gap-3 flex-wrap mb-12">
               {tracks.map((t, i) => (
                 <button
                   key={t.id}
+                  role="tab"
+                  aria-selected={activeTrackIdx === i}
                   onClick={() => { setActiveTrackIdx(i); setSelectedNode(null); }}
                   className={`flex flex-col items-start gap-1 px-4 py-3 rounded-lg border text-left transition-all
                     ${activeTrackIdx === i

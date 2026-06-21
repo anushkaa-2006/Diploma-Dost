@@ -374,6 +374,7 @@ export default function InnovationHub() {
 
         {/* Project Types Tabs */}
         <div
+          role="tablist"
           className="mb-12 flex flex-nowrap gap-3 border-b border-[#2a2a2a] pb-6 overflow-x-auto"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
@@ -384,6 +385,8 @@ export default function InnovationHub() {
           ].map((tab) => (
             <button
               key={tab.id}
+              role="tab"
+              aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`whitespace-nowrap font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold px-4 py-2 rounded-lg transition-all ${
                 activeTab === tab.id

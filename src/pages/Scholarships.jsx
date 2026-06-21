@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChevronDown, ExternalLink, AlertCircle, CheckCircle } from "lucide-react";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
@@ -393,9 +393,9 @@ function ScholarshipFinder({ onSelect }) {
 
       <div>
         <div className="font-['Cabinet_Grotesk'] text-[1rem] font-semibold text-[#f0ede6] mb-3">What is your category?</div>
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div role="tablist" className="flex flex-wrap gap-2 mb-6">
           {CATEGORY_OPTIONS.map((c) => (
-            <button key={c} onClick={() => setCategory(c)}
+            <button key={c} role="tab" aria-selected={category === c} onClick={() => setCategory(c)}
               className={`font-['General_Sans'] text-[0.85rem] font-medium px-3 py-2 rounded-lg border transition-all
                 ${category === c ? "border-[#e8453c] text-[#e8453c] bg-[#e8453c]/8" : "border-[#2a2a2a] text-[#888] hover:border-[#3a3a3a] hover:text-[#f0ede6]"}`}>
               {c}
@@ -414,21 +414,27 @@ function ScholarshipFinder({ onSelect }) {
 // ─── SCHEME DETAIL MODAL ─────────────────────────────────────────────────────
 
 function SchemeDetail({ scheme, onClose }) {
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+  }, []);
+
   if (!scheme) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div role="dialog" aria-modal="true" aria-labelledby="scheme-detail-heading" className="bg-[#141414] border border-[#2a2a2a] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-[#141414] border-b border-[#2a2a2a] px-6 py-5 flex items-start justify-between gap-4">
           <div>
             <span className="font-['JetBrains_Mono'] text-[0.65rem] tracking-widest uppercase font-bold" style={{ color: scheme.color }}>
               {scheme.badge}
             </span>
-            <h2 className="font-['Clash_Display'] text-[1.5rem] font-semibold text-[#f0ede6] mt-1">
+            <h2 id="scheme-detail-heading" className="font-['Clash_Display'] text-[1.5rem] font-semibold text-[#f0ede6] mt-1">
               {scheme.name}
             </h2>
           </div>
-          <button onClick={onClose} className="text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
+          <button ref={closeRef} onClick={onClose} className="text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>

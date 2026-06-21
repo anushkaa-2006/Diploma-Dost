@@ -568,6 +568,11 @@ function CollegeAllBranches({ college, category, onClose }) {
 
 function ShortlistDrawer({ shortlist, onRemove, onClear, onClose }) {
   const [copied, setCopied] = useState(false);
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+  }, []);
 
   const exportAsText = () => {
     const text = shortlist
@@ -583,7 +588,7 @@ function ShortlistDrawer({ shortlist, onRemove, onClear, onClose }) {
   return (
     <>
       <div className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm" onClick={onClose} />
-      <div className="fixed right-0 top-0 h-full w-full max-w-[600px] bg-[#141414] border-l border-[#2a2a2a] z-50 overflow-y-auto">
+      <div role="dialog" aria-modal="true" aria-label="Your shortlist" className="fixed right-0 top-0 h-full w-full max-w-[600px] bg-[#141414] border-l border-[#2a2a2a] z-50 overflow-y-auto">
         {/* sticky header */}
         <div className="sticky top-0 bg-[#141414] border-b border-[#2a2a2a] px-6 py-5 flex items-start justify-between gap-4">
           <div className="min-w-0">
@@ -594,7 +599,7 @@ function ShortlistDrawer({ shortlist, onRemove, onClear, onClose }) {
               {shortlist.length} College{shortlist.length !== 1 ? 's' : ''}
             </h2>
           </div>
-          <button onClick={onClose} className="mt-1 text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
+          <button ref={closeRef} onClick={onClose} className="mt-1 text-[#888] hover:text-[#f0ede6] transition-colors flex-shrink-0">
             <X size={20} strokeWidth={2} />
           </button>
         </div>
@@ -853,12 +858,12 @@ export default function Predictor() {
       </div>
 
       {/* mode tabs */}
-      <div className="flex gap-1 p-1 rounded-lg bg-[#141414] border border-[#2a2a2a] w-fit mb-8">
+      <div role="tablist" className="flex gap-1 p-1 rounded-lg bg-[#141414] border border-[#2a2a2a] w-fit mb-8">
         {[
           { id: "predictor", icon: Search,    label: "Predictor" },
           { id: "college",   icon: Building2, label: "Search College" },
         ].map(({ id, icon: Icon, label }) => (
-          <button key={id} onClick={() => switchMode(id)}
+          <button key={id} role="tab" aria-selected={mode === id} onClick={() => switchMode(id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-md font-['General_Sans'] text-sm
                         font-medium transition-all duration-150
                         ${mode === id
