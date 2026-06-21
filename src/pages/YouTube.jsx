@@ -185,7 +185,7 @@ export default function YouTube() {
 
         {loading && (
           <div role="status" aria-label="Loading playlists" className="yt-state">
-            <Loader2 size={28} className="yt-spinner" aria-hidden="true" />
+            <Loader2 size={32} className="animate-spin" style={{ color: 'var(--accent)' }} aria-hidden="true" />
             <p className="yt-state__title">Loading playlists…</p>
             <p className="yt-state__sub">Fetching the best content for {BRANCH_LABELS[activeBranch]}</p>
           </div>

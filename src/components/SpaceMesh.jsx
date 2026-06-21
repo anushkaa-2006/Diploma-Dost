@@ -10,6 +10,9 @@ export default function SpaceMesh() {
     let w, h, points
     let isMobile = false
 
+    // Declared before draw() so the closure captures the reference
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+
     function resize() {
       w = canvas.width  = canvas.offsetWidth
       h = canvas.height = canvas.offsetHeight
@@ -102,7 +105,10 @@ export default function SpaceMesh() {
         ctx.fill()
       }
 
-      frameId = requestAnimationFrame(draw)
+      // Loop only when user has not requested reduced motion
+      if (!motionQuery.matches) {
+        frameId = requestAnimationFrame(draw)
+      }
     }
 
     resize()
@@ -114,16 +120,26 @@ export default function SpaceMesh() {
     function handleVisibility() {
       if (document.hidden) {
         cancelAnimationFrame(frameId)
-      } else {
+      } else if (!motionQuery.matches) {
         draw()
       }
     }
     document.addEventListener('visibilitychange', handleVisibility)
 
+    function handleMotion() {
+      if (motionQuery.matches) {
+        cancelAnimationFrame(frameId)
+      } else {
+        draw()
+      }
+    }
+    motionQuery.addEventListener('change', handleMotion)
+
     return () => {
       cancelAnimationFrame(frameId)
       ro.disconnect()
       document.removeEventListener('visibilitychange', handleVisibility)
+      motionQuery.removeEventListener('change', handleMotion)
     }
   }, [])
 

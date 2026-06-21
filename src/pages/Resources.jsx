@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { ExternalLink, FileText, BookOpen, Loader2, ChevronDown, Download, Link2 } from "lucide-react";
@@ -197,7 +197,8 @@ export default function Resources() {
       .eq("branch", branch)
       .eq("semester", semester)
       .order("subject_name", { ascending: true })
-      .order("session", { ascending: true });
+      .order("session", { ascending: true })
+      .limit(200);
 
     if (typeFilter !== "All") {
       query = query.eq("type", typeFilter);
@@ -350,12 +351,12 @@ export default function Resources() {
     }
   }
 
-  const bySubject = data.reduce((acc, row) => {
+  const bySubject = useMemo(() => data.reduce((acc, row) => {
     const key = row.course_code;
     if (!acc[key]) acc[key] = { subjectName: row.subject_name, courseCode: row.course_code, entries: [] };
     acc[key].entries.push(row);
     return acc;
-  }, {});
+  }, {}), [data]);
 
   const subjects = Object.values(bySubject);
 

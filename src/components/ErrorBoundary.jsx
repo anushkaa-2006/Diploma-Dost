@@ -1,4 +1,5 @@
 import React from 'react';
+import { supabase } from '../lib/supabase';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -12,8 +13,16 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service here
     console.error("ErrorBoundary caught an error", error, errorInfo);
+    // Best-effort: log to Supabase error_logs table.
+    // Requires: CREATE TABLE error_logs (id uuid default gen_random_uuid() primary key,
+    //   message text, stack text, url text, timestamp timestamptz);
+    supabase.from('error_logs').insert([{
+      message: error.message,
+      stack: error.stack?.slice(0, 500),
+      url: window.location.href,
+      timestamp: new Date().toISOString(),
+    }]).then(() => {}).catch(() => {});
   }
 
   render() {

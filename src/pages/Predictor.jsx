@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import {
   Search, AlertTriangle, ChevronDown, X,
   BookmarkPlus, BookmarkCheck, Info, MapPin, Building2,
-  Download, Share2, Trash2, Copy, Check
+  Download, Share2, Trash2, Copy, Check, Loader2
 } from "lucide-react";
 
 // ─── constants ──────────────────────────────────────────────────────────────
@@ -318,11 +318,13 @@ function CollegeSearch({ value, onChange, onSelect }) {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const debounceRef = useRef(null);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     if (value.length < 2) { setSuggestions([]); setOpen(false); setFetchError(false); return; }
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
+      const currentId = ++requestIdRef.current;
       setLoading(true);
       setFetchError(false);
       const { data, error } = await supabase
@@ -332,6 +334,7 @@ function CollegeSearch({ value, onChange, onSelect }) {
         .eq("year", 2025)
         .order("college_name")
         .limit(8);
+      if (currentId !== requestIdRef.current) return;
       if (error) {
         setFetchError(true);
         setOpen(true);
@@ -347,6 +350,7 @@ function CollegeSearch({ value, onChange, onSelect }) {
       }
       setLoading(false);
     }, 300);
+    return () => { clearTimeout(debounceRef.current); };
   }, [value]);
 
   return (
@@ -366,9 +370,8 @@ function CollegeSearch({ value, onChange, onSelect }) {
                      transition-colors duration-150"
         />
         {loading && (
-          <div className="absolute right-3.5 top-1/2 -translate-y-1/2
-                          w-3.5 h-3.5 border-2 border-[#e8453c] border-t-transparent
-                          rounded-full animate-spin" />
+          <Loader2 size={14} strokeWidth={2} aria-hidden="true"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 animate-spin text-[var(--accent)]" />
         )}
         {value && !loading && (
           <button onClick={() => { onChange(""); onSelect(null); setSuggestions([]); setOpen(false); }}
@@ -517,7 +520,7 @@ function CollegeAllBranches({ college, category, onClose }) {
 
       {loading && (
         <div role="status" aria-label="Loading results" className="flex items-center justify-center gap-2 py-10">
-          <div aria-hidden="true" className="w-4 h-4 border-2 border-[#e8453c] border-t-transparent rounded-full animate-spin" />
+          <Loader2 size={16} className="animate-spin text-[var(--accent)]" aria-hidden="true" />
           <span className="font-['General_Sans'] text-[#888] text-sm">Loading…</span>
         </div>
       )}
@@ -1035,7 +1038,7 @@ export default function Predictor() {
       <div>
         {loading && (
           <div className="flex flex-col items-center gap-3 py-20">
-            <div className="w-5 h-5 border-2 border-[#e8453c] border-t-transparent rounded-full animate-spin" />
+            <Loader2 size={20} className="animate-spin text-[var(--accent)]" aria-hidden="true" />
             <p className="font-['General_Sans'] text-[#888] text-sm">Searching cutoff data…</p>
           </div>
         )}

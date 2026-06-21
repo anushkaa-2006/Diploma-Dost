@@ -188,15 +188,6 @@
   border: 1px solid var(--border);
 }
 
-@keyframes yt-spin {
-  to { transform: rotate(360deg); }
-}
-
-.yt-spinner {
-  color: var(--accent);
-  animation: yt-spin 0.9s linear infinite;
-}
-
 /* ── semester accordion ──────────────────────────────────────────────────────── */
 
 .yt-sem {
