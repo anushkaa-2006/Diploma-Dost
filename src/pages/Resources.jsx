@@ -448,7 +448,7 @@ export default function Resources() {
         )}
 
         {!loading && error && (
-          <div className="flex flex-col items-center gap-2 py-24
+          <div role="alert" className="flex flex-col items-center gap-2 py-24
                           font-['General_Sans'] text-[#e8453c] text-sm text-center">
             <p className="font-['Cabinet_Grotesk'] font-semibold">Could not load resources</p>
             <p>Check your connection and try again.</p>
@@ -559,13 +559,13 @@ export default function Resources() {
                 <p className="text-[0.9rem] text-[#888]">
                   {user ? `Logged in as ${user.user_metadata?.username || user.email}` : 'Login to upload resources.'}
                 </p>
-                <button type="submit" disabled={uploading} className="btn-primary inline-flex items-center justify-center px-5 py-3 rounded-lg">
+                <button type="submit" disabled={uploading} aria-busy={uploading} className="btn-primary inline-flex items-center justify-center px-5 py-3 rounded-lg">
                   {uploading ? 'Uploading…' : 'Upload'}
                 </button>
               </div>
 
               {uploadMessage && (
-                <p className="text-sm text-[#e8453c]">{uploadMessage}</p>
+                <p role="alert" className="text-sm text-[#e8453c]">{uploadMessage}</p>
               )}
 
               <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-4 space-y-2">

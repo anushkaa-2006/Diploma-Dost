@@ -62,7 +62,7 @@ export default function DSAPage() {
           DSA & Competitive Programming
         </h1>
 
-        <h1 style={{
+        <span style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 700,
           fontSize: 'clamp(2.5rem, 7vw, 5rem)',
@@ -86,7 +86,7 @@ export default function DSAPage() {
           }}>
             top placements.
           </span>
-        </h1>
+        </span>
 
         {/* Subtext */}
         <p style={{

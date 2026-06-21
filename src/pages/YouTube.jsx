@@ -2,17 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from '../lib/supabase';
 import { ExternalLink, PlayCircle, BookOpen, ChevronDown, Loader2, Play } from "lucide-react";
 import "./YouTube.css";
-
-const BRANCHES = ["CS", "IT", "Mech", "Civil", "Elec", "ETC"];
-
-const BRANCH_LABELS = {
-  CS:    "Computer Science",
-  IT:    "Information Technology",
-  Mech:  "Mechanical",
-  Civil: "Civil",
-  Elec:  "Electrical",
-  ETC:   "Electronics & TC",
-};
+import { BRANCHES, BRANCH_LABELS } from '../data/branches';
 
 const SEMESTERS = [1, 2, 3, 4, 5, 6];
 

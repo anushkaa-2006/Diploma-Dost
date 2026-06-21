@@ -132,6 +132,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
+            aria-busy={loading}
             className="btn-primary w-full px-5 py-3 rounded-lg text-sm"
           >
             {loading ? 'Signing In...' : 'Sign In'}
@@ -150,8 +151,8 @@ export default function Login() {
                 : 'Forgot Password?'}
           </button>
 
-          {error && <p className="text-sm text-[var(--accent)]">{error}</p>}
-          {message && <p className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
+          {error && <p role="alert" className="text-sm text-[var(--accent)]">{error}</p>}
+          {message && <p role="status" className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
         </form>
 
         <p className="mt-6 text-sm text-[var(--text-muted)]">

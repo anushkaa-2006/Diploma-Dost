@@ -211,7 +211,7 @@ export default function Home() {
           >
             Built for diploma
           </h1>
-          <h1
+          <span
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 700,
@@ -239,7 +239,7 @@ export default function Home() {
             >
               By them.
             </span>
-          </h1>
+          </span>
 
           {/* Subtext */}
           <p

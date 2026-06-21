@@ -145,13 +145,14 @@ export default function ResetPassword() {
           <button
             type="submit"
             disabled={loading}
+            aria-busy={loading}
             className="btn-primary w-full px-5 py-3 rounded-lg text-sm"
           >
             {loading ? 'Updating…' : 'Update password'}
           </button>
 
-          {error && <p className="text-sm text-[var(--accent)]">{error}</p>}
-          {message && <p className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
+          {error && <p role="alert" className="text-sm text-[var(--accent)]">{error}</p>}
+          {message && <p role="status" className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
         </form>
       </div>
     </section>

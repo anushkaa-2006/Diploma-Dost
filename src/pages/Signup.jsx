@@ -127,14 +127,15 @@ export default function Signup() {
 
           <button
             type="submit"
-            className="btn-primary w-full px-5 py-3 rounded-lg text-sm"
             disabled={loading}
+            aria-busy={loading}
+            className="btn-primary w-full px-5 py-3 rounded-lg text-sm"
           >
             {loading ? 'Creating account…' : 'Sign up'}
           </button>
 
-          {error && <p className="text-sm text-[var(--accent)]">{error}</p>}
-          {message && <p className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
+          {error && <p role="alert" className="text-sm text-[var(--accent)]">{error}</p>}
+          {message && <p role="status" className="text-sm" style={{ color: 'var(--accent-lime)' }}>{message}</p>}
         </form>
 
         <p className="mt-6 text-sm text-[var(--text-muted)]">

@@ -114,7 +114,7 @@ function TimelineRow({ step, index }) {
         {/* Step number */}
         <span
           className={`font-['JetBrains_Mono'] text-[0.6rem] w-5 text-right flex-shrink-0 ${
-            isCompleted ? "text-[#e8453c]/50" : isCurrent ? "text-[#c8f04d]/70" : "text-[var(--border)]"
+            isCompleted ? "text-[#e8453c]/50" : isCurrent ? "text-[#c8f04d]/70" : "text-[var(--text-muted)]"
           }`}
         >
           {String(index + 1).padStart(2, "0")}
@@ -245,14 +245,14 @@ export default function AdmissionProgress() {
           </span>
           {lastUpdated && (
             <>
-              <span className="text-[var(--border)]">·</span>
-              <span className="font-['JetBrains_Mono'] text-[0.6rem] text-[var(--border)]">
+              <span className="text-[var(--text-muted)]">·</span>
+              <span className="font-['JetBrains_Mono'] text-[0.6rem] text-[var(--text-muted)]">
                 updated {lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
               </span>
               <button
                 onClick={() => fetchData()}
                 title="Refresh"
-                className="text-[var(--border)] hover:text-[var(--text-muted)] transition-colors text-xs ml-1"
+                className="text-[var(--text-muted)] hover:text-[var(--text-muted)] transition-colors text-xs ml-1"
               >
                 ↻
               </button>
@@ -453,7 +453,7 @@ export default function AdmissionProgress() {
       </div>
 
       {/* ── Footer note ── */}
-      <p className="mt-6 text-center font-['General_Sans'] text-xs text-[var(--border)]">
+      <p className="mt-6 text-center font-['General_Sans'] text-xs text-[var(--text-muted)]">
         Data sourced from{" "}
         <a href="https://mahacet.org" target="_blank" rel="noreferrer"
            className="underline underline-offset-2 hover:text-[var(--text-muted)] transition-colors">

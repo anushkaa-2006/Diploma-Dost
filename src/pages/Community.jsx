@@ -4,8 +4,8 @@ import {
   ChevronDown, ChevronUp, Plus, X
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { BRANCHES } from '../data/branches'
 
-const BRANCHES = ['CS', 'IT', 'Mech', 'Civil', 'Elec', 'ETC']
 const SEMESTERS = [1, 2, 3, 4, 5, 6]
 
 export default function Community() {
@@ -325,6 +325,7 @@ export default function Community() {
             <button
               type="submit"
               disabled={submitting}
+              aria-busy={submitting}
               className="btn-primary"
               style={{ alignSelf: 'flex-start', opacity: submitting ? 0.6 : 1 }}
             >
@@ -332,7 +333,7 @@ export default function Community() {
               {submitting ? 'Posting...' : 'Post Question'}
             </button>
             {submitError && (
-              <p className="text-[#e8453c] text-sm font-['General_Sans'] mt-1">{submitError}</p>
+              <p role="alert" className="text-[#e8453c] text-sm font-['General_Sans'] mt-1">{submitError}</p>
             )}
           </form>
         </section>
@@ -359,7 +360,7 @@ export default function Community() {
         )}
 
         {error && !loading && (
-          <div style={{
+          <div role="alert" style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
             borderRadius: '0.75rem',
@@ -602,6 +603,7 @@ export default function Community() {
                       <button
                         type="submit"
                         disabled={answerSubmitting}
+                        aria-busy={answerSubmitting}
                         className="btn-ghost"
                         style={{ alignSelf: 'flex-start', opacity: answerSubmitting ? 0.6 : 1 }}
                       >
