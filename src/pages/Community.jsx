@@ -39,7 +39,7 @@ export default function Community() {
       setError(null)
       const { data, error } = await supabase
         .from('questions')
-        .select('*')
+        .select('id, name, branch, semester, question_text, created_at')
         .order('created_at', { ascending: false })
 
       if (!cancelled) {
@@ -62,7 +62,7 @@ export default function Community() {
     try {
       const { data, error } = await supabase
         .from('answers')
-        .select('*')
+        .select('id, question_id, name, answer_text, created_at')
         .eq('question_id', questionId)
         .order('created_at', { ascending: true })
 
@@ -345,7 +345,7 @@ export default function Community() {
       }}>
 
         {loading && (
-          <div style={{
+          <div role="status" aria-label="Loading questions" style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
@@ -354,7 +354,7 @@ export default function Community() {
             fontSize: '0.9rem',
             padding: '2rem 0',
           }}>
-            <Loader2 size={16} className="animate-spin" />
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
             Loading questions...
           </div>
         )}
@@ -385,7 +385,7 @@ export default function Community() {
             alignItems: 'center',
             gap: '1rem',
           }}>
-            <Users size={28} color="var(--accent)" strokeWidth={1.5} />
+            <Users size={28} color="var(--accent)" strokeWidth={1.5} aria-hidden="true" />
             <h3 style={{
               fontFamily: 'var(--font-ui)',
               fontWeight: 800,
@@ -479,9 +479,9 @@ export default function Community() {
                       textTransform: 'uppercase',
                       color: 'var(--accent)',
                     }}>
-                      <MessageCircle size={13} />
+                      <MessageCircle size={13} aria-hidden="true" />
                       {expanded === q.id ? 'Hide answers' : 'View answers'}
-                      {expanded === q.id ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                      {expanded === q.id ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}
                     </span>
                   </div>
                 </button>

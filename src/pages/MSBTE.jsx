@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Calendar, AlertCircle, CheckCircle, Clock, ExternalLink, FileText } from "lucide-react";
+import { ChevronDown, Calendar, AlertCircle, CheckCircle, Clock, ExternalLink, FileText, Globe, User, CreditCard, Download } from "lucide-react";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -28,12 +28,12 @@ const TERM_SCHEDULE = [
 ];
 
 const QUICK_LINKS = [
-  { label: "MSBTE Official Website", url: "https://msbte.ac.in/", icon: "globe", color: "#4d9ef0" },
-  { label: "Student Login (Exam Forms)", url: "https://online.msbte.co.in/", icon: "user", color: "#c8f04d" },
-  { label: "Summer 2026 Timetable", url: "https://online.msbte.co.in/timetable/", icon: "calendar", color: "#e8453c" },
-  { label: "Check Results", url: "https://msbte.ac.in/", icon: "award", color: "#b87aff" },
-  { label: "Hall Ticket Download", url: "https://online.msbte.co.in/", icon: "id-card", color: "#f0a843" },
-  { label: "Academic Calendar PDF", url: "https://aissmspoly.org.in/wp-content/uploads/2025/06/Academic_Calendar-2025-26.pdf", icon: "download", color: "#4d9ef0" },
+  { label: "MSBTE Official Website", url: "https://msbte.ac.in/", icon: Globe, color: "#4d9ef0" },
+  { label: "Student Login (Exam Forms)", url: "https://online.msbte.co.in/", icon: User, color: "#c8f04d" },
+  { label: "Summer 2026 Timetable", url: "https://online.msbte.co.in/timetable/", icon: Calendar, color: "#e8453c" },
+  { label: "Check Results", url: "https://msbte.ac.in/", icon: CheckCircle, color: "#b87aff" },
+  { label: "Hall Ticket Download", url: "https://online.msbte.co.in/", icon: CreditCard, color: "#f0a843" },
+  { label: "Academic Calendar PDF", url: "https://aissmspoly.org.in/wp-content/uploads/2025/06/Academic_Calendar-2025-26.pdf", icon: Download, color: "#4d9ef0" },
 ];
 
 const RECHECKING_STEPS = [
@@ -258,9 +258,11 @@ function QuickLinksSection() {
     <div className="mb-12">
       <SectionHeader eyebrow="MSBTE Portals" title="Quick Links" subtitle="Direct access to official MSBTE portals and resources." />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {QUICK_LINKS.map((link, i) => (
+        {QUICK_LINKS.map((link) => {
+          const Icon = link.icon;
+          return (
           <a
-            key={i}
+            key={link.label}
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
@@ -270,19 +272,15 @@ function QuickLinksSection() {
               className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
               style={{ background: `${link.color}18`, color: link.color }}
             >
-              {link.icon === 'globe' && <ExternalLink size={18} strokeWidth={1.5} />}
-              {link.icon === 'user' && <FileText size={18} strokeWidth={1.5} />}
-              {link.icon === 'calendar' && <Calendar size={18} strokeWidth={1.5} />}
-              {link.icon === 'award' && <CheckCircle size={18} strokeWidth={1.5} />}
-              {link.icon === 'id-card' && <FileText size={18} strokeWidth={1.5} />}
-              {link.icon === 'download' && <ExternalLink size={18} strokeWidth={1.5} />}
+              <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
             </span>
             <span className="font-['Cabinet_Grotesk'] text-[0.95rem] font-semibold text-[#f0ede6] flex-1 leading-snug">
               {link.label}
             </span>
             <ExternalLink size={14} strokeWidth={1.5} className="text-[#555] group-hover:text-[#e8453c] transition-colors flex-shrink-0" />
           </a>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

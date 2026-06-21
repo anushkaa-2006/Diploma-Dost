@@ -184,8 +184,8 @@ export default function YouTube() {
       <div className="yt-content">
 
         {loading && (
-          <div className="yt-state">
-            <Loader2 size={28} className="yt-spinner" />
+          <div role="status" aria-label="Loading playlists" className="yt-state">
+            <Loader2 size={28} className="yt-spinner" aria-hidden="true" />
             <p className="yt-state__title">Loading playlists…</p>
             <p className="yt-state__sub">Fetching the best content for {BRANCH_LABELS[activeBranch]}</p>
           </div>
@@ -200,7 +200,7 @@ export default function YouTube() {
 
         {!loading && !error && !hasSemesters && (
           <div className="yt-state">
-            <PlayCircle size={40} strokeWidth={1.2} />
+            <PlayCircle size={40} strokeWidth={1.2} aria-hidden="true" />
             <p className="yt-state__title">No playlists yet</p>
             <p className="yt-state__sub">Playlists for {BRANCH_LABELS[activeBranch]} are being curated. Check back soon!</p>
           </div>

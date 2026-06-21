@@ -199,8 +199,8 @@ export default function AdmissionProgress() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-        <div className="inline-flex items-center gap-3 text-[var(--text-muted)] font-['General_Sans']">
-          <span className="h-2 w-2 rounded-full bg-[#c8f04d] animate-pulse" />
+        <div role="status" aria-label="Loading admission schedule" className="inline-flex items-center gap-3 text-[var(--text-muted)] font-['General_Sans']">
+          <span className="h-2 w-2 rounded-full bg-[#c8f04d] animate-pulse" aria-hidden="true" />
           Loading admission schedule…
         </div>
       </div>
@@ -389,7 +389,7 @@ export default function AdmissionProgress() {
         ) : (
           <div className="space-y-2">
             {steps.map((step, i) => (
-              <TimelineRow key={i} step={step} index={i} />
+              <TimelineRow key={step.title} step={step} index={i} />
             ))}
           </div>
         )}

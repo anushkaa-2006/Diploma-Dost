@@ -388,11 +388,11 @@ export default function Home() {
             gap: "1.5rem",
           }}
         >
-          {highlights.map((item, idx) => {
+          {highlights.map((item) => {
             const Icon = item.icon;
             return (
               <div
-                key={idx}
+                key={item.title}
                 style={{
                   background: "var(--surface)",
                   border: "1px solid var(--border)",
@@ -403,7 +403,7 @@ export default function Home() {
                   gap: "1rem",
                 }}
               >
-                <Icon size={24} color="var(--accent)" strokeWidth={1.5} />
+                <Icon size={24} color="var(--accent)" strokeWidth={1.5} aria-hidden="true" />
                 <div>
                   <h3
                     style={{
@@ -534,7 +534,7 @@ export default function Home() {
                   transition: "transform 0.2s ease",
                 }}
               />
-              <Icon size={22} color="var(--text-muted)" strokeWidth={1.5} />
+              <Icon size={22} color="var(--text-muted)" strokeWidth={1.5} aria-hidden="true" />
               <div>
                 <div
                   style={{
@@ -664,9 +664,9 @@ export default function Home() {
               cta: "Placement Guide",
               path: "/placement",
             },
-          ].map((journey, idx) => (
+          ].map((journey) => (
             <div
-              key={idx}
+              key={journey.title}
               style={{
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
@@ -728,6 +728,7 @@ export default function Home() {
                       color="var(--accent-lime)"
                       strokeWidth={2}
                       style={{ flexShrink: 0, marginTop: "2px" }}
+                      aria-hidden="true"
                     />
                     {item}
                   </li>

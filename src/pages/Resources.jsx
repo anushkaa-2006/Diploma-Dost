@@ -439,9 +439,9 @@ export default function Resources() {
       <div>
 
         {loading && (
-          <div className="flex flex-col items-center gap-3 py-24
+          <div role="status" aria-label="Loading resources" className="flex flex-col items-center gap-3 py-24
                           font-['General_Sans'] text-[#888] text-sm">
-            <Loader2 size={28} className="text-[#e8453c] animate-spin" />
+            <Loader2 size={28} className="text-[#e8453c] animate-spin" aria-hidden="true" />
             <p className="font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">Loading resources…</p>
             <p className="text-[0.85rem]">Fetching study materials for {BRANCH_LABELS[branch]} Semester {semester}</p>
           </div>
@@ -458,7 +458,7 @@ export default function Resources() {
         {!loading && !error && subjects.length === 0 && (
           <div className="flex flex-col items-center gap-3 py-24
                           font-['General_Sans'] text-[#888] text-sm text-center">
-            <FileText size={40} strokeWidth={1.2} />
+            <FileText size={40} strokeWidth={1.2} aria-hidden="true" />
             <p className="font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">No resources yet</p>
             <p className="text-[0.85rem] max-w-[300px]">No resources found for {BRANCH_LABELS[branch]} — Semester {semester}. More content being added soon.</p>
           </div>

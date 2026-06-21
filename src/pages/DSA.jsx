@@ -5,6 +5,270 @@ import {
 
 import { FaGithub } from 'react-icons/fa'
 
+const LANGUAGES = [
+  {
+    name: 'C++',
+    emoji: '⚡',
+    pros: [
+      'Fastest execution (competitive programming gold standard)',
+      'Built-in STL (vectors, maps, sets, queues)',
+      'Memory control — understand how things work',
+      'Used in MSBTE curriculum',
+      'Top choice for FAANG interviews'
+    ],
+    cons: [
+      'Steeper learning curve',
+      'Manual memory management',
+      'Syntax can be complex'
+    ],
+    recommended: true
+  },
+  {
+    name: 'Java',
+    emoji: '☕',
+    pros: [
+      'Cleaner syntax than C++',
+      'Strong OOP principles',
+      'Garbage collection (less memory headaches)',
+      'Widely used in industry',
+      'Great for building scalable systems'
+    ],
+    cons: [
+      'Slightly slower than C++',
+      'More verbose',
+      'Larger memory footprint'
+    ],
+    recommended: true
+  },
+]
+
+const MSBTE_TOPICS = [
+  'Arrays & Strings',
+  'Linked Lists',
+  'Stacks & Queues',
+  'Trees & Graphs',
+  'Sorting Algorithms',
+  'Searching Algorithms',
+  'Recursion & Backtracking',
+  'Dynamic Programming (Intro)',
+]
+
+const BEYOND_TOPICS = [
+  'Advanced DP',
+  'Greedy Algorithms',
+  'Bit Manipulation',
+  'Segment Trees',
+  'Fenwick Trees',
+  'Graph Algorithms (DFS, BFS, Dijkstra)',
+  'Hash Maps & Sets',
+  'Heaps & Priority Queues',
+  'Sliding Window',
+  'Two Pointers',
+  'Binary Search',
+  'Trie & Suffix Arrays',
+]
+
+const ROADMAPS = [
+  {
+    title: "Striver's SDE Sheet",
+    desc: 'The most popular DSA roadmap. 180+ problems curated for interviews. Start here.',
+    link: 'https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2',
+    icon: TrendingUp,
+    highlight: true
+  },
+  {
+    title: 'Love Babbar 450 DSA',
+    desc: '450 must-do problems for interview prep. Comprehensive and well-organized.',
+    link: 'https://codolio.com/question-tracker/sheet/love-babbar-sheet',
+    icon: BookOpen,
+    highlight: false
+  },
+  {
+    title: 'GFG DSA Self-Paced',
+    desc: 'GeeksforGeeks structured DSA course with videos and practice problems.',
+    link: 'https://www.geeksforgeeks.org/courses/dsa-self-paced',
+    icon: Layers,
+    highlight: false
+  },
+  {
+    title: 'NeetCode 150',
+    desc: 'Curated 150 problems for FAANG interviews. Organized by topic.',
+    link: 'https://neetcode.io/practice',
+    icon: Target,
+    highlight: false
+  },
+]
+
+const PLATFORMS = [
+  {
+    name: 'LeetCode',
+    emoji: '💻',
+    desc: 'Premium platform for FAANG interview prep. 2500+ problems, discuss forums, mock interviews.',
+    pros: ['Best for interviews', 'Excellent explanations', 'Mock interview feature'],
+    link: 'https://leetcode.com'
+  },
+  {
+    name: 'CodeChef',
+    emoji: '🍳',
+    desc: 'Indian competitive programming platform. Monthly contests, beginner-friendly.',
+    pros: ['Great for CP', 'Monthly contests', 'Indian community'],
+    link: 'https://www.codechef.com'
+  },
+  {
+    name: 'GeeksforGeeks (GFG)',
+    emoji: '🧠',
+    desc: 'Comprehensive DSA tutorials + problems. Excellent explanations and articles.',
+    pros: ['Best tutorials', 'Free content', 'Well-organized'],
+    link: 'https://www.geeksforgeeks.org'
+  },
+  {
+    name: 'Codeforces',
+    emoji: '⚔️',
+    desc: 'Hardcore competitive programming. Contests, problem sets, rating system.',
+    pros: ['Challenging problems', 'Real contests', 'Strong community'],
+    link: 'https://codeforces.com'
+  },
+  {
+    name: 'HackerRank',
+    emoji: '🎯',
+    desc: 'Interactive learning platform. Tutorials + problems in one place.',
+    pros: ['Beginner-friendly', 'Tutorials included', 'Certificates'],
+    link: 'https://www.hackerrank.com'
+  },
+  {
+    name: 'AtCoder',
+    emoji: '🏆',
+    desc: 'Japanese competitive programming platform. High-quality contests and problems.',
+    pros: ['Quality problems', 'Educational', 'Regular contests'],
+    link: 'https://atcoder.jp'
+  },
+]
+
+const PROBLEM_CATEGORIES = [
+  {
+    level: 'Beginner',
+    color: 'var(--accent-lime)',
+    problems: [
+      'Two Sum',
+      'Reverse String',
+      'Valid Parentheses',
+      'Merge Sorted Array',
+      'Remove Duplicates from Sorted Array',
+      'Best Time to Buy and Sell Stock',
+      'Contains Duplicate',
+      'Valid Anagram'
+    ]
+  },
+  {
+    level: 'Intermediate',
+    color: 'var(--accent)',
+    problems: [
+      'Longest Substring Without Repeating Characters',
+      'Median of Two Sorted Arrays',
+      'Longest Palindromic Substring',
+      'Zigzag Conversion',
+      'Reverse Integer',
+      'String to Integer (atoi)',
+      'Palindrome Number',
+      'Container With Most Water'
+    ]
+  },
+  {
+    level: 'Advanced',
+    color: 'var(--accent)',
+    problems: [
+      'Regular Expression Matching',
+      'Merge k Sorted Lists',
+      'Trapping Rain Water',
+      'Wildcard Matching',
+      'Maximal Rectangle',
+      'Word Ladder II',
+      'Minimum Window Substring',
+      'Serialize and Deserialize Binary Tree'
+    ]
+  },
+]
+
+const LANG_GUIDES = [
+  {
+    lang: 'C++',
+    resources: [
+      { title: 'GeeksforGeeks C++ Tutorial', link: 'https://www.geeksforgeeks.org/c-plus-plus/' },
+      { title: 'Striver C++ Series (YouTube)', link: 'https://www.youtube.com/watch?v=z9bsSdjUGo0&list=PLgUwDviBIf0oF6sPw6sBbSqkKLJQJXSld' },
+      { title: 'cppreference.com (Documentation)', link: 'https://en.cppreference.com/' },
+      { title: "Competitive Programmer's Handbook", link: 'https://cses.fi/book/' },
+    ]
+  },
+  {
+    lang: 'Java',
+    resources: [
+      { title: 'GeeksforGeeks Java Tutorial', link: 'https://www.geeksforgeeks.org/java/' },
+      { title: 'Striver Java Series (YouTube)', link: 'https://www.youtube.com/watch?v=Ej4pz0uRYMA&list=PLgUwDviBIf0q_7t5nycigCMGVUG74Dc-d' },
+      { title: 'Oracle Java Documentation', link: 'https://docs.oracle.com/javase/tutorial/' },
+      { title: 'Java Collections Framework Guide', link: 'https://www.geeksforgeeks.org/collections-in-java-2/' },
+    ]
+  },
+]
+
+const GITHUB_REPOS = [
+  {
+    name: 'TheAlgorithms/C-Plus-Plus',
+    desc: 'Collection of algorithms implemented in C++. Great for understanding different approaches.',
+    link: 'https://github.com/TheAlgorithms/C-Plus-Plus',
+    stars: '30k+'
+  },
+  {
+    name: 'TheAlgorithms/Java',
+    desc: 'Same collection but for Java. Comprehensive and well-documented.',
+    link: 'https://github.com/TheAlgorithms/Java',
+    stars: '55k+'
+  },
+  {
+    name: 'striver79/striver-sheet-solutions',
+    desc: "Solutions to Striver's SDE Sheet. Learn from the creator himself.",
+    link: 'https://github.com/striver79/striver-sheet-solutions',
+    stars: '10k+'
+  },
+  {
+    name: 'williamfiset/Algorithms',
+    desc: 'High-quality algorithm implementations with detailed explanations.',
+    link: 'https://github.com/williamfiset/Algorithms',
+    stars: '15k+'
+  },
+  {
+    name: 'twowaits/leetcode-solutions',
+    desc: 'LeetCode problem solutions in C++ and Java with explanations.',
+    link: 'https://github.com/twowaits/leetcode-solutions',
+    stars: '5k+'
+  },
+  {
+    name: 'kamyu104/LeetCode-Solutions',
+    desc: 'Comprehensive LeetCode solutions with detailed comments.',
+    link: 'https://github.com/kamyu104/LeetCode-Solutions',
+    stars: '12k+'
+  },
+]
+
+const STUDY_TIPS = [
+  { title: "1. Understand, Don't Memorize", desc: 'Learn the "why" behind each algorithm. Understand the logic, not just the code.' },
+  { title: '2. Start with Basics', desc: 'Master arrays, strings, and linked lists before jumping to advanced topics.' },
+  { title: '3. Code by Hand First', desc: 'Write pseudocode and trace through examples on paper before coding.' },
+  { title: '4. Practice Consistently', desc: 'Solve 1-2 problems daily. Consistency beats marathon cramming sessions.' },
+  { title: '5. Analyze Time & Space', desc: 'For every solution, calculate Big O complexity. This is crucial for interviews.' },
+  { title: '6. Solve Multiple Approaches', desc: 'For each problem, try to find 2-3 different solutions. Compare their complexities.' },
+  { title: '7. Join Communities', desc: 'Discuss solutions on Discord, Reddit, or LeetCode. Learn from others.' },
+  { title: '8. Mock Interviews', desc: 'Practice explaining your solution out loud. This is how interviews work.' },
+]
+
+const CHECKLIST_ITEMS = [
+  'Choose C++ or Java',
+  'Learn language basics',
+  "Start with Striver's Sheet",
+  'Solve 1-2 problems daily',
+  'Understand time/space complexity',
+  'Mock interviews & placements 🎉',
+]
+
 export default function DSAPage() {
   return (
     <div style={{ background: 'var(--bg)' }}>
@@ -168,44 +432,9 @@ export default function DSAPage() {
           gap: '2rem',
           marginBottom: '3rem',
         }}>
-          {[
-            {
-              name: 'C++',
-              emoji: '⚡',
-              pros: [
-                'Fastest execution (competitive programming gold standard)',
-                'Built-in STL (vectors, maps, sets, queues)',
-                'Memory control — understand how things work',
-                'Used in MSBTE curriculum',
-                'Top choice for FAANG interviews'
-              ],
-              cons: [
-                'Steeper learning curve',
-                'Manual memory management',
-                'Syntax can be complex'
-              ],
-              recommended: true
-            },
-            {
-              name: 'Java',
-              emoji: '☕',
-              pros: [
-                'Cleaner syntax than C++',
-                'Strong OOP principles',
-                'Garbage collection (less memory headaches)',
-                'Widely used in industry',
-                'Great for building scalable systems'
-              ],
-              cons: [
-                'Slightly slower than C++',
-                'More verbose',
-                'Larger memory footprint'
-              ],
-              recommended: true
-            },
-          ].map((lang, idx) => (
+          {LANGUAGES.map((lang) => (
             <div
-              key={idx}
+              key={lang.name}
               style={{
                 background: 'var(--surface)',
                 border: lang.recommended ? '2px solid var(--accent)' : '1px solid var(--border)',
@@ -268,8 +497,8 @@ export default function DSAPage() {
                   lineHeight: 1.8,
                   paddingLeft: '1.5rem',
                 }}>
-                  {lang.pros.map((pro, i) => (
-                    <li key={i} style={{ marginBottom: '0.5rem' }}>✓ {pro}</li>
+                  {lang.pros.map((pro) => (
+                    <li key={pro} style={{ marginBottom: '0.5rem' }}>✓ {pro}</li>
                   ))}
                 </ul>
               </div>
@@ -293,8 +522,8 @@ export default function DSAPage() {
                   lineHeight: 1.8,
                   paddingLeft: '1.5rem',
                 }}>
-                  {lang.cons.map((con, i) => (
-                    <li key={i} style={{ marginBottom: '0.5rem' }}>• {con}</li>
+                  {lang.cons.map((con) => (
+                    <li key={con} style={{ marginBottom: '0.5rem' }}>• {con}</li>
                   ))}
                 </ul>
               </div>
@@ -401,18 +630,9 @@ export default function DSAPage() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '1rem',
           }}>
-            {[
-              'Arrays & Strings',
-              'Linked Lists',
-              'Stacks & Queues',
-              'Trees & Graphs',
-              'Sorting Algorithms',
-              'Searching Algorithms',
-              'Recursion & Backtracking',
-              'Dynamic Programming (Intro)',
-            ].map((topic, idx) => (
+            {MSBTE_TOPICS.map((topic) => (
               <div
-                key={idx}
+                key={topic}
                 style={{
                   background: 'var(--surface2)',
                   border: '1px solid var(--border)',
@@ -423,7 +643,7 @@ export default function DSAPage() {
                   gap: '0.75rem',
                 }}
               >
-                <CheckCircle size={18} color="var(--accent-lime)" strokeWidth={1.5} />
+                <CheckCircle size={18} color="var(--accent-lime)" strokeWidth={1.5} aria-hidden="true" />
                 <span style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.9rem',
@@ -459,22 +679,9 @@ export default function DSAPage() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '1rem',
           }}>
-            {[
-              'Advanced DP',
-              'Greedy Algorithms',
-              'Bit Manipulation',
-              'Segment Trees',
-              'Fenwick Trees',
-              'Graph Algorithms (DFS, BFS, Dijkstra)',
-              'Hash Maps & Sets',
-              'Heaps & Priority Queues',
-              'Sliding Window',
-              'Two Pointers',
-              'Binary Search',
-              'Trie & Suffix Arrays',
-            ].map((topic, idx) => (
+            {BEYOND_TOPICS.map((topic) => (
               <div
-                key={idx}
+                key={topic}
                 style={{
                   background: 'var(--surface)',
                   border: '1px solid var(--border)',
@@ -485,7 +692,7 @@ export default function DSAPage() {
                   gap: '0.75rem',
                 }}
               >
-                <Star size={18} color="var(--accent)" strokeWidth={1.5} />
+                <Star size={18} color="var(--accent)" strokeWidth={1.5} aria-hidden="true" />
                 <span style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.9rem',
@@ -536,40 +743,11 @@ export default function DSAPage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '2rem',
         }}>
-          {[
-            {
-              title: "Striver's SDE Sheet",
-              desc: 'The most popular DSA roadmap. 180+ problems curated for interviews. Start here.',
-              link: 'https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2',
-              icon: TrendingUp,
-              highlight: true
-            },
-            {
-              title: 'Love Babbar 450 DSA',
-              desc: '450 must-do problems for interview prep. Comprehensive and well-organized.',
-              link: 'https://codolio.com/question-tracker/sheet/love-babbar-sheet',
-              icon: BookOpen,
-              highlight: false
-            },
-            {
-              title: 'GFG DSA Self-Paced',
-              desc: 'GeeksforGeeks structured DSA course with videos and practice problems.',
-              link: 'https://www.geeksforgeeks.org/courses/dsa-self-paced',
-              icon: Layers,
-              highlight: false
-            },
-            {
-              title: 'NeetCode 150',
-              desc: 'Curated 150 problems for FAANG interviews. Organized by topic.',
-              link: 'https://neetcode.io/practice',
-              icon: Target,
-              highlight: false
-            },
-          ].map((roadmap, idx) => {
+          {ROADMAPS.map((roadmap) => {
             const Icon = roadmap.icon
             return (
               <a
-                key={idx}
+                key={roadmap.title}
                 href={roadmap.link}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -690,52 +868,9 @@ export default function DSAPage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1.5rem',
         }}>
-          {[
-            {
-              name: 'LeetCode',
-              emoji: '💻',
-              desc: 'Premium platform for FAANG interview prep. 2500+ problems, discuss forums, mock interviews.',
-              pros: ['Best for interviews', 'Excellent explanations', 'Mock interview feature'],
-              link: 'https://leetcode.com'
-            },
-            {
-              name: 'CodeChef',
-              emoji: '🍳',
-              desc: 'Indian competitive programming platform. Monthly contests, beginner-friendly.',
-              pros: ['Great for CP', 'Monthly contests', 'Indian community'],
-              link: 'https://www.codechef.com'
-            },
-            {
-              name: 'GeeksforGeeks (GFG)',
-              emoji: '🧠',
-              desc: 'Comprehensive DSA tutorials + problems. Excellent explanations and articles.',
-              pros: ['Best tutorials', 'Free content', 'Well-organized'],
-              link: 'https://www.geeksforgeeks.org'
-            },
-            {
-              name: 'Codeforces',
-              emoji: '⚔️',
-              desc: 'Hardcore competitive programming. Contests, problem sets, rating system.',
-              pros: ['Challenging problems', 'Real contests', 'Strong community'],
-              link: 'https://codeforces.com'
-            },
-            {
-              name: 'HackerRank',
-              emoji: '🎯',
-              desc: 'Interactive learning platform. Tutorials + problems in one place.',
-              pros: ['Beginner-friendly', 'Tutorials included', 'Certificates'],
-              link: 'https://www.hackerrank.com'
-            },
-            {
-              name: 'AtCoder',
-              emoji: '🏆',
-              desc: 'Japanese competitive programming platform. High-quality contests and problems.',
-              pros: ['Quality problems', 'Educational', 'Regular contests'],
-              link: 'https://atcoder.jp'
-            },
-          ].map((platform, idx) => (
+          {PLATFORMS.map((platform) => (
             <a
-              key={idx}
+              key={platform.name}
               href={platform.link}
               target="_blank"
               rel="noopener noreferrer"
@@ -786,8 +921,8 @@ export default function DSAPage() {
                 flexDirection: 'column',
                 gap: '0.5rem',
               }}>
-                {platform.pros.map((pro, i) => (
-                  <div key={i} style={{
+                {platform.pros.map((pro) => (
+                  <div key={pro} style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
@@ -795,7 +930,7 @@ export default function DSAPage() {
                     fontSize: '0.8rem',
                     color: 'var(--accent-lime)',
                   }}>
-                    <CheckCircle size={14} strokeWidth={2} />
+                    <CheckCircle size={14} strokeWidth={2} aria-hidden="true" />
                     {pro}
                   </div>
                 ))}
@@ -855,52 +990,9 @@ export default function DSAPage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '1.5rem',
         }}>
-          {[
-            {
-              level: 'Beginner',
-              color: 'var(--accent-lime)',
-              problems: [
-                'Two Sum',
-                'Reverse String',
-                'Valid Parentheses',
-                'Merge Sorted Array',
-                'Remove Duplicates from Sorted Array',
-                'Best Time to Buy and Sell Stock',
-                'Contains Duplicate',
-                'Valid Anagram'
-              ]
-            },
-            {
-              level: 'Intermediate',
-              color: 'var(--accent)',
-              problems: [
-                'Longest Substring Without Repeating Characters',
-                'Median of Two Sorted Arrays',
-                'Longest Palindromic Substring',
-                'Zigzag Conversion',
-                'Reverse Integer',
-                'String to Integer (atoi)',
-                'Palindrome Number',
-                'Container With Most Water'
-              ]
-            },
-            {
-              level: 'Advanced',
-              color: 'var(--accent)',
-              problems: [
-                'Regular Expression Matching',
-                'Merge k Sorted Lists',
-                'Trapping Rain Water',
-                'Wildcard Matching',
-                'Maximal Rectangle',
-                'Word Ladder II',
-                'Minimum Window Substring',
-                'Serialize and Deserialize Binary Tree'
-              ]
-            },
-          ].map((category, idx) => (
+          {PROBLEM_CATEGORIES.map((category) => (
             <div
-              key={idx}
+              key={category.level}
               style={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -924,9 +1016,9 @@ export default function DSAPage() {
                 gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
                 gap: '0.75rem',
               }}>
-                {category.problems.map((problem, i) => (
+                {category.problems.map((problem) => (
                   <div
-                    key={i}
+                    key={problem}
                     style={{
                       background: 'var(--surface2)',
                       border: '1px solid var(--border)',
@@ -1017,52 +1109,9 @@ export default function DSAPage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '2rem',
         }}>
-          {[
-            {
-              lang: 'C++',
-              resources: [
-                {
-                  title: 'GeeksforGeeks C++ Tutorial',
-                  link: 'https://www.geeksforgeeks.org/c-plus-plus/'
-                },
-                {
-                  title: 'Striver C++ Series (YouTube)',
-                  link: 'https://www.youtube.com/watch?v=z9bsSdjUGo0&list=PLgUwDviBIf0oF6sPw6sBbSqkKLJQJXSld'
-                },
-                {
-                  title: 'cppreference.com (Documentation)',
-                  link: 'https://en.cppreference.com/'
-                },
-                {
-                  title: 'Competitive Programmer\'s Handbook',
-                  link: 'https://cses.fi/book/'
-                },
-              ]
-            },
-            {
-              lang: 'Java',
-              resources: [
-                {
-                  title: 'GeeksforGeeks Java Tutorial',
-                  link: 'https://www.geeksforgeeks.org/java/'
-                },
-                {
-                  title: 'Striver Java Series (YouTube)',
-                  link: 'https://www.youtube.com/watch?v=Ej4pz0uRYMA&list=PLgUwDviBIf0q_7t5nycigCMGVUG74Dc-d'
-                },
-                {
-                  title: 'Oracle Java Documentation',
-                  link: 'https://docs.oracle.com/javase/tutorial/'
-                },
-                {
-                  title: 'Java Collections Framework Guide',
-                  link: 'https://www.geeksforgeeks.org/collections-in-java-2/'
-                },
-              ]
-            },
-          ].map((langGuide, idx) => (
+          {LANG_GUIDES.map((langGuide) => (
             <div
-              key={idx}
+              key={langGuide.lang}
               style={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -1086,9 +1135,9 @@ export default function DSAPage() {
                 flexDirection: 'column',
                 gap: '1rem',
               }}>
-                {langGuide.resources.map((resource, i) => (
+                {langGuide.resources.map((resource) => (
                   <a
-                    key={i}
+                    key={resource.title}
                     href={resource.link}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1166,46 +1215,9 @@ export default function DSAPage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '1.5rem',
         }}>
-          {[
-            {
-              name: 'TheAlgorithms/C-Plus-Plus',
-              desc: 'Collection of algorithms implemented in C++. Great for understanding different approaches.',
-              link: 'https://github.com/TheAlgorithms/C-Plus-Plus',
-              stars: '30k+'
-            },
-            {
-              name: 'TheAlgorithms/Java',
-              desc: 'Same collection but for Java. Comprehensive and well-documented.',
-              link: 'https://github.com/TheAlgorithms/Java',
-              stars: '55k+'
-            },
-            {
-              name: 'striver79/striver-sheet-solutions',
-              desc: 'Solutions to Striver\'s SDE Sheet. Learn from the creator himself.',
-              link: 'https://github.com/striver79/striver-sheet-solutions',
-              stars: '10k+'
-            },
-            {
-              name: 'williamfiset/Algorithms',
-              desc: 'High-quality algorithm implementations with detailed explanations.',
-              link: 'https://github.com/williamfiset/Algorithms',
-              stars: '15k+'
-            },
-            {
-              name: 'twowaits/leetcode-solutions',
-              desc: 'LeetCode problem solutions in C++ and Java with explanations.',
-              link: 'https://github.com/twowaits/leetcode-solutions',
-              stars: '5k+'
-            },
-            {
-              name: 'kamyu104/LeetCode-Solutions',
-              desc: 'Comprehensive LeetCode solutions with detailed comments.',
-              link: 'https://github.com/kamyu104/LeetCode-Solutions',
-              stars: '12k+'
-            },
-          ].map((repo, idx) => (
+          {GITHUB_REPOS.map((repo) => (
             <a
-              key={idx}
+              key={repo.name}
               href={repo.link}
               target="_blank"
               rel="noopener noreferrer"
@@ -1260,7 +1272,7 @@ export default function DSAPage() {
                 color: 'var(--accent-lime)',
                 marginTop: 'auto',
               }}>
-                <Star size={14} strokeWidth={1.5} />
+                <Star size={14} strokeWidth={1.5} aria-hidden="true" />
                 {repo.stars} stars
               </div>
             </a>
@@ -1305,42 +1317,9 @@ export default function DSAPage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1.5rem',
         }}>
-          {[
-            {
-              title: '1. Understand, Don\'t Memorize',
-              desc: 'Learn the "why" behind each algorithm. Understand the logic, not just the code.'
-            },
-            {
-              title: '2. Start with Basics',
-              desc: 'Master arrays, strings, and linked lists before jumping to advanced topics.'
-            },
-            {
-              title: '3. Code by Hand First',
-              desc: 'Write pseudocode and trace through examples on paper before coding.'
-            },
-            {
-              title: '4. Practice Consistently',
-              desc: 'Solve 1-2 problems daily. Consistency beats marathon cramming sessions.'
-            },
-            {
-              title: '5. Analyze Time & Space',
-              desc: 'For every solution, calculate Big O complexity. This is crucial for interviews.'
-            },
-            {
-              title: '6. Solve Multiple Approaches',
-              desc: 'For each problem, try to find 2-3 different solutions. Compare their complexities.'
-            },
-            {
-              title: '7. Join Communities',
-              desc: 'Discuss solutions on Discord, Reddit, or LeetCode. Learn from others.'
-            },
-            {
-              title: '8. Mock Interviews',
-              desc: 'Practice explaining your solution out loud. This is how interviews work.'
-            },
-          ].map((tip, idx) => (
+          {STUDY_TIPS.map((tip) => (
             <div
-              key={idx}
+              key={tip.title}
               style={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -1437,16 +1416,9 @@ export default function DSAPage() {
           borderLeft: '1px solid var(--border)',
           paddingLeft: '3rem',
         }}>
-          {[
-            'Choose C++ or Java',
-            'Learn language basics',
-            'Start with Striver\'s Sheet',
-            'Solve 1-2 problems daily',
-            'Understand time/space complexity',
-            'Mock interviews & placements 🎉',
-          ].map((item, idx) => (
-            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <CheckCircle size={18} color="var(--accent-lime)" strokeWidth={1.5} />
+          {CHECKLIST_ITEMS.map((item) => (
+            <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <CheckCircle size={18} color="var(--accent-lime)" strokeWidth={1.5} aria-hidden="true" />
               <span style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.95rem',

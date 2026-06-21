@@ -516,8 +516,8 @@ function CollegeAllBranches({ college, category, onClose }) {
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center gap-2 py-10">
-          <div className="w-4 h-4 border-2 border-[#e8453c] border-t-transparent rounded-full animate-spin" />
+        <div role="status" aria-label="Loading results" className="flex items-center justify-center gap-2 py-10">
+          <div aria-hidden="true" className="w-4 h-4 border-2 border-[#e8453c] border-t-transparent rounded-full animate-spin" />
           <span className="font-['General_Sans'] text-[#888] text-sm">Loading…</span>
         </div>
       )}

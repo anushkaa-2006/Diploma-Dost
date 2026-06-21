@@ -323,10 +323,10 @@ function SkillMatrix() {
       <table className="w-full text-[0.9rem]">
         <thead>
           <tr className="border-b border-[#2a2a2a]">
-            <th className="text-left py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">Skill</th>
-            <th className="text-center py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">Micro</th>
-            <th className="text-center py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">ITR</th>
-            <th className="text-center py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">Capstone</th>
+            <th scope="col" className="text-left py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">Skill</th>
+            <th scope="col" className="text-center py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">Micro</th>
+            <th scope="col" className="text-center py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">ITR</th>
+            <th scope="col" className="text-center py-3 px-4 font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">Capstone</th>
           </tr>
         </thead>
         <tbody>
@@ -420,8 +420,8 @@ export default function InnovationHub() {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
-          {projectsByType[activeTab].map((project, i) => (
-            <ProjectCard key={i} project={project} />
+          {projectsByType[activeTab].map((project) => (
+            <ProjectCard key={project.name} project={project} />
           ))}
         </div>
 
@@ -440,8 +440,8 @@ export default function InnovationHub() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-            {HACKATHONS.map((hackathon, i) => (
-              <HackathonCard key={i} hackathon={hackathon} />
+            {HACKATHONS.map((hackathon) => (
+              <HackathonCard key={hackathon.name} hackathon={hackathon} />
             ))}
           </div>
 
