@@ -22,10 +22,8 @@ export default function ResetPassword() {
     async function init() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!mounted) return
-      if (session) {
-        setValidLink(true)
-        setChecking(false)
-      }
+      if (session) setValidLink(true)
+      setChecking(false)
     }
 
     init()

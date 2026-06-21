@@ -78,6 +78,7 @@ export default function Navbar() {
         WebkitBackdropFilter: 'blur(12px)',
       }}
       className="sticky top-0 z-50"
+      aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center h-16 gap-4">
 
