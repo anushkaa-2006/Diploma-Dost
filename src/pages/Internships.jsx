@@ -110,18 +110,18 @@ export default function InternshipsPage() {
 
         {/* CTAs */}
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '5rem' }}>
-          <a
-            href="#msbte-internship"
+          <button
+            onClick={() => document.getElementById('msbte-internship')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-primary"
           >
             MSBTE Requirement <ArrowRight size={15} />
-          </a>
-          <a
-            href="#platforms"
+          </button>
+          <button
+            onClick={() => document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-ghost"
           >
             Find Opportunities
-          </a>
+          </button>
         </div>
       </section>
 
