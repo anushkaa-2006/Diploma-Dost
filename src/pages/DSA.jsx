@@ -104,18 +104,18 @@ export default function DSAPage() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-3 mb-20">
-          <a
-            href="#strivers-sheet"
+          <button
+            onClick={() => document.getElementById('strivers-sheet')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-primary w-full sm:w-auto text-center justify-center"
           >
             Start with Striver's Sheet <ArrowRight size={15} />
-          </a>
-          <a
-            href="#language-choice"
+          </button>
+          <button
+            onClick={() => document.getElementById('language-choice')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-ghost w-full sm:w-auto text-center justify-center"
           >
             Choose Your Language
-          </a>
+          </button>
         </div>
       </section>
 

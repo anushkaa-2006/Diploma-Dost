@@ -321,11 +321,7 @@ function ScholarshipFinder({ onSelect }) {
   const [results, setResults] = useState(null);
 
   const find = () => {
-    let matched = SCHOLARSHIPS.filter((s) => {
-      if (!category) return true;
-      const cat = category.replace(" (EBC)", "");
-      return s.categories.some((c) => c === cat || c === "Open/General" || (cat === "Open/General" && c === "EBC"));
-    });
+    let matched = SCHOLARSHIPS;
 
     if (category === "Open/General (EBC)") {
       matched = SCHOLARSHIPS.filter((s) => s.categories.includes("Open/General") || s.categories.includes("EBC"));

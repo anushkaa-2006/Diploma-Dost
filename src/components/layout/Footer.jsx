@@ -47,7 +47,7 @@ export default function Footer() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className="font-[var(--font-body)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                  className="group font-[var(--font-body)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
                 >
                   <ChevronRight size={14} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   {link.label}
@@ -73,7 +73,7 @@ export default function Footer() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className="font-[var(--font-body)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                  className="group font-[var(--font-body)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
                 >
                   <ChevronRight size={14} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   {link.label}

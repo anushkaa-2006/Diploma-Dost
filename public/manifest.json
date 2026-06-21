@@ -1,13 +1,14 @@
 {
   "name": "Diploma Dost",
-  "short_name": "DiplomaD",
+  "short_name": "Diploma",
   "description": "Your buddy for all 3 years of diploma",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d0d0d",
+  "background_color": "#0d0e0f",
   "theme_color": "#e8453c",
+  "categories": ["education"],
   "icons": [
-    { "src": "/favicon.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/favicon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }

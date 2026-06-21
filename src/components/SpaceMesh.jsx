@@ -68,7 +68,7 @@ export default function SpaceMesh() {
               ctx.lineTo(points[j].x, points[j].y)
               ctx.lineTo(points[k].x, points[k].y)
               ctx.closePath()
-              ctx.fillStyle = 'rgba(226, 48, 45, 0.05)'
+              ctx.fillStyle = 'rgba(232, 69, 60, 0.05)'
               ctx.fill()
             }
           }
@@ -84,18 +84,18 @@ export default function SpaceMesh() {
           if (distSq > MAX_DIST_SQ) continue
 
           const dist = Math.sqrt(distSq)
-          const alpha = (1 - dist / MAX_DIST) * 0.15
+          const alpha = (1 - dist / MAX_DIST) * 0.08
           ctx.beginPath()
           ctx.moveTo(points[i].x, points[i].y)
           ctx.lineTo(points[j].x, points[j].y)
-          ctx.strokeStyle = `rgba(200, 168, 75, ${alpha})`
+          ctx.strokeStyle = `rgba(200, 240, 77, ${alpha})`
           ctx.lineWidth = 0.5
           ctx.stroke()
         }
       }
 
       // Dot pass — both platforms
-      ctx.fillStyle = 'rgba(200, 75, 75, 0.18)'
+      ctx.fillStyle = 'rgba(232, 69, 60, 0.18)'
       for (let i = 0; i < points.length; i++) {
         ctx.beginPath()
         ctx.arc(points[i].x, points[i].y, 1.1, 0, Math.PI * 2)
@@ -124,7 +124,8 @@ export default function SpaceMesh() {
         position: 'fixed',
         inset: 0,
         width: '100vw',
-        height: '100vh',
+        height: '100dvh',
+        minHeight: '100vh',
         pointerEvents: 'none',
         zIndex: 0,
         opacity: 0.45,
