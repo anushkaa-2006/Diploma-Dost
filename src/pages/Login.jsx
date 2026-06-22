@@ -13,8 +13,7 @@ export default function Login() {
   const [resetCooldown, setResetCooldown] = useState(0)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
-  const redirectTo =
-  searchParams.get("redirect") || "/";
+  const redirectTo = searchParams.get('redirect') || '/resources'
 
   useEffect(() => {
     async function checkSession() {
@@ -162,10 +161,11 @@ export default function Login() {
         <p className="mt-6 text-sm text-[var(--text-muted)]">
           Don't have an account?{' '}
           <Link
-  to={`/signup?redirect=${encodeURIComponent(redirectTo)}`}
->
-  Create account
-</Link>
+            to={`/signup?redirect=${encodeURIComponent(redirectTo)}`}
+            className="text-[var(--accent)] hover:text-[var(--text)]"
+          >
+            Create account
+          </Link>
         </p>
       </div>
     </section>

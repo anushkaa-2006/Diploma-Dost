@@ -289,7 +289,7 @@ test.describe('4. Auth — Login', () => {
   });
 
   test('link to signup navigates to /signup', async ({ page }) => {
-    await page.getByRole('link', { name: /create one here/i }).click();
+    await page.getByRole('link', { name: /create account/i }).click();
     await expect(page).toHaveURL(/#\/signup/);
   });
 });
@@ -461,25 +461,60 @@ test.describe('7. Predictor', () => {
   });
 
   test('shortlist button toggles and opens shortlist drawer', async ({ page }) => {
+    // Auth + shortlists mocks must be set before navigation (addInitScript requirement)
+    await mockAuthSession(page);
+
+    // Use regex to avoid glob ambiguity: "shortlists" prefix matches "shortlisted_colleges"
+    await page.route(/\/rest\/v1\/shortlists(?!\w)/, async (route) => {
+      await route.fulfill({
+        status: 200, contentType: 'application/json',
+        body: JSON.stringify([{ id: 1, name: 'Dream Colleges', user_id: 'fake-user-id-123', created_at: '2024-01-01T00:00:00Z' }]),
+      });
+    });
+
+    // Stateful mock: empty until POST, then returns the saved college
+    const shortlistedList = [];
+    await page.route(/\/rest\/v1\/shortlisted_colleges/, async (route) => {
+      if (route.request().method() === 'POST') {
+        shortlistedList.push({
+          id: 1, college_code: 'CS0001', college_name: 'Government Polytechnic Mumbai',
+          course_name: 'Computer Engineering', district: 'Mumbai', category: 'GOPEN',
+          cap_round: 'Round II', cutoff_percent: 74.5,
+        });
+        await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(shortlistedList[0]) });
+      } else {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([...shortlistedList]) });
+      }
+    });
+
     await mockCutoffsSuccess(page);
 
+    // Reload forces a full page load so addInitScript (localStorage injection) runs.
+    // page.goto('/#/predictor') when already at the same hash URL is a fragment navigation
+    // (no real reload), so addInitScript would not fire.
+    await page.reload();
+    await page.waitForLoadState('load');
+
+    // Wait for "My Shortlists" panel — confirms auth resolved and shortlists loaded
+    await expect(page.getByText('My Shortlists')).toBeVisible({ timeout: 8000 });
+
+    // Fill form and search
     await page.locator('input[placeholder="e.g. 78.50"]').fill('75');
-    const categoryInput = page.getByPlaceholder('Select your category').first();
-    await categoryInput.click();
+    await page.getByPlaceholder('Select your category').first().click();
     await page.getByRole('button', { name: /open \(general\)/i }).first().click();
     await page.getByRole('button', { name: /^CS/ }).first().click();
     await page.getByRole('button', { name: /find colleges/i }).click();
 
     await page.waitForSelector('text=Government Polytechnic Mumbai', { timeout: 8000 });
 
-    // Click shortlist button on first result card
-    const shortlistBtn = page.getByRole('button', { name: /shortlist/i }).first();
-    await shortlistBtn.click();
-    await expect(shortlistBtn).toContainText(/shortlisted/i);
+    // Click the "Shortlist" button on the first result card
+    await page.getByRole('button', { name: 'Shortlist' }).first().click();
 
-    // Open shortlist drawer
-    const drawerBtn = page.getByRole('button', { name: /my shortlist|shortlist/i }).first();
-    await drawerBtn.click();
+    // After toggle, the count badge "1 Shortlisted" should appear in the results header
+    await expect(page.getByRole('button', { name: /1 shortlisted/i })).toBeVisible({ timeout: 8000 });
+
+    // Click the count badge to open the shortlist drawer
+    await page.getByRole('button', { name: /1 shortlisted/i }).click();
     await expect(page.getByRole('dialog', { name: /shortlist/i })).toBeVisible();
   });
 

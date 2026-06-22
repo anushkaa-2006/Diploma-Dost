@@ -735,7 +735,7 @@ export default function Predictor() {
   const [error, setError]         = useState(null);
   const [showShortlist, setShowShortlist] = useState(false);
   const [showCreateShortlist, setShowCreateShortlist] = useState(false);
-const [newShortlistName, setNewShortlistName] = useState("");
+  const [newShortlistName, setNewShortlistName] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -750,160 +750,119 @@ const [newShortlistName, setNewShortlistName] = useState("");
     ? (isValidPct && branches.length > 0 && category)
     : (selectedCollege !== null && category);
 
-    useEffect(() => {
-  async function getUser() {
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-
-    setUser(user);
-
-    if (user) {
-      loadShortlists(user.id);
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      if (user) loadShortlists(user.id);
     }
-  }
+    getUser();
+  }, []);
 
-  getUser();
-}, []);
-
-async function toggleShortlist(college) {
-  if (!user) {
-    navigate(
-  `/login?redirect=${encodeURIComponent(location.pathname)}`
-);
-    return;
-  }
-
-  if (!selectedShortlist) {
-    setShowCreateShortlist(true);
-    return;
-  }
-
-  const shortlistId = Number(selectedShortlist);
-
-  const { data: existing, error: checkError } = await supabase
-    .from("shortlisted_colleges")
-    .select("id")
-    .eq("shortlist_id", shortlistId)
-    .eq("college_code", college.college_code)
-    .eq("course_name", college.course_name);
-
-  if (checkError) {
-    console.error("CHECK ERROR:", checkError);
-    return;
-  }
-
-  if (existing?.length > 0) {
-    const { error } = await supabase
-      .from("shortlisted_colleges")
-      .delete()
-      .eq("id", existing[0].id);
-
-    if (error) {
-      console.error("DELETE ERROR:", error);
+  async function toggleShortlist(college) {
+    if (!user) {
+      navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
-  } else {
-    const payload = {
-      shortlist_id: shortlistId,
-      college_code: college.college_code,
-      college_name: college.college_name,
-      course_name: college.course_name,
-      district: college.district,
-      category: college.category,
-      cap_round: Number(college.cap_round),
-      cutoff_percent: Number(college.cutoff_percent),
-      predicted_at: new Date().toISOString()
-    };
-
-    const { error } = await supabase
-      .from("shortlisted_colleges")
-      .insert([payload]);
-
-    if (error) {
-      console.error(
-        "INSERT ERROR:",
-        error.message,
-        error.details,
-        error.hint
-      );
+    if (!selectedShortlist) {
+      setShowCreateShortlist(true);
       return;
     }
-  }
-
-  await loadShortlistedColleges();
-}
-
-  // ── shortlist handlers ──
-  const isShortlisted = (college) => {
-  return savedColleges.some(
-    c =>
-      c.college_name === college.college_name &&
-      c.course_name === college.course_name
-  );
-};
-  async function loadShortlists(userId) {
-  const { data, error } = await supabase
-    .from("shortlists")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
-
-  if (!error && data) {
-    setShortlists(data);
-
-    if (data.length > 0) {
-      setSelectedShortlist(data[0].id);
+    const shortlistId = Number(selectedShortlist);
+    const { data: existing, error: checkError } = await supabase
+      .from("shortlisted_colleges")
+      .select("id")
+      .eq("shortlist_id", shortlistId)
+      .eq("college_code", college.college_code)
+      .eq("course_name", college.course_name);
+    if (checkError) {
+      console.error("CHECK ERROR:", checkError);
+      return;
     }
-  }
-}
-
-async function createShortlist() {
-  if (!newShortlistName.trim()) return;
-
-  const { data, error } = await supabase
-    .from("shortlists")
-    .insert([
-      {
-        user_id: user.id,
-        name: newShortlistName.trim()
+    if (existing?.length > 0) {
+      const { error } = await supabase
+        .from("shortlisted_colleges")
+        .delete()
+        .eq("id", existing[0].id);
+      if (error) {
+        console.error("DELETE ERROR:", error);
+        return;
       }
-    ])
-    .select()
-    .single();
-
-  if (error) {
-    console.error(error);
-    return;
+    } else {
+      const payload = {
+        shortlist_id: shortlistId,
+        college_code: college.college_code,
+        college_name: college.college_name,
+        course_name: college.course_name,
+        district: college.district,
+        category: college.category,
+        cap_round: college.cap_round,
+        cutoff_percent: Number(college.cutoff_percent),
+        predicted_at: new Date().toISOString(),
+      };
+      const { error } = await supabase
+        .from("shortlisted_colleges")
+        .insert([payload]);
+      if (error) {
+        console.error("INSERT ERROR:", error.message, error.details, error.hint);
+        return;
+      }
+    }
+    await loadShortlistedColleges();
   }
 
-  setShortlists(prev => [data, ...prev]);
-  setSelectedShortlist(data.id);
+  // ── shortlist helpers ──
+  const isShortlisted = (college) =>
+    savedColleges.some(
+      (c) => c.college_name === college.college_name && c.course_name === college.course_name
+    );
 
-  setNewShortlistName("");
-  setShowCreateShortlist(false);
-}
-
-async function loadShortlistedColleges() {
-  if (!selectedShortlist) return;
-
-  const { data, error } = await supabase
-    .from("shortlisted_colleges")
-    .select("*")
-    .eq("shortlist_id", Number(selectedShortlist))
-    .order("cutoff_percent", { ascending: false });
-
-  if (error) {
-    console.error(error);
-    return;
+  async function loadShortlists(userId) {
+    const { data, error } = await supabase
+      .from("shortlists")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    if (!error && data) {
+      setShortlists(data);
+      if (data.length > 0) setSelectedShortlist(data[0].id);
+    }
   }
 
-  setSavedColleges(data || []);
-}
+  async function createShortlist() {
+    if (!newShortlistName.trim()) return;
+    const { data, error } = await supabase
+      .from("shortlists")
+      .insert([{ user_id: user.id, name: newShortlistName.trim() }])
+      .select()
+      .single();
+    if (error) {
+      console.error(error);
+      return;
+    }
+    setShortlists((prev) => [data, ...prev]);
+    setSelectedShortlist(data.id);
+    setNewShortlistName("");
+    setShowCreateShortlist(false);
+  }
 
-useEffect(() => {
-  loadShortlistedColleges();
-}, [selectedShortlist]);
+  async function loadShortlistedColleges() {
+    if (!selectedShortlist) return;
+    const { data, error } = await supabase
+      .from("shortlisted_colleges")
+      .select("*")
+      .eq("shortlist_id", Number(selectedShortlist))
+      .order("cutoff_percent", { ascending: false });
+    if (error) {
+      console.error(error);
+      return;
+    }
+    setSavedColleges(data || []);
+  }
+
+  useEffect(() => {
+    loadShortlistedColleges();
+  }, [selectedShortlist]);
 
   // ── predictor search ──
   async function handleSearch() {
@@ -1173,41 +1132,41 @@ useEffect(() => {
         </div>
       )}
 
-{user && (
-  <div className="mb-8 rounded-lg border border-[#2a2a2a] bg-[#141414] p-5">
-
-    <div className="flex justify-between items-center mb-4">
-      <h3 className="text-[#f0ede6] font-semibold">
-        My Shortlists
-      </h3>
-
-      <button
-  onClick={() => setShowCreateShortlist(true)}
-  className="px-3 py-2 rounded bg-[#e8453c] text-white text-sm"
->
-  + Create New Shortlist
-</button>
-    </div>
-
-    <div className="flex flex-wrap gap-2">
-      {shortlists.map(list => (
-        <button
-          key={list.id}
-          onClick={() => setSelectedShortlist(list.id)}
-          className={`px-3 py-2 rounded border
-          ${
-            selectedShortlist === list.id
-              ? "border-[#e8453c] text-[#e8453c]"
-              : "border-[#2a2a2a] text-[#888]"
-          }`}
-        >
-          {list.name}
-        </button>
-      ))}
-    </div>
-
-  </div>
-)}
+      {user && (
+        <div className="mb-8 rounded-lg border border-[#2a2a2a] bg-[#141414] p-5">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-['Cabinet_Grotesk'] font-semibold text-[#f0ede6]">
+              My Shortlists
+            </h3>
+            <button
+              onClick={() => setShowCreateShortlist(true)}
+              className="px-3 py-2 rounded-lg bg-[#e8453c] text-white text-sm font-['General_Sans']"
+            >
+              + Create New
+            </button>
+          </div>
+          {shortlists.length === 0 ? (
+            <p className="font-['General_Sans'] text-[0.8rem] text-[#888]">
+              No shortlists yet. Create one to start saving colleges.
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {shortlists.map((list) => (
+                <button
+                  key={list.id}
+                  onClick={() => setSelectedShortlist(list.id)}
+                  className={`px-3 py-2 rounded-lg border font-['General_Sans'] text-sm transition-colors duration-150
+                    ${selectedShortlist === list.id
+                      ? "border-[#e8453c] text-[#e8453c] bg-[#e8453c]/5"
+                      : "border-[#2a2a2a] text-[#888] hover:border-[#888]"}`}
+                >
+                  {list.name}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* search button */}
       <button
@@ -1317,65 +1276,57 @@ useEffect(() => {
           shortlist={savedColleges}
           onRemove={toggleShortlist}
           onClear={async () => {
-  if (!selectedShortlist) return;
-
-  await supabase
-    .from("shortlisted_colleges")
-    .delete()
-    .eq("shortlist_id", selectedShortlist);
-
-  setSavedColleges([]);
-}}
+            if (!selectedShortlist) return;
+            await supabase
+              .from("shortlisted_colleges")
+              .delete()
+              .eq("shortlist_id", selectedShortlist);
+            setSavedColleges([]);
+          }}
           onClose={() => setShowShortlist(false)}
         />
       )}
 
       {showCreateShortlist && (
-  <>
-    <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
-      onClick={() => setShowCreateShortlist(false)}
-    />
-
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-      <div className="w-full max-w-md rounded-xl border border-[#2a2a2a] bg-[#141414] p-6">
-
-        <h2 className="text-[#f0ede6] text-xl font-semibold mb-2">
-          Create Shortlist
-        </h2>
-
-        <p className="text-[#888] text-sm mb-4">
-          Give your shortlist a name.
-        </p>
-
-        <input
-          value={newShortlistName}
-          onChange={(e) => setNewShortlistName(e.target.value)}
-          placeholder="Example: Dream Colleges"
-          className="w-full px-4 py-3 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] text-[#f0ede6]"
-        />
-
-        <div className="flex justify-end gap-3 mt-5">
-
-          <button
+        <>
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
             onClick={() => setShowCreateShortlist(false)}
-            className="px-4 py-2 border border-[#2a2a2a] rounded-lg text-[#888]"
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={createShortlist}
-            className="px-4 py-2 bg-[#e8453c] text-white rounded-lg"
-          >
-            Create
-          </button>
-
-        </div>
-      </div>
-    </div>
-  </>
-)}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+            <div className="w-full max-w-md rounded-xl border border-[#2a2a2a] bg-[#141414] p-6">
+              <h2 className="font-['Clash_Display'] text-[#f0ede6] text-xl font-semibold mb-2">
+                Create Shortlist
+              </h2>
+              <p className="font-['General_Sans'] text-[#888] text-sm mb-4">
+                Give your shortlist a name.
+              </p>
+              <input
+                autoFocus
+                value={newShortlistName}
+                onChange={(e) => setNewShortlistName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && createShortlist()}
+                placeholder="e.g. Dream Colleges"
+                className="w-full px-4 py-3 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] text-[#f0ede6] font-['General_Sans'] text-sm outline-none focus:border-[#e8453c]"
+              />
+              <div className="flex justify-end gap-3 mt-5">
+                <button
+                  onClick={() => setShowCreateShortlist(false)}
+                  className="px-4 py-2 border border-[#2a2a2a] rounded-lg font-['General_Sans'] text-sm text-[#888] hover:text-[#f0ede6] transition-colors duration-150"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={createShortlist}
+                  className="px-4 py-2 bg-[#e8453c] text-white rounded-lg font-['General_Sans'] text-sm hover:bg-[#d03d35] transition-colors duration-150"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }
