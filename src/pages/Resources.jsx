@@ -27,6 +27,7 @@ const UPLOAD_TYPES = [
   "PYQs",
   "Model Answers",
   "Study Resources",
+  "Report"
 ];
 
 const TYPE_CONFIG = {
