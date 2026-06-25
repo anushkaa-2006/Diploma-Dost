@@ -314,7 +314,17 @@ export default function Resources() {
 
     const { name, subject, semester, drive_link } = uploadForm;
     if (!name.trim() || !subject || !drive_link.trim()) {
-      setUploadMessage('Please provide a name, subject, semester, and Google Drive link before uploading.');
+      setUploadMessage('Please fill in all fields before uploading.');
+      return;
+    }
+    try {
+      const hostname = new URL(drive_link.trim()).hostname;
+      if (hostname !== 'drive.google.com' && hostname !== 'docs.google.com') {
+        setUploadMessage('Please provide a valid Google Drive or Google Docs link.');
+        return;
+      }
+    } catch {
+      setUploadMessage('Please provide a valid Google Drive link.');
       return;
     }
 
