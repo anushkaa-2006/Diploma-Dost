@@ -730,7 +730,9 @@ test.describe('11. Performance', () => {
         text.includes('serviceworker') ||
         text.includes('service-worker') ||
         text.includes('workbox') ||
-        text.includes('ResizeObserver')
+        text.includes('ResizeObserver') ||
+        text.includes('__cf_bm') ||
+        text.includes('rejected for invalid domain')
       ) return;
       errors.push(text);
     });
@@ -748,7 +750,8 @@ test.describe('11. Performance', () => {
       const text = msg.text();
       if (
         text.includes('WebSocket') || text.includes('wss://') ||
-        text.includes('realtime') || text.includes('workbox')
+        text.includes('realtime') || text.includes('workbox') ||
+        text.includes('__cf_bm') || text.includes('rejected for invalid domain')
       ) return;
       errors.push(text);
     });
