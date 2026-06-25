@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { ExternalLink, FileText, BookOpen, Loader2, ChevronDown, Download, Link2 } from "lucide-react";
@@ -168,6 +168,8 @@ export default function Resources() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const resourceCache = useRef(new Map());
+
   const [user, setUser] = useState(null);
 
   const [uploads, setUploads] = useState([]);
@@ -186,6 +188,14 @@ export default function Resources() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const cacheKey = `${branch}:${semester}:${typeFilter}`;
+    if (resourceCache.current.has(cacheKey)) {
+      setData(resourceCache.current.get(cacheKey));
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     let cancelled = false;
     setLoading(true);
     setError(null);
@@ -207,7 +217,9 @@ export default function Resources() {
     query.then(({ data: rows, error: err }) => {
       if (cancelled) return;
       if (err) { setError(err.message); setLoading(false); return; }
-      setData(rows || []);
+      const result = rows || [];
+      resourceCache.current.set(cacheKey, result);
+      setData(result);
       setLoading(false);
     }).catch(() => {
       if (cancelled) return;
