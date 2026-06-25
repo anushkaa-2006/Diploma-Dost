@@ -1,7 +1,7 @@
 import {
   ArrowRight, ExternalLink, Briefcase, TrendingUp, Users, BookOpen,
   CheckCircle, AlertCircle, Lightbulb, Zap, Target, Award,
-  BarChart3, Code, MessageSquare, Clock, DollarSign
+  BarChart3, Code, MessageSquare, Clock, DollarSign, FileText, Download
 } from 'lucide-react'
 
 export default function PlacementPage() {
@@ -110,18 +110,18 @@ export default function PlacementPage() {
 
         {/* CTAs */}
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '5rem' }}>
-          <a
-            href="#job-vs-degree"
+          <button
+            onClick={() => document.getElementById('job-vs-degree')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-primary"
           >
             Job vs. Degree <ArrowRight size={15} />
-          </a>
-          <a
-            href="#target-companies"
+          </button>
+          <button
+            onClick={() => document.getElementById('target-companies')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-ghost"
           >
             Target Companies
-          </a>
+          </button>
         </div>
       </section>
 
@@ -1143,6 +1143,188 @@ export default function PlacementPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── RESUME RESOURCES ───────────────────── */}
+      <section style={{
+        padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 7rem)',
+        borderTop: '1px solid var(--border)',
+      }}>
+        <div style={{ marginBottom: '3rem' }}>
+          <div className="section-label" style={{ marginBottom: '0.75rem' }}>
+            Templates
+          </div>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 700,
+            fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+            letterSpacing: '-0.03em',
+            color: 'var(--text)',
+            lineHeight: 1.05,
+          }}>
+            Resume resources
+          </h2>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '1.5rem',
+        }}>
+          {/* Template */}
+          <a
+            href="https://docs.google.com/document/d/143IO2bys0mWWbbZoBR2b40pz51owtvJu/edit?usp=sharing&ouid=102189478654106730681&rtpof=true&sd=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '1rem',
+              padding: '2rem',
+              textDecoration: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+              transition: 'border-color 0.2s ease, transform 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = 'rgba(232, 69, 60, 0.4)'
+              e.currentTarget.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = 'var(--border)'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            <div style={{
+              width: '44px', height: '44px',
+              borderRadius: '0.75rem',
+              background: 'rgba(232, 69, 60, 0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <FileText size={22} color="var(--accent)" strokeWidth={1.5} />
+            </div>
+            <div>
+              <div style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.62rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--accent)',
+                marginBottom: '0.5rem',
+              }}>
+                Google Doc Template
+              </div>
+              <h3 style={{
+                fontFamily: 'var(--font-ui)',
+                fontWeight: 800,
+                fontSize: '1.1rem',
+                color: 'var(--text)',
+                letterSpacing: '-0.01em',
+                marginBottom: '0.5rem',
+              }}>
+                Resume Template
+              </h3>
+              <p style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.875rem',
+                color: 'var(--text-muted)',
+                lineHeight: 1.6,
+              }}>
+                A clean, ATS-friendly resume template. Open in Google Docs, make a copy, and fill in your details.
+              </p>
+            </div>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: 'var(--accent)',
+              fontFamily: 'var(--font-ui)',
+              fontWeight: 800,
+              fontSize: '0.85rem',
+              marginTop: 'auto',
+            }}>
+              Open Template <ExternalLink size={13} />
+            </div>
+          </a>
+
+          {/* Example */}
+          <a
+            href="https://drive.google.com/file/d/13--xSmGjke9xWja1lazjfDF91c5j7AD-/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '1rem',
+              padding: '2rem',
+              textDecoration: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+              transition: 'border-color 0.2s ease, transform 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = 'rgba(200, 240, 77, 0.4)'
+              e.currentTarget.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = 'var(--border)'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            <div style={{
+              width: '44px', height: '44px',
+              borderRadius: '0.75rem',
+              background: 'rgba(200, 240, 77, 0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Download size={22} color="var(--accent-lime)" strokeWidth={1.5} />
+            </div>
+            <div>
+              <div style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.62rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--accent-lime)',
+                marginBottom: '0.5rem',
+              }}>
+                Real Example
+              </div>
+              <h3 style={{
+                fontFamily: 'var(--font-ui)',
+                fontWeight: 800,
+                fontSize: '1.1rem',
+                color: 'var(--text)',
+                letterSpacing: '-0.01em',
+                marginBottom: '0.5rem',
+              }}>
+                Resume Example
+              </h3>
+              <p style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.875rem',
+                color: 'var(--text-muted)',
+                lineHeight: 1.6,
+              }}>
+                A real diploma student resume for reference. See how projects, skills, and internships are presented effectively.
+              </p>
+            </div>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: 'var(--accent-lime)',
+              fontFamily: 'var(--font-ui)',
+              fontWeight: 800,
+              fontSize: '0.85rem',
+              marginTop: 'auto',
+            }}>
+              View Example <ExternalLink size={13} />
+            </div>
+          </a>
         </div>
       </section>
 
