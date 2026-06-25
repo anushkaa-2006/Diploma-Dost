@@ -498,7 +498,7 @@ export default function Resources() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {subjects.map((s) => (
                 <SessionPill
-                  key={s.courseCode}
+                  key={s.courseCode ?? s.subjectName}
                   subjectName={s.subjectName}
                   courseCode={s.courseCode}
                   entries={s.entries}
