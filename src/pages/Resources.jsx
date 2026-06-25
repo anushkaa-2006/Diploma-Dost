@@ -4,14 +4,13 @@ import { supabase } from '../lib/supabase';
 import { ExternalLink, FileText, BookOpen, Loader2, ChevronDown, Download, Link2 } from "lucide-react";
 
 
-const BRANCHES = ["CS", "IT", "ME", "CE", "EE", "ENTC"];
+const BRANCHES = ["CE", "ENTC", "IT", "EE", "CS"];
 const BRANCH_LABELS = {
-  CS: "Computer Science",
-  IT: "Information Technology", 
-  ME: "Mechanical",
   CE: "Civil",
-  EE: "Electrical",
   ENTC: "Electronics & Telecommunication",
+  IT: "Information Technology",
+  EE: "Electrical",
+  CS: "Computer Science",
 };
 
 const SEMESTERS = [1, 2, 3, 4, 5, 6];
