@@ -253,16 +253,24 @@ export default function Roadmaps() {
 
         {/* Coming Soon */}
         {branchData?.comingSoon ? (
-          <div className="flex flex-col items-center justify-center py-32 gap-4">
-            <div className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[#555] font-bold">
+          <div className="flex flex-col items-center justify-center py-32 gap-5 text-center">
+            <div className="font-['JetBrains_Mono'] text-[0.65rem] uppercase tracking-[0.14em] text-[#e8453c] font-bold">
               Coming Soon
             </div>
-            <h2 className="font-['Clash_Display'] text-[2rem] font-semibold text-[#333]">
+            <h2 className="font-['Clash_Display'] text-[2rem] font-semibold text-[#f0ede6]">
               {branchData.title} Roadmap
             </h2>
-            <p className="font-['General_Sans'] text-[0.95rem] text-[#555] text-center max-w-[400px] leading-relaxed">
-              We're building detailed roadmaps for all branches. CS and IT are live — others coming soon.
+            <p className="font-['General_Sans'] text-[0.95rem] text-[#888] max-w-[420px] leading-relaxed">
+              CS and IT roadmaps are live. We're actively building {branchData.title} next — structured tracks, curated resources, and step-by-step guides.
             </p>
+            <a
+              href="https://github.com/piush365/Diploma-Dost/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[#2a2a2a] bg-[#141414] font-['Cabinet_Grotesk'] text-[0.875rem] font-semibold text-[#f0ede6] hover:border-[#e8453c]/50 hover:text-[#e8453c] transition-colors duration-150"
+            >
+              Suggest topics on GitHub
+            </a>
           </div>
         ) : (
           <>
