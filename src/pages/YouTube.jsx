@@ -8,9 +8,22 @@ const SEMESTERS = [1, 2, 3, 4, 5, 6];
 
 // ── playlist card ──────────────────────────────────────────────────────────────
 
+// If the stored URL is a YouTube image CDN URL, extract the video ID and
+// return srcset variants so browsers pick the smallest adequate size.
+function getYtSrcSet(url) {
+  const m = url?.match(/i\.ytimg\.com\/vi\/([^/]+)\//);
+  if (!m) return null;
+  const id = m[1];
+  return {
+    srcSet: `https://i.ytimg.com/vi/${id}/mqdefault.jpg 320w, https://i.ytimg.com/vi/${id}/hqdefault.jpg 480w`,
+    sizes: "(max-width: 480px) 320px, 480px",
+  };
+}
+
 function PlaylistCard({ item }) {
   const [imgError, setImgError] = useState(false);
   const thumb = item.thumbnail_url || null;
+  const srcSetInfo = !imgError ? getYtSrcSet(thumb) : null;
 
   return (
     <a
@@ -26,6 +39,7 @@ function PlaylistCard({ item }) {
             src={thumb}
             alt={item.subject}
             loading="lazy"
+            {...(srcSetInfo && { srcSet: srcSetInfo.srcSet, sizes: srcSetInfo.sizes })}
             onError={() => setImgError(true)}
           />
         ) : (
