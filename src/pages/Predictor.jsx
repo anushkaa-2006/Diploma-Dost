@@ -877,16 +877,21 @@ export default function Predictor() {
       const patterns  = branches.flatMap((b) => BRANCH_PATTERNS[b]);
       const maxCutoff = percentageNum + PCT_MARGIN;
 
-      // Branch filtering is done client-side to avoid PostgREST URL parsing
-      // issues with special characters (commas, parentheses) in pattern values.
+      // Double-quote each value so PostgREST's or() parser treats commas and
+      // parentheses inside the pattern as literals, not syntax characters.
+      const orCondition = patterns
+        .map((p) => `course_name.ilike."%${p}%"`)
+        .join(',');
+
       let query = supabase
         .from("cutoffs")
         .select("college_code, college_name, district, course_name, category, cap_round, year, cutoff_open, cutoff_percent")
         .eq("category", category)
         .eq("year", 2025)
         .lte("cutoff_percent", maxCutoff)
+        .or(orCondition)
         .order("cutoff_percent", { ascending: false })
-        .limit(5000);
+        .limit(200);
 
       if (districtFilters.length > 0) {
         query = query.in('district', districtFilters);
@@ -895,15 +900,9 @@ export default function Predictor() {
       const { data, error: err } = await query;
       if (err) { setError("Could not fetch cutoff data. Please try again."); return; }
 
-      const lowerPatterns = patterns.map((p) => p.toLowerCase());
-      const filtered = (data || []).filter((row) => {
-        const name = row.course_name.toLowerCase();
-        return lowerPatterns.some((p) => name.includes(p));
-      });
-
       // Deduplicate: per college+course keep the highest cap_round (Round II > Round I)
       const groups = new Map();
-      for (const row of filtered) {
+      for (const row of (data || [])) {
         const key = `${row.college_code}__${row.course_name}`;
         const existing = groups.get(key);
         if (!existing || row.cap_round > existing.cap_round) groups.set(key, row);
