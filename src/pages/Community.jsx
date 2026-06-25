@@ -41,6 +41,7 @@ export default function Community() {
         .from('questions')
         .select('id, name, branch, semester, question_text, created_at')
         .order('created_at', { ascending: false })
+        .limit(50)
 
       if (!cancelled) {
         if (error) {
