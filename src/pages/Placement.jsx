@@ -68,7 +68,7 @@ export default function PlacementPage() {
           From diploma to dream job
         </h1>
 
-        <h1 style={{
+        <p style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 700,
           fontSize: 'clamp(2.5rem, 7vw, 5rem)',
@@ -92,7 +92,7 @@ export default function PlacementPage() {
           }}>
             Your choice.
           </span>
-        </h1>
+        </p>
 
         {/* Subtext */}
         <p style={{
