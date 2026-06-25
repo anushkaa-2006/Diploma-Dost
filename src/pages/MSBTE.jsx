@@ -3,37 +3,49 @@ import { ChevronDown, Calendar, AlertCircle, CheckCircle, Clock, ExternalLink, F
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
-const ACADEMIC_YEAR = "2025–26";
+const ACADEMIC_YEAR = "2026–27";
 
 const TERM_SCHEDULE = [
-  { label: "Odd Semester Start", date: "1 Jul 2025", status: "done" },
-  { label: "1st Year (New Admission) Start", date: "17 Jul 2025", status: "done" },
-  { label: "Odd Sem Class Test 1", date: "11–13 Aug 2025", status: "done" },
-  { label: "Odd Sem Class Test 2", date: "13–15 Oct 2025", status: "done" },
-  { label: "Odd Semester End", date: "17 Oct 2025", status: "done" },
-  { label: "Winter 2025 Practicals", date: "28 Oct – 6 Nov 2025", status: "done" },
-  { label: "Winter 2025 Theory Exams", date: "11 Nov – 3 Dec 2025", status: "done" },
-  { label: "Even Semester Start", date: "15 Dec 2025", status: "done" },
-  { label: "Even Sem Class Test 1", date: "27–29 Jan 2026", status: "done" },
-  { label: "Even Sem Class Test 2", date: "30 Mar – 2 Apr 2026", status: "done" },
-  { label: "Even Semester End", date: "4 Apr 2026", status: "done" },
-  { label: "Summer 2026 Exam Form (Normal)", date: "2–12 Feb 2026", status: "done" },
-  { label: "Summer 2026 Exam Form (Late ₹1500)", date: "17–19 Feb 2026", status: "done" },
-  { label: "Summer 2026 Practicals", date: "8 Apr – 18 Apr 2026", status: "done" },
-  { label: "Summer 2026 Theory Exams", date: "23 Apr – 16 May 2026", status: "current" },
-  { label: "Summer 2026 Results (Expected)", date: "Late Jun 2026", status: "upcoming" },
-  { label: "Photocopy / Rechecking Window", date: "~Late Jun 2026", status: "upcoming" },
-  { label: "Winter 2026 Exam Form", date: "~Sep 2026", status: "upcoming" },
-  { label: "Winter 2026 Theory Exams", date: "~Nov 2026", status: "upcoming" },
+  // Closing 2025-26
+  { label: "Summer 2026 Results (Expected)", date: "Late Jun 2026", status: "current" },
+
+  // Odd Semester (Jul – Oct 2026)
+  { label: "Odd Semester Start (Sem 3 & 5)", date: "1 Jul 2026", status: "upcoming" },
+  { label: "1st Semester Start (New Admissions)", date: "15 Jul 2026", status: "upcoming" },
+  { label: "Odd Sem Class Test 1 — 3rd Sem", date: "10–12 Aug 2026", status: "upcoming" },
+  { label: "Winter 2026 Exam Form (Normal Fee)", date: "20–30 Aug 2026", status: "upcoming" },
+  { label: "Winter 2026 Exam Form (Late Fee ₹200)", date: "1–3 Sep 2026", status: "upcoming" },
+  { label: "Winter 2026 Exam Form (Penalty ₹1500)", date: "5–6 Sep 2026", status: "upcoming" },
+  { label: "1st Sem Class Test 1", date: "10–11 Sep 2026", status: "upcoming" },
+  { label: "Odd Sem Class Test 1 — 5th Sem", date: "21–22 Sep 2026", status: "upcoming" },
+  { label: "Odd & 1st Sem Class Test 2", date: "12–14 Oct 2026", status: "upcoming" },
+  { label: "Odd Semester End (Sem 3 & 5)", date: "17 Oct 2026", status: "upcoming" },
+  { label: "Winter 2026 Practicals (Sem 3 & 5)", date: "21–31 Oct 2026", status: "upcoming" },
+  { label: "1st Semester End", date: "30 Oct 2026", status: "upcoming" },
+  { label: "Winter 2026 Practicals (1st Sem / 1st Year)", date: "2–6 Nov 2026", status: "upcoming" },
+  { label: "Winter 2026 Theory Exams", date: "17 Nov – 9 Dec 2026", status: "upcoming" },
+
+  // Even Semester (Dec 2026 – Apr 2027)
+  { label: "Even Semester Start (Sem 2, 4 & 6)", date: "15 Dec 2026", status: "upcoming" },
+  { label: "Winter 2026 Results (Expected)", date: "2nd Week Jan 2027", status: "upcoming" },
+  { label: "Even Sem Class Test 1", date: "27–29 Jan 2027", status: "upcoming" },
+  { label: "Summer 2027 Exam Form (Normal Fee)", date: "1–11 Feb 2027", status: "upcoming" },
+  { label: "Summer 2027 Exam Form (Late Fee ₹200)", date: "13–15 Feb 2027", status: "upcoming" },
+  { label: "Summer 2027 Exam Form (Penalty ₹1500)", date: "17–19 Feb 2027", status: "upcoming" },
+  { label: "Even Sem Class Test 2", date: "31 Mar – 2 Apr 2027", status: "upcoming" },
+  { label: "Even Semester End", date: "3 Apr 2027", status: "upcoming" },
+  { label: "Summer 2027 Practicals", date: "8–19 Apr 2027", status: "upcoming" },
+  { label: "Summer 2027 Theory Exams", date: "27 Apr – 19 May 2027", status: "upcoming" },
+  { label: "Summer 2027 Results (Expected)", date: "3rd Week Jun 2027", status: "upcoming" },
 ];
 
 const QUICK_LINKS = [
   { label: "MSBTE Official Website", url: "https://msbte.ac.in/", icon: Globe, color: "#4d9ef0" },
   { label: "Student Login (Exam Forms)", url: "https://online.msbte.co.in/", icon: User, color: "#c8f04d" },
-  { label: "Summer 2026 Timetable", url: "https://online.msbte.co.in/timetable/", icon: Calendar, color: "#e8453c" },
+  { label: "Winter 2026 Timetable", url: "https://online.msbte.co.in/timetable/", icon: Calendar, color: "#e8453c" },
   { label: "Check Results", url: "https://msbte.ac.in/", icon: CheckCircle, color: "#b87aff" },
   { label: "Hall Ticket Download", url: "https://online.msbte.co.in/", icon: CreditCard, color: "#f0a843" },
-  { label: "Academic Calendar PDF", url: "https://aissmspoly.org.in/wp-content/uploads/2025/06/Academic_Calendar-2025-26.pdf", icon: Download, color: "#4d9ef0" },
+  { label: "Academic Calendar 2026-27", url: "https://msbte.ac.in/", icon: Download, color: "#4d9ef0" },
 ];
 
 const RECHECKING_STEPS = [
@@ -87,34 +99,34 @@ const NOTICES = [
   {
     tag: "Live Now",
     color: "#e8453c",
-    title: "Summer 2026 Theory Exams Running",
-    desc: "Theory exams are ongoing from Apr 23 – May 16, 2026. Check your timetable at the link below.",
-    link: "https://online.msbte.co.in/timetable/",
-    linkLabel: "View Timetable →",
-  },
-  {
-    tag: "Upcoming",
-    color: "#c8f04d",
-    title: "Results Expected Late June 2026",
-    desc: "Based on past patterns, Summer 2026 results will be published by end of June 2026.",
+    title: "Summer 2026 Results Expected Soon",
+    desc: "Summer 2026 theory exams ended May 2026. Results are expected by end of June 2026. Keep checking the MSBTE portal.",
     link: "https://msbte.ac.in/",
     linkLabel: "Check Results Portal →",
   },
   {
+    tag: "Upcoming",
+    color: "#c8f04d",
+    title: "New Academic Year 2026-27 Starts 1 Jul 2026",
+    desc: "Odd semester (Sem 3 & 5) begins July 1. 1st semester for new admissions begins July 15, 2026 (as per admission authority date).",
+    link: null,
+    linkLabel: null,
+  },
+  {
     tag: "Important",
+    color: "#f0a843",
+    title: "Winter 2026 Exam Form: Aug 20 – Sep 6",
+    desc: "Normal fee window: Aug 20–30. Late fee (₹200): Sep 1–3. Penalty (₹1500): Sep 5–6. RBTE confirmation deadline: Sep 9, 2026 by 5:00 PM.",
+    link: "https://online.msbte.co.in/",
+    linkLabel: "Student Login →",
+  },
+  {
+    tag: "Info",
     color: "#b87aff",
     title: "Online Exam Subjects — No Rechecking",
     desc: "MCQ-based online subjects have no photocopy or rechecking option per MSBTE's latest circular.",
     link: null,
     linkLabel: null,
-  },
-  {
-    tag: "Info",
-    color: "#4d9ef0",
-    title: "K-Scheme Equivalent Subject Provision",
-    desc: "MSBTE has issued a provision for I-Scheme students to appear via equivalent K-Scheme subjects. Check official circular for your branch.",
-    link: "https://msbte.ac.in/",
-    linkLabel: "Official Circular →",
   },
 ];
 
@@ -145,7 +157,7 @@ function TimelineSection() {
   const visible = expanded ? TERM_SCHEDULE : TERM_SCHEDULE.slice(0, 10);
 
   const statusConfig = {
-    done:     { dot: "bg-[#2a2a2a]", text: "text-[#666]", dateTxt: "text-[#555]", icon: CheckCircle },
+    done:     { dot: "bg-[#c8f04d]/10 border border-[#c8f04d]/30", text: "text-[#c8f04d]", dateTxt: "text-[#c8f04d]", icon: CheckCircle },
     current:  { dot: "bg-[#e8453c] ring-4 ring-[#e8453c]/20", text: "text-[#f0ede6] font-semibold", dateTxt: "text-[#e8453c]", icon: Clock },
     upcoming: { dot: "bg-[#2a2a2a] border-2 border-[#4d9ef0]", text: "text-[#888]", dateTxt: "text-[#666]", icon: Calendar },
   };
@@ -166,7 +178,7 @@ function TimelineSection() {
               <div key={i} className="flex gap-6 relative">
                 <div className="flex-shrink-0 mt-1 relative z-10">
                   <div className={`w-8 h-8 rounded-full ${config.dot} flex items-center justify-center`}>
-                    <Icon size={14} color={item.status === 'done' ? '#555' : item.status === 'current' ? '#fff' : '#4d9ef0'} strokeWidth={2} />
+                    <Icon size={14} color={item.status === 'done' ? '#c8f04d' : item.status === 'current' ? '#fff' : '#4d9ef0'} strokeWidth={2} />
                   </div>
                 </div>
                 <div className="flex-1 flex items-start justify-between gap-4 min-w-0 pb-4 border-b border-[#1a1a1a] last:border-0">
