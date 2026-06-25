@@ -776,7 +776,6 @@ export default function Predictor() {
       .eq("college_code", college.college_code)
       .eq("course_name", college.course_name);
     if (checkError) {
-      console.error("CHECK ERROR:", checkError);
       return;
     }
     if (existing?.length > 0) {
@@ -785,7 +784,6 @@ export default function Predictor() {
         .delete()
         .eq("id", existing[0].id);
       if (error) {
-        console.error("DELETE ERROR:", error);
         return;
       }
     } else {
@@ -804,7 +802,6 @@ export default function Predictor() {
         .from("shortlisted_colleges")
         .insert([payload]);
       if (error) {
-        console.error("INSERT ERROR:", error.message, error.details, error.hint);
         return;
       }
     }
@@ -837,7 +834,6 @@ export default function Predictor() {
       .select()
       .single();
     if (error) {
-      console.error(error);
       return;
     }
     setShortlists((prev) => [data, ...prev]);
@@ -854,7 +850,6 @@ export default function Predictor() {
       .eq("shortlist_id", Number(selectedShortlist))
       .order("cutoff_percent", { ascending: false });
     if (error) {
-      console.error(error);
       return;
     }
     setSavedColleges(data || []);
