@@ -6,7 +6,8 @@ export class NavbarPage {
   }
 
   hamburger() {
-    return this.page.getByRole('button', { name: 'Open menu' });
+    // aria-label toggles between "Open menu" and "Close menu" — match either state
+    return this.page.getByRole('button', { name: /menu$/i });
   }
 
   searchIcon() {
