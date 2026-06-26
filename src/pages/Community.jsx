@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   Users, MessageCircle, Send, Loader2,
   ChevronDown, ChevronUp, Plus, X
@@ -6,12 +6,17 @@ import {
 import { supabase } from '../lib/supabase'
 import { BRANCHES } from '../data/branches'
 
+const SEMESTERS_ALL = ['All', 1, 2, 3, 4, 5, 6]
+const BRANCHES_ALL = ['All', ...BRANCHES]
+
 const SEMESTERS = [1, 2, 3, 4, 5, 6]
 
 export default function Community() {
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [filterBranch, setFilterBranch] = useState('All')
+  const [filterSemester, setFilterSemester] = useState('All')
 
   const [showForm, setShowForm] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -39,7 +44,7 @@ export default function Community() {
       setError(null)
       const { data, error } = await supabase
         .from('questions')
-        .select('id, name, branch, semester, question_text, created_at')
+        .select('id, name, branch, semester, question_text, created_at, answers(count)')
         .order('created_at', { ascending: false })
         .limit(50)
 
@@ -104,6 +109,7 @@ export default function Community() {
           branch: form.branch,
           semester: form.semester,
           question_text: form.question_text.trim(),
+          created_at: new Date().toISOString(),
         }])
         .select()
 
@@ -134,6 +140,7 @@ export default function Community() {
           question_id: questionId,
           name: answerForm.name.trim(),
           answer_text: answerForm.answer_text.trim(),
+          created_at: new Date().toISOString(),
         }])
         .select()
 
@@ -154,7 +161,10 @@ export default function Community() {
   }
 
   function timeAgo(dateStr) {
-    const diff = Date.now() - new Date(dateStr).getTime()
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    if (isNaN(date.getTime())) return ''
+    const diff = Date.now() - date.getTime()
     const mins = Math.floor(diff / 60000)
     if (mins < 1) return 'just now'
     if (mins < 60) return `${mins}m ago`
@@ -162,8 +172,14 @@ export default function Community() {
     if (hours < 24) return `${hours}h ago`
     const days = Math.floor(hours / 24)
     if (days < 30) return `${days}d ago`
-    return new Date(dateStr).toLocaleDateString()
+    return date.toLocaleDateString()
   }
+
+  const filteredQuestions = useMemo(() => questions.filter((q) => {
+    if (filterBranch !== 'All' && q.branch !== filterBranch) return false
+    if (filterSemester !== 'All' && q.semester !== filterSemester) return false
+    return true
+  }), [questions, filterBranch, filterSemester])
 
   return (
     <div style={{ background: 'var(--bg)' }}>
@@ -374,6 +390,32 @@ export default function Community() {
           </div>
         )}
 
+        {!loading && !error && questions.length > 0 && (
+          <div style={{
+            display: 'flex',
+            gap: '0.75rem',
+            flexWrap: 'wrap',
+            marginBottom: '1.5rem',
+          }}>
+            <select
+              value={filterBranch}
+              onChange={e => setFilterBranch(e.target.value)}
+              style={{ ...inputStyle, width: 'auto', minWidth: '110px' }}
+              aria-label="Filter by branch"
+            >
+              {BRANCHES_ALL.map(b => <option key={b} value={b}>{b === 'All' ? 'All Branches' : b}</option>)}
+            </select>
+            <select
+              value={filterSemester}
+              onChange={e => setFilterSemester(e.target.value === 'All' ? 'All' : Number(e.target.value))}
+              style={{ ...inputStyle, width: 'auto', minWidth: '110px' }}
+              aria-label="Filter by semester"
+            >
+              {SEMESTERS_ALL.map(s => <option key={s} value={s}>{s === 'All' ? 'All Semesters' : `Sem ${s}`}</option>)}
+            </select>
+          </div>
+        )}
+
         {!loading && !error && questions.length === 0 && (
           <div style={{
             background: 'var(--surface)',
@@ -407,9 +449,24 @@ export default function Community() {
           </div>
         )}
 
-        {!loading && !error && questions.length > 0 && (
+        {!loading && !error && questions.length > 0 && filteredQuestions.length === 0 && (
+          <div style={{
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '1rem',
+            padding: 'clamp(2rem, 5vw, 3rem)',
+            textAlign: 'center',
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.9rem',
+            color: 'var(--text-muted)',
+          }}>
+            No questions match the selected filters.
+          </div>
+        )}
+
+        {!loading && !error && filteredQuestions.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {questions.map(q => (
+            {filteredQuestions.map(q => (
               <div
                 key={q.id}
                 style={{
