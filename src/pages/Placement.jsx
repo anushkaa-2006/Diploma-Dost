@@ -1259,7 +1259,7 @@ export default function PlacementPage() {
 
           {/* Example */}
           <a
-            href="https://drive.google.com/file/d/13--xSmGjke9xWja1lazjfDF91c5j7AD-/view?usp=sharing"
+            href="https://docs.google.com/document/d/1cZr5rTwzfFDGUGfR2Xmp51r5Bc8qr_m8/edit?usp=sharing&ouid=102189478654106730681&rtpof=true&sd=true"
             target="_blank"
             rel="noopener noreferrer"
             style={{
