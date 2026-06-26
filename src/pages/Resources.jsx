@@ -272,6 +272,7 @@ export default function Resources() {
     username
   )
 `)
+        .eq('verified', true)
         .order('created_at', { ascending: false });
 
       if (err) {
