@@ -588,6 +588,24 @@ function ShortlistDrawer({ shortlist, onRemove, onClear, onClose }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const downloadAsFile = () => {
+    const lines = [
+      'My College Shortlist — Diploma Dost',
+      '='.repeat(40),
+      '',
+      ...shortlist.map((c, i) =>
+        `${i + 1}. ${c.college_name} (${c.college_code})\n   Course : ${c.course_name}\n   Cutoff : ${c.cutoff_percent.toFixed(2)}%   CAP ${c.cap_round}   [${c.category}]\n   District: ${c.district}${c.cutoff_open != null ? `\n   Merit rank: ~${c.cutoff_open.toLocaleString('en-IN')}` : ''}`
+      ),
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'my-shortlist.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (shortlist.length === 0) return null;
 
   return (
@@ -619,6 +637,13 @@ function ShortlistDrawer({ shortlist, onRemove, onClear, onClose }) {
                          transition-colors duration-150">
               {copied ? <Check size={13} strokeWidth={2} /> : <Copy size={13} strokeWidth={2} />}
               {copied ? 'Copied!' : 'Copy List'}
+            </button>
+            <button onClick={downloadAsFile}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a]
+                         font-['General_Sans'] text-[0.75rem] text-[#888] hover:text-[#f0ede6] hover:border-[#888]
+                         transition-colors duration-150">
+              <Download size={13} strokeWidth={2} />
+              Download
             </button>
             <button onClick={onClear}
               className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a]
