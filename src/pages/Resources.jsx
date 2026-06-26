@@ -175,6 +175,8 @@ export default function Resources() {
   const [uploads, setUploads] = useState([]);
   const [uploadsLoading, setUploadsLoading] = useState(true);
   const [uploadsError, setUploadsError] = useState(null);
+  const [uploadsSemFilter, setUploadsSemFilter] = useState('All');
+  const [uploadsTypeFilter, setUploadsTypeFilter] = useState('All');
 
   const [uploadForm, setUploadForm] = useState({
     name: "",
@@ -373,6 +375,12 @@ export default function Resources() {
       setUploading(false);
     }
   }
+
+  const filteredUploads = useMemo(() => uploads.filter((u) => {
+    if (uploadsSemFilter !== 'All' && u.semester !== uploadsSemFilter) return false;
+    if (uploadsTypeFilter !== 'All' && u.subject !== uploadsTypeFilter) return false;
+    return true;
+  }), [uploads, uploadsSemFilter, uploadsTypeFilter]);
 
   const bySubject = useMemo(() => data.reduce((acc, row) => {
     const key = row.course_code;
@@ -630,6 +638,38 @@ export default function Resources() {
               </button>
             </div>
 
+            {/* upload filters */}
+            <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="font-['JetBrains_Mono'] text-[0.6rem] uppercase tracking-[0.12em] text-[#888] font-bold">
+                  Semester
+                </label>
+                <Dropdown
+                  value={uploadsSemFilter}
+                  onChange={setUploadsSemFilter}
+                  options={['All', ...SEMESTERS]}
+                  labelMap={{ All: 'All Semesters', ...Object.fromEntries(SEMESTERS.map(s => [s, `Semester ${s}`])) }}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="font-['JetBrains_Mono'] text-[0.6rem] uppercase tracking-[0.12em] text-[#888] font-bold">
+                  Type
+                </label>
+                <Dropdown
+                  value={uploadsTypeFilter}
+                  onChange={setUploadsTypeFilter}
+                  options={['All', ...UPLOAD_TYPES]}
+                  labelMap={{ All: 'All Types' }}
+                />
+              </div>
+            </div>
+
+            {!uploadsLoading && !uploadsError && uploads.length > 0 && (
+              <p className="font-['JetBrains_Mono'] text-[0.65rem] text-[#888] uppercase tracking-wider">
+                {filteredUploads.length} of {uploads.length} upload{uploads.length !== 1 ? 's' : ''}
+              </p>
+            )}
+
             <div className="space-y-4">
               {uploadsLoading && (
                 <div className="bg-[#141414] border border-[#2a2a2a] rounded-3xl p-6 text-center text-[#888]">
@@ -650,7 +690,13 @@ export default function Resources() {
                 </div>
               )}
 
-              {!uploadsLoading && !uploadsError && uploads.map((upload) => (
+              {!uploadsLoading && !uploadsError && uploads.length > 0 && filteredUploads.length === 0 && (
+                <div className="bg-[#141414] border border-[#2a2a2a] rounded-3xl p-6 text-[#888]">
+                  No uploads match the selected filters.
+                </div>
+              )}
+
+              {!uploadsLoading && !uploadsError && filteredUploads.map((upload) => (
                 <div key={upload.id} className="bg-[#141414] border border-[#2a2a2a] rounded-3xl p-5">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
