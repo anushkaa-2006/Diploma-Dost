@@ -733,6 +733,7 @@ export default function Predictor() {
   const [results, setResults]     = useState([]);
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState(null);
+  const [chanceFilter, setChanceFilter] = useState("all");
   const [showShortlist, setShowShortlist] = useState(false);
   const [showCreateShortlist, setShowCreateShortlist] = useState(false);
   const [newShortlistName, setNewShortlistName] = useState("");
@@ -866,6 +867,7 @@ export default function Predictor() {
     setLoading(true);
     setError(null);
     setResults([]);
+    setChanceFilter("all");
 
     if (mode === "college") {
       // CollegeAllBranches handles its own fetch — just mark as searched
@@ -1239,36 +1241,67 @@ export default function Predictor() {
         )}
 
         {/* predictor results grid */}
-        {mode === "predictor" && searched && !loading && !error && results.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-              <div>
-                <p className="font-['JetBrains_Mono'] text-[0.7rem] text-[#888] tracking-wider uppercase">
-                  {results.length} college{results.length !== 1 ? "s" : ""} found
-                </p>
-                <p className="font-['General_Sans'] text-[0.75rem] text-[#888] mt-1">
-                  {percentage}% · {category}
-                  {districtFilters.length > 0 ? ` · ${districtFilters.join(', ')}` : ""}
-                </p>
+        {mode === "predictor" && searched && !loading && !error && results.length > 0 && (() => {
+          const counts = { high: 0, good: 0, reach: 0 };
+          results.forEach((r) => { if (counts[r.chance] !== undefined) counts[r.chance]++; });
+          const visible = chanceFilter === "all" ? results : results.filter((r) => r.chance === chanceFilter);
+          return (
+            <div>
+              <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                <div>
+                  <p className="font-['JetBrains_Mono'] text-[0.7rem] text-[#888] tracking-wider uppercase">
+                    {results.length} college{results.length !== 1 ? "s" : ""} found
+                  </p>
+                  <p className="font-['General_Sans'] text-[0.75rem] text-[#888] mt-1">
+                    {percentage}% · {category}
+                    {districtFilters.length > 0 ? ` · ${districtFilters.join(', ')}` : ""}
+                  </p>
+                </div>
+                {savedColleges.length > 0 && (
+                  <button onClick={() => setShowShortlist(true)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#e8453c]/40 bg-[#e8453c]/5
+                               font-['General_Sans'] text-[0.75rem] text-[#e8453c] hover:bg-[#e8453c]/10
+                               transition-colors duration-150">
+                    <BookmarkCheck size={14} strokeWidth={2} />
+                    {savedColleges.length} Shortlisted
+                  </button>
+                )}
               </div>
-              {savedColleges.length > 0 && (
-                <button onClick={() => setShowShortlist(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#e8453c]/40 bg-[#e8453c]/5
-                             font-['General_Sans'] text-[0.75rem] text-[#e8453c] hover:bg-[#e8453c]/10
-                             transition-colors duration-150">
-                  <BookmarkCheck size={14} strokeWidth={2} />
-                  {savedColleges.length} Shortlisted
-                </button>
+
+              {/* chance filter tabs */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {[
+                  { key: "all",  label: `All (${results.length})` },
+                  { key: "high", label: `High Chance (${counts.high})` },
+                  { key: "good", label: `Good Chance (${counts.good})` },
+                  { key: "reach",label: `Reach (${counts.reach})` },
+                ].map(({ key, label }) => (
+                  <button key={key} onClick={() => setChanceFilter(key)}
+                    className={`px-3 py-1.5 rounded-lg border font-['JetBrains_Mono'] text-[0.68rem] tracking-wide
+                                transition-colors duration-150
+                                ${chanceFilter === key
+                                  ? "border-[#e8453c] text-[#e8453c] bg-[#e8453c]/5"
+                                  : "border-[#2a2a2a] text-[#888] hover:border-[#888] hover:text-[#f0ede6]"}`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              {visible.length === 0 && (
+                <p className="font-['General_Sans'] text-[#888] text-sm py-10 text-center">
+                  No {chanceFilter} chance colleges in these results.
+                </p>
               )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {visible.map((c, i) => (
+                  <ResultCard key={c.college_code + c.course_name + i}
+                    college={c} isShortlisted={isShortlisted(c)} onToggle={toggleShortlist} />
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {results.map((c, i) => (
-                <ResultCard key={c.college_code + c.course_name + i}
-                  college={c} isShortlisted={isShortlisted(c)} onToggle={toggleShortlist} />
-              ))}
-            </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* Enhanced shortlist drawer */}
