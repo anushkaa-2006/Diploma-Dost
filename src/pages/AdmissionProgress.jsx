@@ -496,17 +496,46 @@ export default function AdmissionProgress() {
         </div>
 
         {steps.length === 0 ? (
-          <div className="text-center py-10">
-            <p className="font-['General_Sans'] text-sm text-[var(--text-muted)]">
-              No steps loaded yet. Check your Google Sheet is published correctly.
-            </p>
+          <div>
+            <div className="flex items-start gap-3 bg-[#f0a843]/10 border border-[#f0a843]/20 rounded-xl px-4 py-3 mb-4">
+              <span className="text-[#f0a843] mt-0.5 flex-shrink-0">⏳</span>
+              <p className="font-['General_Sans'] text-xs text-[#f0a843] leading-relaxed">
+                Official 2026–27 dates not yet announced by CET Cell. Showing estimated dates based on last year's schedule — useful for planning ahead.
+              </p>
+            </div>
+            <div className="space-y-2">
+              {LAST_YEAR.map((step, i) => (
+                <TimelineRow key={i} step={{ title: step.title, date: `~${step.date.replace(/\d{4}/g, "2026")}`, status: "" }} index={i} />
+              ))}
+            </div>
           </div>
         ) : (
-          <div className="space-y-2">
-            {steps.map((step, i) => (
-              <TimelineRow key={step.title} step={step} index={i} />
-            ))}
-          </div>
+          <>
+            {steps.some((s) => !s.date) && (
+              <div className="flex items-start gap-3 bg-[#f0a843]/10 border border-[#f0a843]/20 rounded-xl px-4 py-3 mb-4">
+                <span className="text-[#f0a843] mt-0.5 flex-shrink-0">⏳</span>
+                <p className="font-['General_Sans'] text-xs text-[#f0a843] leading-relaxed">
+                  Some 2026–27 dates are not yet announced. Steps marked <span className="font-semibold">~est.</span> show estimated dates based on last year's schedule.
+                </p>
+              </div>
+            )}
+            <div className="space-y-2">
+              {steps.map((step, i) => {
+                if (step.date) return <TimelineRow key={step.title} step={step} index={i} />;
+                const est = LAST_YEAR.find((ly) =>
+                  ly.title.toLowerCase().includes(step.title.toLowerCase().slice(0, 20)) ||
+                  step.title.toLowerCase().includes(ly.title.toLowerCase().slice(0, 20))
+                );
+                return (
+                  <TimelineRow
+                    key={step.title}
+                    step={{ ...step, date: est ? `~est. ${est.date.replace(/\d{4}/g, "2026")}` : "" }}
+                    index={i}
+                  />
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
 
