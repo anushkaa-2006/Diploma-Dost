@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import {
   Users, MessageCircle, Send, Loader2,
-  ChevronDown, ChevronUp, Plus, X
+  ChevronDown, ChevronUp, Plus, X, Trash2
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { BRANCHES } from '../data/branches'
@@ -10,6 +10,15 @@ const SEMESTERS_ALL = ['All', 1, 2, 3, 4, 5, 6]
 const BRANCHES_ALL = ['All', ...BRANCHES]
 
 const SEMESTERS = [1, 2, 3, 4, 5, 6]
+
+const LS_Q = 'dd_owned_questions'
+const LS_A = 'dd_owned_answers'
+function lsLoad(key) {
+  try { return new Set(JSON.parse(localStorage.getItem(key) || '[]')) } catch { return new Set() }
+}
+function lsSave(key, set) {
+  try { localStorage.setItem(key, JSON.stringify([...set])) } catch { /* ignore */ }
+}
 
 export default function Community() {
   const [questions, setQuestions] = useState([])
@@ -41,6 +50,10 @@ export default function Community() {
     setToast(msg)
     setTimeout(() => setToast(null), 3000)
   }
+
+  const [ownedQIds, setOwnedQIds] = useState(() => lsLoad(LS_Q))
+  const [ownedAIds, setOwnedAIds] = useState(() => lsLoad(LS_A))
+  const [confirmDelete, setConfirmDelete] = useState(null) // { type: 'question'|'answer', id, questionId? }
 
   useEffect(() => {
     let cancelled = false
@@ -124,6 +137,7 @@ export default function Community() {
         setForm({ name: '', branch: 'CS', semester: 1, question_text: '' })
         setShowForm(false)
         showToast('Question posted!')
+        setOwnedQIds(prev => { const n = new Set(prev); n.add(data[0].id); lsSave(LS_Q, n); return n })
       } else if (error) {
         setSubmitError('Failed to post your question. Please try again.')
       }
@@ -158,6 +172,7 @@ export default function Community() {
         }))
         setAnswerForm({ name: '', answer_text: '' })
         showToast('Answer posted!')
+        setOwnedAIds(prev => { const n = new Set(prev); n.add(data[0].id); lsSave(LS_A, n); return n })
       } else if (error) {
         setAnswerError('Failed to post your answer. Please try again.')
       }
@@ -165,6 +180,27 @@ export default function Community() {
       setAnswerError('Failed to post your answer. Please try again.')
     } finally {
       setAnswerSubmitting(false)
+    }
+  }
+
+  async function handleDeleteQuestion(id) {
+    const { error } = await supabase.from('questions').delete().eq('id', id)
+    if (!error) {
+      setQuestions(prev => prev.filter(q => q.id !== id))
+      setOwnedQIds(prev => { const n = new Set(prev); n.delete(id); lsSave(LS_Q, n); return n })
+      if (expanded === id) setExpanded(null)
+      setConfirmDelete(null)
+      showToast('Question deleted.')
+    }
+  }
+
+  async function handleDeleteAnswer(id, questionId) {
+    const { error } = await supabase.from('answers').delete().eq('id', id)
+    if (!error) {
+      setAnswers(prev => ({ ...prev, [questionId]: (prev[questionId] || []).filter(a => a.id !== id) }))
+      setOwnedAIds(prev => { const n = new Set(prev); n.delete(id); lsSave(LS_A, n); return n })
+      setConfirmDelete(null)
+      showToast('Answer deleted.')
     }
   }
 
@@ -506,6 +542,7 @@ export default function Community() {
                   border: '1px solid var(--border)',
                   borderRadius: '1rem',
                   overflow: 'hidden',
+                  position: 'relative',
                 }}
               >
                 <button
@@ -576,6 +613,56 @@ export default function Community() {
                   </div>
                 </button>
 
+                {ownedQIds.has(q.id) && (
+                  confirmDelete?.type === 'question' && confirmDelete?.id === q.id ? (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.5rem 1rem',
+                      borderTop: '1px solid var(--border)',
+                      background: 'rgba(232,69,60,0.05)',
+                    }}>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--text-muted)', flex: 1 }}>
+                        Delete this question?
+                      </span>
+                      <button
+                        onClick={() => handleDeleteQuestion(q.id)}
+                        style={{ ...deleteConfirmStyle, color: 'var(--accent)', borderColor: 'var(--accent)' }}
+                      >
+                        Yes, delete
+                      </button>
+                      <button
+                        onClick={() => setConfirmDelete(null)}
+                        style={deleteConfirmStyle}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setConfirmDelete({ type: 'question', id: q.id })}
+                      title="Delete your question"
+                      style={{
+                        position: 'absolute',
+                        top: '0.75rem',
+                        right: '0.75rem',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'var(--text-muted)',
+                        padding: '0.25rem',
+                        lineHeight: 1,
+                        opacity: 0.5,
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = 1; e.currentTarget.style.color = 'var(--accent)' }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = 0.5; e.currentTarget.style.color = 'var(--text-muted)' }}
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  )
+                )}
+
                 {expanded === q.id && (
                   <div style={{
                     borderTop: '1px solid var(--border)',
@@ -633,6 +720,7 @@ export default function Community() {
                         <div style={{
                           display: 'flex',
                           justifyContent: 'space-between',
+                          alignItems: 'center',
                           gap: '0.5rem',
                           flexWrap: 'wrap',
                         }}>
@@ -643,13 +731,33 @@ export default function Community() {
                           }}>
                             {a.name}
                           </span>
-                          <span style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.7rem',
-                            color: 'var(--text-muted)',
-                          }}>
-                            {timeAgo(a.created_at)}
-                          </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <span style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.7rem',
+                              color: 'var(--text-muted)',
+                            }}>
+                              {timeAgo(a.created_at)}
+                            </span>
+                            {ownedAIds.has(a.id) && (
+                              confirmDelete?.type === 'answer' && confirmDelete?.id === a.id ? (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                  <button onClick={() => handleDeleteAnswer(a.id, q.id)} style={{ ...deleteConfirmStyle, color: 'var(--accent)', borderColor: 'var(--accent)', fontSize: '0.65rem' }}>Delete</button>
+                                  <button onClick={() => setConfirmDelete(null)} style={{ ...deleteConfirmStyle, fontSize: '0.65rem' }}>Cancel</button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => setConfirmDelete({ type: 'answer', id: a.id })}
+                                  title="Delete your answer"
+                                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: '0.15rem', lineHeight: 1, opacity: 0.5 }}
+                                  onMouseEnter={e => { e.currentTarget.style.opacity = 1; e.currentTarget.style.color = 'var(--accent)' }}
+                                  onMouseLeave={e => { e.currentTarget.style.opacity = 0.5; e.currentTarget.style.color = 'var(--text-muted)' }}
+                                >
+                                  <Trash2 size={12} />
+                                </button>
+                              )
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -743,4 +851,15 @@ const tagStyle = {
   background: 'rgba(232, 69, 60, 0.1)',
   padding: '0.2rem 0.55rem',
   borderRadius: '0.3rem',
+}
+
+const deleteConfirmStyle = {
+  background: 'transparent',
+  border: '1px solid var(--border)',
+  borderRadius: '0.3rem',
+  padding: '0.2rem 0.5rem',
+  fontFamily: 'var(--font-mono)',
+  fontSize: '0.7rem',
+  color: 'var(--text-muted)',
+  cursor: 'pointer',
 }
