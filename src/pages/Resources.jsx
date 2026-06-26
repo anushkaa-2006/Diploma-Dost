@@ -167,6 +167,7 @@ export default function Resources() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [retryKey, setRetryKey] = useState(0);
 
   const resourceCache = useRef(new Map());
 
@@ -230,7 +231,7 @@ export default function Resources() {
     });
 
     return () => { cancelled = true; };
-  }, [branch, semester, typeFilter]);
+  }, [branch, semester, typeFilter, retryKey]);
 
   useEffect(() => {
     let mounted = true;
@@ -480,10 +481,20 @@ export default function Resources() {
         )}
 
         {!loading && error && (
-          <div role="alert" className="flex flex-col items-center gap-2 py-24
-                          font-['General_Sans'] text-[#e8453c] text-sm text-center">
-            <p className="font-['Cabinet_Grotesk'] font-semibold">Could not load resources</p>
-            <p>Check your connection and try again.</p>
+          <div role="alert" className="flex flex-col items-center gap-3 py-24
+                          font-['General_Sans'] text-sm text-center">
+            <p className="font-['Cabinet_Grotesk'] font-semibold text-[#e8453c]">Could not load resources</p>
+            <p className="text-[#888]">Check your connection and try again.</p>
+            <button
+              onClick={() => {
+                resourceCache.current.delete(`${branch}:${semester}:${typeFilter}`)
+                setRetryKey(k => k + 1)
+              }}
+              className="btn-ghost"
+              style={{ marginTop: '0.25rem' }}
+            >
+              Try again
+            </button>
           </div>
         )}
 

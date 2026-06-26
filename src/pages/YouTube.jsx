@@ -111,6 +111,7 @@ export default function YouTube() {
   const [data, setData]       = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -137,7 +138,7 @@ export default function YouTube() {
       });
 
     return () => { cancelled = true; };
-  }, [activeBranch]);
+  }, [activeBranch, retryKey]);
 
   const bySemester = SEMESTERS.reduce((acc, s) => {
     const rows = data.filter((r) => r.semester === s);
@@ -209,6 +210,13 @@ export default function YouTube() {
           <div className="yt-state yt-state--error">
             <p className="yt-state__title">Oops! Something went wrong</p>
             <p className="yt-state__sub">Could not load playlists. Check your connection and try again.</p>
+            <button
+              onClick={() => setRetryKey(k => k + 1)}
+              className="btn-ghost"
+              style={{ marginTop: '0.75rem' }}
+            >
+              Try again
+            </button>
           </div>
         )}
 
