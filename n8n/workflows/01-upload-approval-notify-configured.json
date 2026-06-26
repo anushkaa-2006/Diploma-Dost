@@ -1,0 +1,94 @@
+{
+  "name": "01 — Upload Approval: Notify",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "upload-submitted",
+        "options": {}
+      },
+      "id": "a1000001-0000-0000-0000-000000000001",
+      "name": "Webhook — New Upload",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "upload-submitted"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supabase Database Webhook payload: { type, table, record, old_record }\nconst body = $input.first().json;\nconst row = body.record || body;\n\nconst sem = row.semester ? `Sem ${row.semester}` : 'N/A';\nconst drivePreview = row.drive_link ? `\\n🔗 ${row.drive_link}` : '';\n\nreturn [{\n  json: {\n    id: row.id,\n    text: [\n      `📥 *New Upload Request*`,\n      ``,\n      `📄 *Name:* ${row.name || '(untitled)'}`,\n      `📚 *Subject:* ${row.subject || '(unknown)'}`,\n      `🗓 *Semester:* ${sem}`,\n      drivePreview,\n      ``,\n      `Approve to make it public, or reject to delete it.`\n    ].filter(Boolean).join('\\n'),\n    callback_approve: `approve:${row.id}`,\n    callback_reject: `reject:${row.id}`\n  }\n}];"
+      },
+      "id": "a1000001-0000-0000-0000-000000000002",
+      "name": "Extract Upload Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot8651091110:AAF8u8yRG3i5XPzKFwSDf9NzjUijdnFXBVI/sendMessage",
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "chat_id": "=1317446273",
+          "text": "={{ $json.text }}",
+          "parse_mode": "Markdown",
+          "reply_markup": {
+            "inline_keyboard": [
+              [
+                {
+                  "text": "✅ Approve",
+                  "callback_data": "={{ $json.callback_approve }}"
+                },
+                {
+                  "text": "❌ Reject",
+                  "callback_data": "={{ $json.callback_reject }}"
+                }
+              ]
+            ]
+          }
+        },
+        "options": {}
+      },
+      "id": "a1000001-0000-0000-0000-000000000003",
+      "name": "Send Telegram Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "a1000001-0000-0000-0000-000000000004",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook — New Upload": {
+      "main": [[{"node": "Extract Upload Data", "type": "main", "index": 0}]]
+    },
+    "Extract Upload Data": {
+      "main": [[{"node": "Send Telegram Notification", "type": "main", "index": 0}]]
+    },
+    "Send Telegram Notification": {
+      "main": [[{"node": "Respond 200", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["diploma-dost"],
+  "triggerCount": 1,
+  "versionId": "1"
+}

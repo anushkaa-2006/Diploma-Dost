@@ -1,0 +1,112 @@
+{
+  "name": "03 — CET Cell DSE Schedule Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 3 * * *"
+            }
+          ]
+        }
+      },
+      "id": "a3000001-0000-0000-0000-000000000001",
+      "name": "Daily 9AM IST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://cetcell.mahacet.org/cap-_2026-27/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Diploma-Dost-Monitor/1.0 (+https://diploma-dost.vercel.app)"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "a3000001-0000-0000-0000-000000000002",
+      "name": "Fetch CAP Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.data || '';\nconst staticData = $getWorkflowStaticData('global');\n\n// Find the <li> that contains the DSE entry and check if CET Cell has added a real link.\n// Currently the DSE item is a plain <span> with no href.\n// When the schedule is published, CET Cell wraps it in <a href=\"...\">.\n// We skip generic/RSS hrefs like /feed that appear on all pages.\n\nconst liPattern = /<li[^>]*>([\\s\\S]*?)<\\/li>/gi;\nlet liMatch;\nlet dseLink = null;\nlet dseLinkFound = false;\n\nwhile ((liMatch = liPattern.exec(html)) !== null) {\n  const liContent = liMatch[1];\n  if (/Direct\\s+second\\s+[Yy]ear/i.test(liContent)) {\n    const hrefMatch = /href=[\"']([^\"']+)[\"']/i.exec(liContent);\n    if (hrefMatch) {\n      const href = hrefMatch[1];\n      const isGeneric = href.includes('/feed') || href.includes('?feed') || href === '/' || href === '#' || href === '';\n      if (!isGeneric) {\n        dseLink = href.startsWith('http') ? href : 'https://cetcell.mahacet.org' + href;\n        dseLinkFound = true;\n      }\n    }\n    break;\n  }\n}\n\nconst lastDseLinkFound = staticData.dseLinkFound;\nstaticData.dseLinkFound = dseLinkFound;\n\nif (dseLinkFound === lastDseLinkFound || !dseLinkFound) {\n  return [];\n}\n\nreturn [{ json: { dseLink, pageUrl: 'https://cetcell.mahacet.org/cap-_2026-27/' } }];"
+      },
+      "id": "a3000001-0000-0000-0000-000000000003",
+      "name": "Detect DSE Link",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst lines = [\n  '\\ud83c\\udf89 <b>DSE 2026-27 Schedule is LIVE!</b>',\n  '',\n  'CET Cell has published the Direct Second Year Engineering admission schedule.',\n  '',\n  '\\ud83d\\udd17 <a href=\"' + item.dseLink + '\">Open DSE Schedule</a>',\n  '',\n  '\\ud83d\\udccc <a href=\"' + item.pageUrl + '\">CAP 2026-27 Page</a>'\n];\nreturn [{ json: { text: lines.join('\\\\n') } }];"
+      },
+      "id": "a3000001-0000-0000-0000-000000000007",
+      "name": "Build Telegram Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot8651091110:AAF8u8yRG3i5XPzKFwSDf9NzjUijdnFXBVI/sendMessage",
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "chat_id": "1317446273",
+          "text": "={{ $json.text }}",
+          "parse_mode": "HTML",
+          "disable_web_page_preview": false
+        },
+        "options": {}
+      },
+      "id": "a3000001-0000-0000-0000-000000000008",
+      "name": "Send Telegram Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 300]
+    }
+  ],
+  "connections": {
+    "Daily 9AM IST": {
+      "main": [[{"node": "Fetch CAP Page", "type": "main", "index": 0}]]
+    },
+    "Fetch CAP Page": {
+      "main": [[{"node": "Detect DSE Link", "type": "main", "index": 0}]]
+    },
+    "Detect DSE Link": {
+      "main": [[{"node": "Build Telegram Message", "type": "main", "index": 0}]]
+    },
+    "Build Telegram Message": {
+      "main": [[{"node": "Send Telegram Alert", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["diploma-dost"],
+  "triggerCount": 1,
+  "versionId": "2"
+}
