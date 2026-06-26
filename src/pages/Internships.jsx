@@ -1,10 +1,18 @@
+import { useState, useEffect } from 'react'
 import {
   ArrowRight, ExternalLink, Briefcase, FileText, Mail, Users,
   Calendar, CheckCircle, AlertCircle, Lightbulb, Zap, Target,
-  BookOpen, Code, TrendingUp, MessageSquare, Award, Clock
+  BookOpen, Code, TrendingUp, MessageSquare, Award, Clock, ChevronUp
 } from 'lucide-react'
 
 export default function InternshipsPage() {
+  const [showTop, setShowTop] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 400)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <div style={{ background: 'var(--bg)' }}>
 
@@ -1395,6 +1403,34 @@ export default function InternshipsPage() {
           ))}
         </div>
       </section>
+
+      {showTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Back to top"
+          style={{
+            position: 'fixed',
+            bottom: '1.5rem',
+            right: '1.5rem',
+            width: '2.5rem',
+            height: '2.5rem',
+            borderRadius: '50%',
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-muted)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            zIndex: 50,
+            transition: 'color 0.15s, border-color 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'var(--accent)' }}
+          onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'var(--border)' }}
+        >
+          <ChevronUp size={16} />
+        </button>
+      )}
 
     </div>
   )

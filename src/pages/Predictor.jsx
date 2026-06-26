@@ -812,7 +812,10 @@ export default function Predictor() {
   // ── shortlist helpers ──
   const isShortlisted = (college) =>
     savedColleges.some(
-      (c) => c.college_name === college.college_name && c.course_name === college.course_name
+      (c) =>
+        c.college_name === college.college_name &&
+        c.course_name === college.course_name &&
+        c.cap_round === college.cap_round
     );
 
   async function loadShortlists(userId) {

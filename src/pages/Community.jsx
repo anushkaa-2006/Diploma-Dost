@@ -36,6 +36,12 @@ export default function Community() {
   const [answerSubmitting, setAnswerSubmitting] = useState(false)
   const [answerError, setAnswerError] = useState(null)
 
+  const [toast, setToast] = useState(null)
+  function showToast(msg) {
+    setToast(msg)
+    setTimeout(() => setToast(null), 3000)
+  }
+
   useEffect(() => {
     let cancelled = false
 
@@ -117,6 +123,7 @@ export default function Community() {
         setQuestions(prev => [data[0], ...prev])
         setForm({ name: '', branch: 'CS', semester: 1, question_text: '' })
         setShowForm(false)
+        showToast('Question posted!')
       } else if (error) {
         setSubmitError('Failed to post your question. Please try again.')
       }
@@ -150,6 +157,7 @@ export default function Community() {
           [questionId]: [...(prev[questionId] || []), data[0]],
         }))
         setAnswerForm({ name: '', answer_text: '' })
+        showToast('Answer posted!')
       } else if (error) {
         setAnswerError('Failed to post your answer. Please try again.')
       }
@@ -183,6 +191,30 @@ export default function Community() {
 
   return (
     <div style={{ background: 'var(--bg)' }}>
+
+      {/* ── TOAST ──────────────────────────────── */}
+      {toast && (
+        <div style={{
+          position: 'fixed',
+          bottom: '1.5rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderLeft: '3px solid var(--accent-lime)',
+          borderRadius: '0.5rem',
+          padding: '0.65rem 1.25rem',
+          fontFamily: 'var(--font-ui)',
+          fontWeight: 600,
+          fontSize: '0.85rem',
+          color: 'var(--text)',
+          zIndex: 100,
+          whiteSpace: 'nowrap',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+        }}>
+          {toast}
+        </div>
+      )}
 
       {/* ── HERO ───────────────────────────────── */}
       <section style={{

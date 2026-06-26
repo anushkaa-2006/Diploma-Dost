@@ -49,7 +49,18 @@ export default function Login() {
         navigate(redirectTo)
       }
     } catch (err) {
-      setError(err.message)
+      const msg = (err.message || '').toLowerCase()
+      if (msg.includes('invalid login') || msg.includes('invalid credentials') || msg.includes('wrong password')) {
+        setError('Incorrect email or password.')
+      } else if (msg.includes('email not confirmed')) {
+        setError('Please verify your email before logging in.')
+      } else if (msg.includes('too many') || msg.includes('rate limit')) {
+        setError('Too many attempts. Please wait a few minutes and try again.')
+      } else if (msg.includes('network') || msg.includes('fetch')) {
+        setError('Network error. Check your connection and try again.')
+      } else {
+        setError('Something went wrong. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -81,7 +92,7 @@ export default function Login() {
       if (msg.includes('rate limit') || msg.includes('email limit')) {
         setError('Too many attempts. Please wait a few minutes and try again.')
       } else {
-        setError(error.message)
+        setError('Could not send reset link. Please try again.')
       }
       return
     }

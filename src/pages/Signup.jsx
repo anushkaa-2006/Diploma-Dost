@@ -73,7 +73,18 @@ export default function Signup() {
       // Confirmation OFF → live session immediately, go straight in
       navigate(redirectTo)
     } catch (err) {
-      setError(err?.message || 'Unable to create account. Please try again.')
+      const msg = (err?.message || '').toLowerCase()
+      if (msg.includes('already registered') || msg.includes('already exists') || msg.includes('user already')) {
+        setError('An account with this email already exists.')
+      } else if (msg.includes('invalid email') || msg.includes('valid email')) {
+        setError('Please enter a valid email address.')
+      } else if (msg.includes('password') && msg.includes('short')) {
+        setError('Password must be at least 6 characters.')
+      } else if (msg.includes('too many') || msg.includes('rate limit')) {
+        setError('Too many attempts. Please wait a few minutes and try again.')
+      } else {
+        setError('Unable to create account. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
